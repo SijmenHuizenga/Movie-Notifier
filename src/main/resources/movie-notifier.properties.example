@@ -1,0 +1,15 @@
+# Pathe api key
+pathe-api-key=
+
+# Facebook messenger api access token
+fb-messenger-token=
+
+# Mailgun configuration
+mailgun-secret=
+mailgun-domain=
+mailgun-from-name=
+mailgun-from-mail=
+
+# AWS SNS SMS configuration
+aws-sns-accesskey=
+aws-sns-secretkey=
