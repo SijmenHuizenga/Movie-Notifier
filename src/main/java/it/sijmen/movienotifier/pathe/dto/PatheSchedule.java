@@ -137,4 +137,22 @@ public class PatheSchedule implements Serializable {
     public void setSpecialId(long specialId) {
         this.specialId = specialId;
     }
+
+    @Override
+    public String toString() {
+        return "PatheSchedule{" +
+                "cinema=" + cinema +
+                ", cinemaId=" + cinemaId +
+                ", endOfShow=" + endOfShow +
+                ", is3d=" + is3d +
+                ", isDutch=" + isDutch +
+                ", isImax=" + isImax +
+                ", isOriginalVersion=" + isOriginalVersion +
+                ", movieId=" + movieId +
+                ", scheduleId=" + scheduleId +
+                ", specialId=" + specialId +
+                ", startOfShow=" + startOfShow +
+                ", status=" + status +
+                '}';
+    }
 }

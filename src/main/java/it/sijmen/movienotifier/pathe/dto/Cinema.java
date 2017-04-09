@@ -293,4 +293,38 @@ public class Cinema implements Serializable {
     public void setScannerAvailable(boolean scannerAvailable) {
         this.scannerAvailable = scannerAvailable;
     }
+
+    @Override
+    public String toString() {
+        return "Cinema{" +
+                "address='" + address + '\'' +
+                ", alertMessage='" + alertMessage + '\'' +
+                ", city=" + city +
+                ", code='" + code + '\'' +
+                ", description='" + description + '\'' +
+                ", emailCinema='" + emailCinema + '\'' +
+                ", emailHrm='" + emailHrm + '\'' +
+                ", emailReservation='" + emailReservation + '\'' +
+                ", experiences=" + experiences +
+                ", factFigures=" + factFigures +
+                ", googleMapsImage='" + googleMapsImage + '\'' +
+                ", handicap=" + handicap +
+                ", id=" + id +
+                ", imaxAvailable=" + imaxAvailable +
+                ", lat=" + lat +
+                ", lon=" + lon +
+                ", name='" + name + '\'' +
+                ", openingHours=" + openingHours +
+                ", parking=" + parking +
+                ", phonenumber='" + phonenumber + '\'' +
+                ", phonenumberText='" + phonenumberText + '\'' +
+                ", publicTransport=" + publicTransport +
+                ", routeDescriptionImage='" + routeDescriptionImage + '\'' +
+                ", scannerAvailable=" + scannerAvailable +
+                ", showDurationExtraMinutes=" + showDurationExtraMinutes +
+                ", wifiAnonymousAccess=" + wifiAnonymousAccess +
+                ", wifiShowContentLinks=" + wifiShowContentLinks +
+                ", zipcode='" + zipcode + '\'' +
+                '}';
+    }
 }

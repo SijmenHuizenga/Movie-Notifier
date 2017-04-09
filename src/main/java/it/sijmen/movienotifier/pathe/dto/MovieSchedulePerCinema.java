@@ -56,4 +56,14 @@ public class MovieSchedulePerCinema {
     public void setSchedules(ArrayList<PatheSchedule> schedules) {
         this.schedules = schedules;
     }
+
+    @Override
+    public String toString() {
+        return "MovieSchedulePerCinema{" +
+                "mCinemaArray=" + mCinemaArray +
+                ", mCities=" + mCities +
+                ", mSchedulePerCinemaList=" + mSchedulePerCinemaList +
+                ", schedules=" + schedules +
+                '}';
+    }
 }

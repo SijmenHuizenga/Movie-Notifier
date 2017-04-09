@@ -1,11 +1,15 @@
 package it.sijmen.movienotifier.pathe.api;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
+import it.sijmen.movienotifier.pathe.dto.MovieSchedulePerCinema;
 
 import javax.inject.Inject;
 import javax.inject.Named;
+import java.io.IOException;
 
 /**
  * Created by Sijmen on 7-4-2017.
@@ -21,19 +25,29 @@ public class PatheApi {
     @Named("pathe-api-key")
     private String patheApiKey;
 
+    @Inject
+    private ObjectMapper mapper;
+
     public PatheApi() {
     }
 
-    public String send(){
+    private String send(String uri) throws IOException {
         HttpResponse<String> stringHttpResponse;
         try {
-            stringHttpResponse = Unirest.post("http://httpbin.org/post")
+            stringHttpResponse = Unirest.get(PatheUrl.API_URL + uri)
                     .header("X-Client-Token", patheApiKey)
                     .asString();
         } catch (UnirestException e) {
-            e.printStackTrace();
-            return null;
+            throw new IOException("Could not load request.", e);
         }
-        return "";
+        if(stringHttpResponse.getStatus() != 200)
+            throw new IOException("Status returned " + stringHttpResponse.getStatus());
+        return stringHttpResponse.getBody();
+    }
+
+    public MovieSchedulePerCinema getMovieSchedulePerCinema(long movieId) throws IOException {
+        String requestURL = String.format(PatheUrl.MOVIE_PER_CINEMA_SCHEDULES, movieId);
+        mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        return  mapper.readValue(send(requestURL), MovieSchedulePerCinema.class);
     }
 }
