@@ -1,6 +1,7 @@
 package it.sijmen.movienotifier;
 
-import it.sijmen.movienotifier.notification.*;
+import it.sijmen.movienotifier.notifiers.*;
+import it.sijmen.movienotifier.str.Recipient;
 
 import javax.inject.Inject;
 

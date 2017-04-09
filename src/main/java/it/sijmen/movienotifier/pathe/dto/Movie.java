@@ -14,80 +14,118 @@ public class Movie implements Serializable {
 
     @JsonProperty
     private int age;
+
     @JsonProperty("cast")
     private ArrayList<PathePerson> castList;
+
     @JsonProperty
     private String distributor;
+
     @JsonProperty("genreIds")
     private ArrayList<Long> genreIds;
+
     @JsonProperty("genres")
     private ArrayList<MovieGenre> genreList;
+
     @JsonProperty
     private long id;
+
     @JsonProperty
     private String intro;
+
     @JsonProperty
     private boolean isRatable;
+
     @JsonProperty
     private long likesAllTime;
+
     @JsonProperty
     private long likesRecent;
+
     @JsonProperty
     private String name;
+
     @JsonProperty
     private String originalName;
+
     @JsonProperty
     private int pDisc;
+
     @JsonProperty
     private int pDrugs;
+
     @JsonProperty
     private int pFear;
+
     @JsonProperty
     private int pLang;
+
     @JsonProperty
     private int pSex;
+
     @JsonProperty
     private int pViol;
+
     @JsonProperty("posters")
     private ArrayList<PathePoster> posterList;
+
     @JsonProperty
     private int producationYear;
+
     @JsonProperty
     private double rating;
+
     @JsonProperty
     private long ratingCount;
+
     @JsonProperty
     private Calendar releaseDate;
+
     @JsonProperty
     private int runTime;
+
     @JsonProperty
     private long salesAlltime;
+
     @JsonProperty
     private long salesRecent;
+
     @JsonProperty("schedule")
     private ArrayList<PatheSchedule> scheduleList;
+
     @JsonProperty
     private String status;
+
     @JsonProperty("stills")
     private ArrayList<PatheStill> stillList;
+
     @JsonProperty
     private String teaser;
+
     @JsonProperty
     private String text;
+
     @JsonProperty
     private String thumb;
+
     @JsonProperty("trailers")
     private ArrayList<Trailer> trailerList;
+
     @JsonProperty
     private PatheVersion version;
+
     @JsonProperty
     private List<PatheVersion> versions;
+
     @JsonProperty
     private long visitors;
+
     @JsonProperty
     private long visitorsAllTime;
+
     @JsonProperty
     private long visitorsRecent;
+
     @JsonProperty
     private String vodUrl;
 

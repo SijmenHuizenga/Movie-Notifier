@@ -9,7 +9,6 @@ public class Cinema implements Serializable {
 
     private static final long serialVersionUID = -4593722361788767520L;
 
-    public final String TAG;
     @JsonProperty
     private String address;
     @JsonProperty
@@ -114,11 +113,6 @@ public class Cinema implements Serializable {
     public void setLon(double lon) {
         this.lon = lon;
     }
-
-    public Cinema() {
-        this.TAG = getClass().getSimpleName();
-    }
-
 
     public int describeContents() {
         return 0;

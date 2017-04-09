@@ -1,4 +1,4 @@
-package it.sijmen.movienotifier.notification;
+package it.sijmen.movienotifier.notifiers;
 
 import com.restfb.DefaultFacebookClient;
 import com.restfb.FacebookClient;
@@ -7,6 +7,7 @@ import com.restfb.Version;
 import com.restfb.types.send.Message;
 import com.restfb.types.send.PhoneMessageRecipient;
 import com.restfb.types.send.SendResponse;
+import it.sijmen.movienotifier.str.Recipient;
 
 import javax.inject.Inject;
 import javax.inject.Named;

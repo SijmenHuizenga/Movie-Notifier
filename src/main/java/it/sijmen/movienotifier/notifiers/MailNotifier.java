@@ -1,5 +1,6 @@
-package it.sijmen.movienotifier.notification;
+package it.sijmen.movienotifier.notifiers;
 
+import it.sijmen.movienotifier.str.Recipient;
 import net.sargue.mailgun.Configuration;
 import net.sargue.mailgun.Mail;
 import net.sargue.mailgun.Response;

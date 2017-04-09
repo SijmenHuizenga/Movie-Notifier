@@ -1,4 +1,4 @@
-package it.sijmen.movienotifier.notification;
+package it.sijmen.movienotifier.notifiers;
 
 import java.io.IOException;
 

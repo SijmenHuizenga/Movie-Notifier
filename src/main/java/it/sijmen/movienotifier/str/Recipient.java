@@ -1,12 +1,17 @@
-package it.sijmen.movienotifier.notification;
+package it.sijmen.movienotifier.str;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * Created by Sijmen on 7-4-2017.
  */
 public class Recipient {
 
+    @JsonProperty
     private String name;
+    @JsonProperty
     private String email;
+    @JsonProperty
     private String phonenumber;
 
     public Recipient(String name, String email, String phonenumber) {

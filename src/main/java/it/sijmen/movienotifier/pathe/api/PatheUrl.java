@@ -5,8 +5,8 @@ package it.sijmen.movienotifier.pathe.api;
  */
 public class PatheUrl {
 
-    public static final String API_ACCEPT_URL = "http://pathe-api.accept.poort80.net/";
     public static final String API_PRODUCTION_URL = "https://connect.pathe.nl/v1/";
+    public static final String API_ACCEPT_URL = "http://pathe-api.accept.poort80.net/";
     public static final String API_TEST_URL = "http://pathe-api.test.poort80.nl/";
 
     public static final String ARTICLE_BY_CODE = "articles/code/%s";

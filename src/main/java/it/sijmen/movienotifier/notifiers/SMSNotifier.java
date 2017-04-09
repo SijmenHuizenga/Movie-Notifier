@@ -1,4 +1,4 @@
-package it.sijmen.movienotifier.notification;
+package it.sijmen.movienotifier.notifiers;
 
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
@@ -6,6 +6,7 @@ import com.amazonaws.regions.Regions;
 import com.amazonaws.services.sns.AmazonSNS;
 import com.amazonaws.services.sns.AmazonSNSClientBuilder;
 import com.amazonaws.services.sns.model.*;
+import it.sijmen.movienotifier.str.Recipient;
 
 import javax.inject.Inject;
 import javax.inject.Named;

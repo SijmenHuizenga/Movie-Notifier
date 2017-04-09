@@ -20,13 +20,13 @@ public class ConfigurationModule extends AbstractModule {
         try {
             File f = new File(getClass().getResource(configFileName).toURI());
             if(!f.exists())
-                throw new IllegalArgumentException("Configuraiton file could not be found. Check if the file "+configFileName+" is available.");
+                throw new IllegalArgumentException("Configuration file could not be found. Check if the file "+configFileName+" is available.");
 
             Properties properties = new Properties();
             properties.load(new FileReader(f));
             Names.bindProperties(binder(), properties);
         } catch (Exception e) {
-            throw new IllegalArgumentException("Configuraiton file could not be loaded. Check if the file "+configFileName+" is available and valid. Error message: " + e.getMessage(), e);
+            throw new IllegalArgumentException("Configuration file could not be loaded. Check if the file "+configFileName+" is available and valid. Error message: " + e.getMessage(), e);
         }
     }
 

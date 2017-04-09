@@ -1,4 +1,6 @@
-package it.sijmen.movienotifier.notification;
+package it.sijmen.movienotifier.notifiers;
+
+import it.sijmen.movienotifier.str.Recipient;
 
 /**
  * Created by Sijmen on 7-4-2017.
