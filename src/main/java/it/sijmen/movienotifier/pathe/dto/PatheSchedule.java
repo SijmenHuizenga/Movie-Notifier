@@ -23,6 +23,22 @@ public class PatheSchedule implements Serializable {
     private int isImax;
     @JsonProperty("ov")
     private int isOriginalVersion;
+    @JsonProperty("vip")
+    private int isVIPAvailable;
+    @JsonProperty("hfr")
+    private int isHfr;
+    @JsonProperty("isAtmos")
+    private int isAtmos;
+    @JsonProperty("is4k")
+    private int is4k;
+    @JsonProperty("isLaser")
+    private int isLaser;
+    @JsonProperty("isPremium")
+    private int isPremium;
+    @JsonProperty("hallIsLarge")
+    private int isLargeHall;
+    @JsonProperty("hallIsRooftop")
+    private int isRooftopHall;
     @JsonProperty
     private long movieId;
     @JsonProperty("id")
@@ -136,5 +152,69 @@ public class PatheSchedule implements Serializable {
 
     public void setSpecialId(long specialId) {
         this.specialId = specialId;
+    }
+
+    public int getIsVIPAvailable() {
+        return isVIPAvailable;
+    }
+
+    public void setIsVIPAvailable(int isVIPAvailable) {
+        this.isVIPAvailable = isVIPAvailable;
+    }
+
+    public int getIsHfr() {
+        return isHfr;
+    }
+
+    public void setIsHfr(int isHfr) {
+        this.isHfr = isHfr;
+    }
+
+    public int getIsAtmos() {
+        return isAtmos;
+    }
+
+    public void setIsAtmos(int isAtmos) {
+        this.isAtmos = isAtmos;
+    }
+
+    public int getIs4k() {
+        return is4k;
+    }
+
+    public void setIs4k(int is4k) {
+        this.is4k = is4k;
+    }
+
+    public int getIsLaser() {
+        return isLaser;
+    }
+
+    public void setIsLaser(int isLaser) {
+        this.isLaser = isLaser;
+    }
+
+    public int getIsPremium() {
+        return isPremium;
+    }
+
+    public void setIsPremium(int isPremium) {
+        this.isPremium = isPremium;
+    }
+
+    public int getIsLargeHall() {
+        return isLargeHall;
+    }
+
+    public void setIsLargeHall(int isLargeHall) {
+        this.isLargeHall = isLargeHall;
+    }
+
+    public int getIsRooftopHall() {
+        return isRooftopHall;
+    }
+
+    public void setIsRooftopHall(int isRooftopHall) {
+        this.isRooftopHall = isRooftopHall;
     }
 }
