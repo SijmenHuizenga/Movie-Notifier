@@ -1,5 +1,6 @@
 package it.sijmen.movienotifier.pathe.api;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.inject.Singleton;
@@ -50,6 +51,14 @@ public class PatheApi {
     public MovieSchedulePerCinema getMovieSchedulePerCinema(long movieId) throws IOException {
         String requestURL = String.format(PatheUrl.MOVIE_PER_CINEMA_SCHEDULES, movieId);
         mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-        return  mapper.readValue(send(requestURL), MovieSchedulePerCinema.class);
+        return mapper.readValue(send(requestURL), MovieSchedulePerCinema.class);
+    }
+
+    public <T> T parse(String text, Class<T> tClass) throws IOException {
+        return mapper.readValue(text, tClass);
+    }
+
+    public String encode(Object o) throws IOException {
+        return mapper.writeValueAsString(o);
     }
 }

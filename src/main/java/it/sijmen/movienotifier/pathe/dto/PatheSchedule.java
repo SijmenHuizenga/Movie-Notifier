@@ -4,8 +4,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.io.Serializable;
 import java.util.Calendar;
+import java.util.Objects;
 
-public class PatheSchedule implements Serializable {
+public class PatheSchedule implements Serializable, Cloneable {
 
     private static final long serialVersionUID = -4593722361788767522L;
 
@@ -235,4 +236,19 @@ public class PatheSchedule implements Serializable {
                 ", status=" + status +
                 '}';
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        PatheSchedule that = (PatheSchedule) o;
+        return scheduleId == that.scheduleId;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(scheduleId);
+    }
+
+
 }

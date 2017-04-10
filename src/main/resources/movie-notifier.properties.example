@@ -13,3 +13,6 @@ mailgun-from-mail=
 # AWS SNS SMS configuration
 aws-sns-accesskey=
 aws-sns-secretkey=
+
+#The location where to store data
+storage-folder=.

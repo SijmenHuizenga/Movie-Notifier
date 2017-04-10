@@ -1,6 +1,5 @@
 package it.sijmen.movienotifier;
 
-
 import it.sijmen.movienotifier.inj.JobFactory;
 import it.sijmen.movienotifier.jobs.CheckScheduleChangeJob;
 import it.sijmen.movienotifier.jobs.DayNightCalendar;
@@ -19,7 +18,7 @@ import static org.quartz.TriggerBuilder.newTrigger;
 public class MovieNotifier {
 
     @Inject
-    JobFactory jobFactory;
+    private JobFactory jobFactory;
 
     public void run() {
         try {
@@ -39,7 +38,7 @@ public class MovieNotifier {
                 .storeDurably()
                 .build();
         scheduler.addJob(job, true);
-        
+
         scheduler.addCalendar("night",
                 new DayNightCalendar(LocalTime.parse("22:00:00"), LocalTime.parse("07:00:00")), false, false);
 

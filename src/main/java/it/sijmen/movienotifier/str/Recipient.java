@@ -8,24 +8,29 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class Recipient {
 
     @JsonProperty
-    private String name;
+    private String key;
     @JsonProperty
     private String email;
     @JsonProperty
     private String phonenumber;
 
-    public Recipient(String name, String email, String phonenumber) {
-        this.name = name;
+    public Recipient(String key, String email, String phonenumber) {
+        this.key = key;
         this.email = email;
         this.phonenumber = phonenumber;
     }
 
-    public String getName() {
-        return name;
+    public boolean isValid(){
+        return key != null && email != null && phonenumber != null &&
+                !key.isEmpty() && !email.isEmpty() && !phonenumber.isEmpty();
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public String getKey() {
+        return key;
+    }
+
+    public void setKey(String key) {
+        this.key = key;
     }
 
     public String getEmail() {
