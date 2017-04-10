@@ -1,5 +1,6 @@
 package it.sijmen.movienotifier.notifiers;
 
+import com.google.inject.Singleton;
 import it.sijmen.movienotifier.str.Recipient;
 import net.sargue.mailgun.Configuration;
 import net.sargue.mailgun.Mail;
@@ -11,6 +12,7 @@ import javax.inject.Named;
 /**
  * Created by Sijmen on 7-4-2017.
  */
+@Singleton
 public class MailNotifier extends Notifier {
 
     private Configuration mailgunConfig;

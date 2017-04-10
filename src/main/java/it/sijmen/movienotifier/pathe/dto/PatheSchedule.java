@@ -234,4 +234,5 @@ public class PatheSchedule implements Serializable {
                 ", startOfShow=" + startOfShow +
                 ", status=" + status +
                 '}';
+    }
 }

@@ -2,6 +2,7 @@ package it.sijmen.movienotifier.pathe.api;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.inject.Singleton;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
@@ -14,6 +15,7 @@ import java.io.IOException;
 /**
  * Created by Sijmen on 7-4-2017.
  */
+@Singleton
 public class PatheApi {
 
     public static final String API_HEADER_ACCEPT_LANGUAGE = "nl-NL";

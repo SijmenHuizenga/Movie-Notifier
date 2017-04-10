@@ -1,12 +1,17 @@
 package it.sijmen.movienotifier;
 
-import it.sijmen.movienotifier.notifiers.*;
-import it.sijmen.movienotifier.pathe.api.PatheApi;
-import it.sijmen.movienotifier.pathe.dto.MovieSchedulePerCinema;
-import it.sijmen.movienotifier.str.Recipient;
+
+import it.sijmen.movienotifier.inj.JobFactory;
+import it.sijmen.movienotifier.jobs.CheckScheduleChangeJob;
+import it.sijmen.movienotifier.jobs.DayNightCalendar;
+import org.quartz.*;
+import org.quartz.impl.StdSchedulerFactory;
 
 import javax.inject.Inject;
-import java.io.IOException;
+import java.time.LocalTime;
+
+import static org.quartz.SimpleScheduleBuilder.simpleSchedule;
+import static org.quartz.TriggerBuilder.newTrigger;
 
 /**
  * Hello world!
@@ -14,41 +19,52 @@ import java.io.IOException;
 public class MovieNotifier {
 
     @Inject
-    private FBMessengerNotifier fbMessengerNotifier;
-
-    @Inject
-    private MailNotifier mailNotifier;
-
-    @Inject
-    private SMSNotifier smsNotifier;
-
-    @Inject
-    private PatheApi patheApi;
-
-    private Notifier[] getNotifiers(){
-        return new Notifier[]{
-                fbMessengerNotifier, mailNotifier, smsNotifier
-        };
-    }
+    JobFactory jobFactory;
 
     public void run() {
-        //todo: load recipients dynamicly
-//        Recipient recipient = new Recipient("", "", "");
-//        for (Notifier notifier : getNotifiers()) {
-//            try {
-//                notifier.notify(recipient, "Public Test Message");
-//            } catch (NotificationException e) {
-//                e.printStackTrace();
-//            }
-//        }
-
         try {
-            MovieSchedulePerCinema movieSchedulePerCinema = patheApi.getMovieSchedulePerCinema(20721);
-            System.out.println(movieSchedulePerCinema);
-        } catch (IOException e) {
+            startJobs();
+        } catch (SchedulerException e) {
             e.printStackTrace();
+            //todo
         }
+    }
 
+    private void startJobs() throws SchedulerException {
+        Scheduler scheduler = StdSchedulerFactory.getDefaultScheduler();
+        scheduler.setJobFactory(jobFactory);
 
+        JobDetail job = JobBuilder.newJob(CheckScheduleChangeJob.class)
+                .withIdentity("CheckScheduleChangeJob")
+                .storeDurably()
+                .build();
+        scheduler.addJob(job, true);
+        
+        scheduler.addCalendar("night",
+                new DayNightCalendar(LocalTime.parse("22:00:00"), LocalTime.parse("07:00:00")), false, false);
+
+        scheduler.addCalendar("day",
+                new DayNightCalendar(LocalTime.parse("07:00:00"), LocalTime.parse("22:00:00")), false, false);
+
+        Trigger dayTrigger = newTrigger()
+                .withIdentity("DayTrigger")
+                .startNow()
+                .withSchedule(simpleSchedule().withIntervalInSeconds(30).repeatForever())
+                .modifiedByCalendar("day")
+                .forJob(job)
+                .build();
+
+        Trigger nightTrigger = newTrigger()
+                .withIdentity("NightTrigger")
+                .startNow()
+                .withSchedule(simpleSchedule().withIntervalInMinutes(5).repeatForever())
+                .modifiedByCalendar("night")
+                .forJob(job)
+                .build();
+
+        scheduler.scheduleJob(dayTrigger);
+        scheduler.scheduleJob(nightTrigger);
+
+        scheduler.start();
     }
 }

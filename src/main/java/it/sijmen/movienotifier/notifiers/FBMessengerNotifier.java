@@ -1,5 +1,6 @@
 package it.sijmen.movienotifier.notifiers;
 
+import com.google.inject.Singleton;
 import com.restfb.DefaultFacebookClient;
 import com.restfb.FacebookClient;
 import com.restfb.Parameter;
@@ -15,6 +16,7 @@ import javax.inject.Named;
 /**
  * Created by Sijmen on 7-4-2017.
  */
+@Singleton
 public class FBMessengerNotifier extends Notifier {
 
     private FacebookClient pageClient;

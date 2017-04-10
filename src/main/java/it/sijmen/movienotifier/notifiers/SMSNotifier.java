@@ -6,6 +6,7 @@ import com.amazonaws.regions.Regions;
 import com.amazonaws.services.sns.AmazonSNS;
 import com.amazonaws.services.sns.AmazonSNSClientBuilder;
 import com.amazonaws.services.sns.model.*;
+import com.google.inject.Singleton;
 import it.sijmen.movienotifier.str.Recipient;
 
 import javax.inject.Inject;
@@ -16,6 +17,7 @@ import java.util.Map;
 /**
  * Created by Sijmen on 7-4-2017.
  */
+@Singleton
 public class SMSNotifier extends Notifier{
 
     private AmazonSNS snsClient;
