@@ -20,12 +20,14 @@ public class MovieNotifier {
     @Inject
     private JobFactory jobFactory;
 
+    @Inject
+    private ErrorLogger errorLogger;
+
     public void run() {
         try {
             startJobs();
         } catch (SchedulerException e) {
-            e.printStackTrace();
-            //todo
+            errorLogger.log("Error while starting jobs.", e);
         }
     }
 

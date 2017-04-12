@@ -16,3 +16,11 @@ aws-sns-secretkey=
 
 #The location where to store data
 storage-folder=.
+
+#The logging token for rollbar
+rollbar-token=
+
+#administrator data for error notifieng
+admin-name=
+admin-mail=
+admin-phone=

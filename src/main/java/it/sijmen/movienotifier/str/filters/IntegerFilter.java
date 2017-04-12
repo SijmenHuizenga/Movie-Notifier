@@ -5,7 +5,7 @@ import it.sijmen.movienotifier.str.FilterValue;
 /**
  * Created by Sijmen on 9-4-2017.
  */
-public class IntegerFilter extends FilterValue {
+public class IntegerFilter extends FilterValue<Integer> {
 
     private int value;
 
@@ -17,4 +17,8 @@ public class IntegerFilter extends FilterValue {
         return value;
     }
 
+    @Override
+    public boolean accepts(Integer value) {
+        return this.value == value;
+    }
 }

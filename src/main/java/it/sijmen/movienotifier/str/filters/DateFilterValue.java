@@ -7,7 +7,7 @@ import java.util.Calendar;
 /**
  * Created by Sijmen on 9-4-2017.
  */
-public class DateFilterValue extends FilterValue{
+public class DateFilterValue extends FilterValue<Calendar> {
 
     private Calendar after, before;
 
@@ -24,4 +24,9 @@ public class DateFilterValue extends FilterValue{
         return before;
     }
 
+    @Override
+    public boolean accepts(Calendar value) {
+        return value.equals(after) || value.equals(before) ||
+               (value.after(after) && value.before(before));
+    }
 }

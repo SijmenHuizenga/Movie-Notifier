@@ -1,10 +1,14 @@
 package it.sijmen.movienotifier.jobs;
 
+import it.sijmen.movienotifier.ErrorLogger;
+import it.sijmen.movienotifier.notifiers.FBMessengerNotifier;
+import it.sijmen.movienotifier.notifiers.NotificationException;
 import it.sijmen.movienotifier.pathe.api.PatheApi;
 import it.sijmen.movienotifier.pathe.dto.MovieSchedulePerCinema;
 import it.sijmen.movienotifier.pathe.dto.PatheSchedule;
 import it.sijmen.movienotifier.str.NotifierConfiguration;
 import it.sijmen.movienotifier.str.NewScheduleListener;
+import it.sijmen.movienotifier.str.Recipient;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 
@@ -31,8 +35,14 @@ public class CheckScheduleChangeJob implements org.quartz.Job {
     private NotifierConfiguration configuration;
 
     @Inject
+    private FBMessengerNotifier fbMessengerNotifier;
+
+    @Inject
     @Named("storage-folder")
     private String storageFolder;
+
+    @Inject
+    private ErrorLogger errorHandler;
 
     @Override
     public void execute(JobExecutionContext jobExecutionContext)
@@ -48,8 +58,7 @@ public class CheckScheduleChangeJob implements org.quartz.Job {
             newData = api.getMovieSchedulePerCinema(movieKey);
             oldData = loadLastMovieData(movieKey);
         } catch (IOException e) {
-            e.printStackTrace();
-            //todo: handle error
+            errorHandler.log("Could not load newdata or olddata.", e);
             return;
         }
         List<PatheSchedule> newSchedules = filterNewSchedules(oldData, newData);
@@ -59,9 +68,7 @@ public class CheckScheduleChangeJob implements org.quartz.Job {
         try {
             saveLastMovieData(movieKey, newData);
         } catch (IOException e) {
-            e.printStackTrace();
-            //todo: handle error!
-            //if this goes wrong than possible people get the same message again! This is wrong!
+            errorHandler.log("Could not save new move state file!", e);
         }
     }
 
@@ -76,7 +83,15 @@ public class CheckScheduleChangeJob implements org.quartz.Job {
     }
 
     private void notifyRecipients(ArrayList<String> recipients, PatheSchedule schedule) {
-        //todo
+        for(String r : recipients){
+            Recipient recipient = configuration.getRecipient(r);
+            try {
+                fbMessengerNotifier.notify(recipient,
+                        "New movie online!!! https://www.pathe.nl/tickets/start/"+schedule.getId());
+            } catch (NotificationException e) {
+                errorHandler.log("Failed to notify " + recipient + " about movie " + schedule.getId(), e);
+            }
+        }
     }
 
     private List<PatheSchedule> filterNewSchedules(MovieSchedulePerCinema oldData, MovieSchedulePerCinema newData){

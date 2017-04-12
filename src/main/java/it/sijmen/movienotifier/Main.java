@@ -2,6 +2,7 @@ package it.sijmen.movienotifier;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;
+import it.sijmen.movienotifier.inj.AdministratorModule;
 import it.sijmen.movienotifier.inj.ConfigurationModule;
 
 /**
@@ -13,8 +14,8 @@ public class Main {
         Injector injector;
         try{
             injector = Guice.createInjector(
-                    new ConfigurationModule()
-                    //todo: add more injectors!
+                    new ConfigurationModule(),
+                    new AdministratorModule()
             );
         }catch (Exception e){
             System.err.println("Initialisation failed: " + e.getMessage());

@@ -107,32 +107,32 @@ public class PatheSchedule implements Serializable, Cloneable {
         this.cinemaId = cinemaId;
     }
 
-    public int getIsDutch() {
-        return this.isDutch;
+    public boolean getIsDutch() {
+        return this.isDutch == 1;
     }
 
     public void setIsDutch(int isDutch) {
         this.isDutch = isDutch;
     }
 
-    public int getIsOriginalVersion() {
-        return this.isOriginalVersion;
+    public boolean getIsOriginalVersion() {
+        return this.isOriginalVersion == 1;
     }
 
     public void setIsOriginalVersion(int isOriginalVersion) {
         this.isOriginalVersion = isOriginalVersion;
     }
 
-    public int getIsImax() {
-        return this.isImax;
+    public boolean getIsImax() {
+        return this.isImax == 1;
     }
 
     public void setIsImax(int isImax) {
         this.isImax = isImax;
     }
 
-    public int getIs3d() {
-        return this.is3d;
+    public boolean getIs3d() {
+        return this.is3d == 1;
     }
 
     public void setIs3d(int is3d) {
@@ -155,64 +155,64 @@ public class PatheSchedule implements Serializable, Cloneable {
         this.specialId = specialId;
     }
 
-    public int getIsVIPAvailable() {
-        return isVIPAvailable;
+    public boolean getIsVIPAvailable() {
+        return isVIPAvailable == 1;
     }
 
     public void setIsVIPAvailable(int isVIPAvailable) {
         this.isVIPAvailable = isVIPAvailable;
     }
 
-    public int getIsHfr() {
-        return isHfr;
+    public boolean getIsHfr() {
+        return isHfr == 1;
     }
 
     public void setIsHfr(int isHfr) {
         this.isHfr = isHfr;
     }
 
-    public int getIsAtmos() {
-        return isAtmos;
+    public boolean getIsAtmos() {
+        return isAtmos == 1;
     }
 
     public void setIsAtmos(int isAtmos) {
         this.isAtmos = isAtmos;
     }
 
-    public int getIs4k() {
-        return is4k;
+    public boolean getIs4k() {
+        return is4k == 1;
     }
 
     public void setIs4k(int is4k) {
         this.is4k = is4k;
     }
 
-    public int getIsLaser() {
-        return isLaser;
+    public boolean getIsLaser() {
+        return isLaser == 1;
     }
 
     public void setIsLaser(int isLaser) {
         this.isLaser = isLaser;
     }
 
-    public int getIsPremium() {
-        return isPremium;
+    public boolean getIsPremium() {
+        return isPremium == 1;
     }
 
     public void setIsPremium(int isPremium) {
         this.isPremium = isPremium;
     }
 
-    public int getIsLargeHall() {
-        return isLargeHall;
+    public boolean getIsLargeHall() {
+        return isLargeHall == 1;
     }
 
     public void setIsLargeHall(int isLargeHall) {
         this.isLargeHall = isLargeHall;
     }
 
-    public int getIsRooftopHall() {
-        return isRooftopHall;
+    public boolean getIsRooftopHall() {
+        return isRooftopHall == 1;
     }
 
     public void setIsRooftopHall(int isRooftopHall) {

@@ -48,4 +48,13 @@ public class Recipient {
     public void setPhonenumber(String phonenumber) {
         this.phonenumber = phonenumber;
     }
+
+    @Override
+    public String toString() {
+        return "Recipient{" +
+                "key='" + key + '\'' +
+                ", email='" + email + '\'' +
+                ", phonenumber='" + phonenumber + '\'' +
+                '}';
+    }
 }
