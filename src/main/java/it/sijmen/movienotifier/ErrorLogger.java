@@ -33,11 +33,11 @@ public class ErrorLogger {
     public void log(String msg, Exception e){
         e.printStackTrace();
         try {
-            notifier.notify(admin, msg + e);
+            notifier.notify(admin, msg +" "+ e);
         } catch (NotificationException e1) {
             HashMap<String, Object> errorMap = new HashMap<>();
             errorMap.put("Original error", e);
-            errorMap.put("Original error", e1);
+            errorMap.put("Admin Notificaiotn Error", e1);
             rollbar.error("Could send the following error to the administrator", errorMap);
         }
     }

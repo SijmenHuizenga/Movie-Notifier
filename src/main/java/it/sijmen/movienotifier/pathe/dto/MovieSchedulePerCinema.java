@@ -1,22 +1,24 @@
 package it.sijmen.movienotifier.pathe.dto;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.ArrayList;
 import java.util.Map;
 
+@JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.PUBLIC_ONLY, getterVisibility = JsonAutoDetect.Visibility.NONE, setterVisibility = JsonAutoDetect.Visibility.NONE)
 public class MovieSchedulePerCinema {
 
     private static final long serialVersionUID = -4593722361788767522L;
 
     @JsonProperty("cinemas")
-    private ArrayList<Cinema> mCinemaArray;
+    public ArrayList<Cinema> cinemas;
 
     @JsonProperty("cities")
-    private ArrayList<Cinema> mCities;
+    public ArrayList<Cinema> cities;
 
     @JsonProperty("schedulesPerCinema")
-    private Map<Long, ArrayList<PatheSchedule>> mSchedulePerCinemaList;
+    public Map<Long, ArrayList<PatheSchedule>> schedulesPerCinema;
 
     @JsonProperty("schedules")
     private ArrayList<PatheSchedule> schedules;
@@ -25,28 +27,28 @@ public class MovieSchedulePerCinema {
         return serialVersionUID;
     }
 
-    public ArrayList<Cinema> getmCinemaArray() {
-        return mCinemaArray;
+    public ArrayList<Cinema> getCinemas() {
+        return cinemas;
     }
 
-    public void setmCinemaArray(ArrayList<Cinema> mCinemaArray) {
-        this.mCinemaArray = mCinemaArray;
+    public void setCinemas(ArrayList<Cinema> cinemas) {
+        this.cinemas = cinemas;
     }
 
-    public ArrayList<Cinema> getmCities() {
-        return mCities;
+    public ArrayList<Cinema> getCities() {
+        return cities;
     }
 
-    public void setmCities(ArrayList<Cinema> mCities) {
-        this.mCities = mCities;
+    public void setCities(ArrayList<Cinema> cities) {
+        this.cities = cities;
     }
 
-    public Map<Long, ArrayList<PatheSchedule>> getmSchedulePerCinemaList() {
-        return mSchedulePerCinemaList;
+    public Map<Long, ArrayList<PatheSchedule>> getSchedulesPerCinema() {
+        return schedulesPerCinema;
     }
 
-    public void setmSchedulePerCinemaList(Map<Long, ArrayList<PatheSchedule>> mSchedulePerCinemaList) {
-        this.mSchedulePerCinemaList = mSchedulePerCinemaList;
+    public void setSchedulesPerCinema(Map<Long, ArrayList<PatheSchedule>> schedulesPerCinema) {
+        this.schedulesPerCinema = schedulesPerCinema;
     }
 
     public ArrayList<PatheSchedule> getSchedules() {
@@ -60,9 +62,9 @@ public class MovieSchedulePerCinema {
     @Override
     public String toString() {
         return "MovieSchedulePerCinema{" +
-                "mCinemaArray=" + mCinemaArray +
-                ", mCities=" + mCities +
-                ", mSchedulePerCinemaList=" + mSchedulePerCinemaList +
+                "cinemas=" + cinemas +
+                ", cities=" + cities +
+                ", schedulesPerCinema=" + schedulesPerCinema +
                 ", schedules=" + schedules +
                 '}';
     }

@@ -3,11 +3,16 @@ package it.sijmen.movienotifier;
 import it.sijmen.movienotifier.inj.JobFactory;
 import it.sijmen.movienotifier.jobs.CheckScheduleChangeJob;
 import it.sijmen.movienotifier.jobs.DayNightCalendar;
+import it.sijmen.movienotifier.str.NewScheduleListener;
+import it.sijmen.movienotifier.str.NotifierConfiguration;
+import it.sijmen.movienotifier.str.Recipient;
+import it.sijmen.movienotifier.str.filters.IntegerFilter;
 import org.quartz.*;
 import org.quartz.impl.StdSchedulerFactory;
 
 import javax.inject.Inject;
 import java.time.LocalTime;
+import java.util.ArrayList;
 
 import static org.quartz.SimpleScheduleBuilder.simpleSchedule;
 import static org.quartz.TriggerBuilder.newTrigger;
@@ -23,7 +28,13 @@ public class MovieNotifier {
     @Inject
     private ErrorLogger errorLogger;
 
+    @Inject
+    private NotifierConfiguration config;
+
     public void run() {
+
+        //removed: fill NotifierConfiguraiotn
+
         try {
             startJobs();
         } catch (SchedulerException e) {

@@ -21,8 +21,8 @@ public class Recipient {
     }
 
     public boolean isValid(){
-        return key != null && email != null && phonenumber != null &&
-                !key.isEmpty() && !email.isEmpty() && !phonenumber.isEmpty();
+        return key == null || email == null || phonenumber == null ||
+                key.isEmpty() || email.isEmpty() || phonenumber.isEmpty();
     }
 
     public String getKey() {

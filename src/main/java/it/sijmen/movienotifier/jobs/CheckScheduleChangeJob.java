@@ -58,7 +58,7 @@ public class CheckScheduleChangeJob implements org.quartz.Job {
             newData = api.getMovieSchedulePerCinema(movieKey);
             oldData = loadLastMovieData(movieKey);
         } catch (IOException e) {
-            errorHandler.log("Could not load newdata or olddata.", e);
+            errorHandler.log("Could not load newdata or old data. ", e);
             return;
         }
         List<PatheSchedule> newSchedules = filterNewSchedules(oldData, newData);
@@ -113,6 +113,8 @@ public class CheckScheduleChangeJob implements org.quartz.Job {
         File file = getMovieStorageFile(movieKey);
         FileWriter f2 = new FileWriter(file, false);
         f2.write(api.encode(data));
+        f2.flush();
+        f2.close();
     }
 
     private File getStoragePath(){

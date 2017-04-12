@@ -56,7 +56,7 @@ public class NewScheduleListener {
     private ArrayList<String> recipients;
 
     public boolean isValid(){
-        return name != null && !name.isEmpty() && movieid != -1 && recipients != null && !recipients.isEmpty();
+        return name == null || name.isEmpty() || movieid == -1 || recipients == null || recipients.isEmpty();
     }
 
     public boolean accepts(PatheSchedule schedule) {
@@ -82,6 +82,10 @@ public class NewScheduleListener {
 
     private <T> boolean accepts(FilterValue<T> value, T actualValue) {
         return value == null || value.accepts(actualValue);
+    }
+
+    private boolean accepts(FilterValue<Boolean> value, Integer actualValue) {
+        return value == null || value.accepts(actualValue == 1);
     }
 
     public String getName() {

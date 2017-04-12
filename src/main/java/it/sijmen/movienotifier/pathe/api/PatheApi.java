@@ -44,7 +44,7 @@ public class PatheApi {
             throw new IOException("Could not load request.", e);
         }
         if(stringHttpResponse.getStatus() != 200)
-            throw new IOException("Status returned " + stringHttpResponse.getStatus());
+            throw new IOException("Status returned " + stringHttpResponse.getStatus() + " after request " + PatheUrl.API_URL + uri);
         return stringHttpResponse.getBody();
     }
 
@@ -59,6 +59,6 @@ public class PatheApi {
     }
 
     public String encode(Object o) throws IOException {
-        return mapper.writeValueAsString(o);
+        return mapper.writerWithDefaultPrettyPrinter().writeValueAsString(o);
     }
 }

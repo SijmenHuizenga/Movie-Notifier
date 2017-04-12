@@ -10,8 +10,6 @@ public class PatheSchedule implements Serializable, Cloneable {
 
     private static final long serialVersionUID = -4593722361788767522L;
 
-    private Cinema cinema;
-
     @JsonProperty
     private int cinemaId;
     @JsonProperty("end")
@@ -91,138 +89,137 @@ public class PatheSchedule implements Serializable, Cloneable {
         return fakeEndOfShow;
     }
 
-    public int getStatus() {
-        return this.status;
-    }
-
-    public void setStatus(int status) {
-        this.status = status;
-    }
-
     public int getCinemaId() {
-        return this.cinemaId;
+        return cinemaId;
     }
 
     public void setCinemaId(int cinemaId) {
         this.cinemaId = cinemaId;
     }
 
-    public boolean getIsDutch() {
-        return this.isDutch == 1;
-    }
-
-    public void setIsDutch(int isDutch) {
-        this.isDutch = isDutch;
-    }
-
-    public boolean getIsOriginalVersion() {
-        return this.isOriginalVersion == 1;
-    }
-
-    public void setIsOriginalVersion(int isOriginalVersion) {
-        this.isOriginalVersion = isOriginalVersion;
-    }
-
-    public boolean getIsImax() {
-        return this.isImax == 1;
-    }
-
-    public void setIsImax(int isImax) {
-        this.isImax = isImax;
-    }
-
-    public boolean getIs3d() {
-        return this.is3d == 1;
+    public int getIs3d() {
+        return is3d;
     }
 
     public void setIs3d(int is3d) {
         this.is3d = is3d;
     }
 
-    public Cinema getCinema() {
-        return this.cinema;
+    public int getIsDutch() {
+        return isDutch;
     }
 
-    public void setCinema(Cinema cinema) {
-        this.cinema = cinema;
+    public void setIsDutch(int isDutch) {
+        this.isDutch = isDutch;
     }
 
-    public long getSpecialId() {
-        return this.specialId;
+    public int getIsImax() {
+        return isImax;
     }
 
-    public void setSpecialId(long specialId) {
-        this.specialId = specialId;
+    public void setIsImax(int isImax) {
+        this.isImax = isImax;
     }
 
-    public boolean getIsVIPAvailable() {
-        return isVIPAvailable == 1;
+    public int getIsOriginalVersion() {
+        return isOriginalVersion;
+    }
+
+    public void setIsOriginalVersion(int isOriginalVersion) {
+        this.isOriginalVersion = isOriginalVersion;
+    }
+
+    public int getIsVIPAvailable() {
+        return isVIPAvailable;
     }
 
     public void setIsVIPAvailable(int isVIPAvailable) {
         this.isVIPAvailable = isVIPAvailable;
     }
 
-    public boolean getIsHfr() {
-        return isHfr == 1;
+    public int getIsHfr() {
+        return isHfr;
     }
 
     public void setIsHfr(int isHfr) {
         this.isHfr = isHfr;
     }
 
-    public boolean getIsAtmos() {
-        return isAtmos == 1;
+    public int getIsAtmos() {
+        return isAtmos;
     }
 
     public void setIsAtmos(int isAtmos) {
         this.isAtmos = isAtmos;
     }
 
-    public boolean getIs4k() {
-        return is4k == 1;
+    public int getIs4k() {
+        return is4k;
     }
 
     public void setIs4k(int is4k) {
         this.is4k = is4k;
     }
 
-    public boolean getIsLaser() {
-        return isLaser == 1;
+    public int getIsLaser() {
+        return isLaser;
     }
 
     public void setIsLaser(int isLaser) {
         this.isLaser = isLaser;
     }
 
-    public boolean getIsPremium() {
-        return isPremium == 1;
+    public int getIsPremium() {
+        return isPremium;
     }
 
     public void setIsPremium(int isPremium) {
         this.isPremium = isPremium;
     }
 
-    public boolean getIsLargeHall() {
-        return isLargeHall == 1;
+    public int getIsLargeHall() {
+        return isLargeHall;
     }
 
     public void setIsLargeHall(int isLargeHall) {
         this.isLargeHall = isLargeHall;
     }
 
-    public boolean getIsRooftopHall() {
-        return isRooftopHall == 1;
+    public int getIsRooftopHall() {
+        return isRooftopHall;
     }
 
     public void setIsRooftopHall(int isRooftopHall) {
         this.isRooftopHall = isRooftopHall;
     }
 
+    public long getMovieId() {
+        return movieId;
+    }
+
+    public void setMovieId(long movieId) {
+        this.movieId = movieId;
+    }
+
+    public long getSpecialId() {
+        return specialId;
+    }
+
+    public void setSpecialId(long specialId) {
+        this.specialId = specialId;
+    }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
+    }
+
     @Override
     public String toString() {
         return "PatheSchedule{" +
-                "cinema=" + cinema +
                 ", cinemaId=" + cinemaId +
                 ", endOfShow=" + endOfShow +
                 ", is3d=" + is3d +
