@@ -9,32 +9,34 @@
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
+                <artifactId>maven-jar-plugin</artifactId>
                 <configuration>
-                    <source>1.8</source>
-                    <target>1.8</target>
+                    <archive>
+                        <manifest>
+                            <addClasspath>true</addClasspath>
+                            <mainClass>it.sijmen.movienotifier.Main</mainClass>
+                        </manifest>
+                    </archive>
                 </configuration>
             </plugin>
             <plugin>
-                <artifactId>maven-assembly-plugin</artifactId>
                 <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-assembly-plugin</artifactId>
                 <executions>
                     <execution>
-                        <id>make-executable-jar-with-dependencies</id>
-                        <phase>package</phase>
                         <goals>
-                            <goal>single</goal>
+                            <goal>attached</goal>
                         </goals>
+                        <phase>package</phase>
                         <configuration>
-                            <archive>
-                                <manifest>
-                                    <addClasspath>true</addClasspath>
-                                    <mainClass>it.sijmen.movienotifier.MovieNotifier</mainClass>
-                                </manifest>
-                            </archive>
                             <descriptorRefs>
                                 <descriptorRef>jar-with-dependencies</descriptorRef>
                             </descriptorRefs>
+                            <archive>
+                                <manifest>
+                                    <mainClass>it.sijmen.movienotifier.Main</mainClass>
+                                </manifest>
+                            </archive>
                         </configuration>
                     </execution>
                 </executions>
@@ -53,6 +55,8 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
     </properties>
 
     <dependencies>
