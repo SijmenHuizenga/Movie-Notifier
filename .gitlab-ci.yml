@@ -21,7 +21,7 @@ build-notifier-service:
       - notifier/target/notifierservice.fat.jar
     expire_in: 1 week
 
-build-notifier-service:
+publish-notifier-service:
   stage: deploy
   services:
     - docker:dind
