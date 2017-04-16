@@ -3,9 +3,6 @@ image: docker:latest
 services:
   - docker:dind
 
-before_script:
-  -
-
 notifier:
   stage: build
   script:
