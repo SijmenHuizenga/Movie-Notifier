@@ -11,11 +11,14 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>notifier</artifactId>
+
     <dependencies>
         <dependency>
             <groupId>it.sijmen.movienotifier</groupId>
             <artifactId>common</artifactId>
             <version>1.0-SNAPSHOT</version>
+            <scope>system</scope>
+            <systemPath>${basedir}/../common/target/common-1.0-SNAPSHOT.jar</systemPath>
         </dependency>
         <dependency>
             <groupId>net.sargue</groupId>
@@ -37,8 +40,56 @@
             <artifactId>guice</artifactId>
             <version>4.1.0</version>
         </dependency>
-
     </dependencies>
+
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <addClasspath>true</addClasspath>
+                            <mainClass>it.sijmen.movienotifier.notifier.NotifierService</mainClass>
+                        </manifest>
+                    </archive>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>attached</goal>
+                        </goals>
+                        <phase>package</phase>
+                        <configuration>
+                            <finalName>notifierservice.fat</finalName>
+                            <archive>
+                                <manifest>
+                                    <mainClass>it.sijmen.movienotifier.notifier.NotifierService</mainClass>
+                                </manifest>
+                            </archive>
+
+                                <descriptorRefs>
+                                    <descriptorRef>jar-with-dependencies</descriptorRef>
+                                </descriptorRefs>
+
+                            <appendAssemblyId>false</appendAssemblyId>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+            </resource>
+        </resources>
+    </build>
 
 
 </project>

@@ -1,3 +1,13 @@
+image: docker:latest
+
+services:
+  - docker:dind
+
 notifier:
+  stage: build
   script:
-    - ./notifier;mvn package;
+    - cd ./ common
+    - mvn package
+    - cd ../notifier
+    - mvn package
+    - docker build -f Dockerfile -t notifier-service .
