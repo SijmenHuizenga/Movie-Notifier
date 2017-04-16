@@ -14,8 +14,8 @@ build-notifier-service:
   image: maven:3-jdk-8
   stage: build
   script:
-    - 'mvn $MAVEN_CLI_OPTS -B -f common/pom.xml install'
-    - 'mvn $MAVEN_CLI_OPTS -B -f notifier/pom.xml package'
+    - mvn -B -f common/pom.xml install
+    - mvn -B -f notifier/pom.xml package
   artifacts:
     paths:
       - notifier/target/notifierservice.fat.jar
@@ -27,4 +27,6 @@ publish-notifier-service:
     - docker:dind
   script:
     - cp notifier/target/notifierservice.fat.jar service.jar
-    - docker build -t notifierservice .
+    - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN registry.gitlab.com
+    - docker build -t $CI_REGISTRY_IMAGE:notifier-latest -t $CI_REGISTRY_IMAGE:notifier-$CI_COMMIT_REF_NAME  .
+    - docker push $CI_REGISTRY_IMAGE:notifier
