@@ -30,6 +30,16 @@ public class Recipient implements Validateble {
         this.phonenumber = phonenumber;
     }
 
+    public Recipient(String uuid, String name, String email, String phonenumber) {
+        this.uuid = UUID.fromString(uuid);
+        this.name = name;
+        this.email = email;
+        this.phonenumber = phonenumber;
+    }
+
+    public Recipient() {
+    }
+
     @Override
     public boolean isValid(){
         return !empty(name) && !empty(email) && !empty(phonenumber);
@@ -65,6 +75,10 @@ public class Recipient implements Validateble {
 
     public void setUuid(UUID uuid) {
         this.uuid = uuid;
+    }
+
+    public void setUuid(String uuid) {
+        this.uuid = UUID.fromString(uuid);
     }
 
     @Override

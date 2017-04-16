@@ -28,6 +28,5 @@ publish-notifier-service:
   script:
     - cp notifier/target/notifierservice.fat.jar service.jar
     - docker login -u sijmenhuizenga -p $DOCKERPWD
-    - docker build -t sijmenhuizenga/movienotifier:notifier-latest -t sijmenhuizenga/movienotifier:notifier-$CI_COMMIT_REF_NAME .
-    - docker push sijmenhuizenga/movienotifier:notifier-latest
-    - docker push sijmenhuizenga/movienotifier:notifier-$CI_COMMIT_REF_NAME
+    - docker build -t sijmenhuizenga/movienotifier:notifier-service .
+    - docker push sijmenhuizenga/movienotifier:notifier-service

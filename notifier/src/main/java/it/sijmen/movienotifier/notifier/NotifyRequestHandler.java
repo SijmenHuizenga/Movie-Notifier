@@ -14,11 +14,14 @@ import static spark.Spark.halt;
  */
 class NotifyRequestHandler {
 
-    @Inject
     private Coder coder;
+    private NotificationSender sender;
 
     @Inject
-    private NotificationSender sender;
+    public NotifyRequestHandler(NotificationSender sender, Coder coder) {
+        this.coder = coder;
+        this.sender = sender;
+    }
 
     void notify(String requestBody) {
         try{
@@ -40,6 +43,7 @@ class NotifyRequestHandler {
         try {
             return coder.decode(requestBody, NotifyRequest.class);
         } catch (IOException e) {
+            e.printStackTrace();
             throw halt(400, "Bad request. Could not parse json.");
         }
     }

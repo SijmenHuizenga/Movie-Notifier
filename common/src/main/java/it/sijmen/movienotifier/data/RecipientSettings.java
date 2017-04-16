@@ -25,6 +25,9 @@ public class RecipientSettings implements Validateble {
         this.receiveFbMessge = receiveFbMessge;
     }
 
+    public RecipientSettings() {
+    }
+
     @Override
     public boolean isValid() {
         return true;
