@@ -14,7 +14,7 @@ cache:
   paths:
     - /root/.m2/repository/
 
-mvn-package:
+mvnpackage:
   image: maven:3-jdk-8:latest
   stage: build
   script:
@@ -30,4 +30,4 @@ release:
   services:
     - docker:dind
   script:
-    - docker build -f notifier/Dockerfile -t notifier-service .
+    - docker build -f notifier/Dockerfile -t notifierservice .
