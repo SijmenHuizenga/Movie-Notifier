@@ -1,4 +1,4 @@
-image: docker:latest
+image: maven:3-jdk-7
 
 services:
   - docker:dind
@@ -6,7 +6,6 @@ services:
 notifier:
   stage: build
   script:
-    - apt-get install maven
     - cd ./ common
     - mvn package
     - cd ../notifier
