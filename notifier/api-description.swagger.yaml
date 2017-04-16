@@ -1,0 +1,103 @@
+swagger: '2.0'
+
+info:
+  version: "1.0"
+  title: Notification Service
+paths:
+  /notify:
+    post:
+      description: |
+        Notifies a `Recipient` of a message.
+      parameters:
+        -
+          name: NotifyRequest
+          in: body
+          required: true
+          schema:
+            type: object
+            required:
+              - apikey
+              - recipient
+              - message
+            properties:
+              apikey:
+                $ref: '#/definitions/APIKey'
+              recipient:
+                $ref: '#/definitions/Recipient'
+              settings:
+                $ref: '#/definitions/RecipientSettings'
+              message:
+                type: string
+                description: The message to sent. Should be short because it might be sent through SMS.
+      responses:
+        200:
+          description: The notification is successful. All notification types are fullfilled.
+        202:
+          description: The notification is partially succesful. The notification of the recipient was partially succesfull. At least 1 notification method is successfull and at least 1 notification method has failed.
+        400:
+          description: Bade Request
+        403:
+          description: Not Authorized
+        500:
+          description: Internal server error.
+        501:
+          description: Internal notification error. None of the notifications have been sent.
+  /ping:
+    get:
+      description: Ping to this server to check the health
+      responses:
+        200:
+          description: The service is ok.
+        503:
+          description: The service is not ok.
+          schema:
+             type: string
+             title: description
+             description: The reason of the failure of the service
+definitions:
+  APIKey:
+    type: string
+    description: A 64 character string that authenticates the request.
+  UUID:
+    type: string
+    description: A Universally Unique IDentifier as described in RFC 4122.
+  EMail:
+    type: string
+    description: A valid email adres.
+  PhoneNumber:
+    type: string
+    description: A valid, Global Number as described in RFC 3966 section 5.1.4 (always in the format of +[countrycode][phonenumber]).
+  Recipient:
+    type: object
+    required:
+      - uuid
+      - name
+      - email
+      - phonenumber
+    properties:
+      uuid:
+        $ref: "#/definitions/UUID"
+      name:
+        title: Username
+        type: string
+        description: The user-friendly name of this recipient.
+      email:
+        $ref: "#/definitions/EMail"
+      phonenumber:
+        $ref: "#/definitions/PhoneNumber"
+  RecipientSettings:
+    type: object
+    required:
+      - receiveEmails
+      - receiveSms
+      - receiveFbMessge
+    properties:
+      receiveEmails:
+        type: boolean
+        description: Wether or not the recipient wants to receive email notifications
+      receiveSms:
+        type: boolean
+        description: Wether or not the recipient wants to receive sms notifications
+      receiveFbMessge:
+        type: boolean
+        description: Wether or not the recipient wants to receive facebook messenger notifications
