@@ -6,8 +6,6 @@ services:
 notifier:
   stage: build
   script:
-    - cd ./ common
-    - mvn package
-    - cd ../notifier
-    - mvn package
-    - docker build -f Dockerfile -t notifier-service .
+    - mvn -f common/pom.xml package
+    - mvn -f notifier/pom.xml package
+    - docker build -f notifier/Dockerfile -t notifier-service .
