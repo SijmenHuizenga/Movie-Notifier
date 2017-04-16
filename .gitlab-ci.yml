@@ -10,7 +10,7 @@ cache:
   paths:
     - /root/.m2/repository/
 
-mvnpackage:
+build-notifier-service:
   image: maven:3-jdk-8
   stage: build
   script:
@@ -18,12 +18,13 @@ mvnpackage:
     - 'mvn $MAVEN_CLI_OPTS -B -f notifier/pom.xml package'
   artifacts:
     paths:
-      - notifier/target/surefire-reports/*
       - notifier/target/notifierservice.fat.jar
+    expire_in: 1 week
 
-release:
+build-notifier-service:
   stage: deploy
   services:
     - docker:dind
   script:
-    - docker build -f notifier/Dockerfile -t notifierservice .
+    - cp notifier/target/notifierservice.fat.jar service.jar
+    - docker build -t notifierservice .
