@@ -28,5 +28,6 @@ publish-notifier-service:
   script:
     - cp notifier/target/notifierservice.fat.jar service.jar
     - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN registry.gitlab.com
-    - docker build -t $CI_REGISTRY_IMAGE:notifier-latest -t $CI_REGISTRY_IMAGE:notifier-$CI_COMMIT_REF_NAME  .
-    - docker push $CI_REGISTRY_IMAGE:notifier
+    - docker build -t $CI_REGISTRY_IMAGE:notifier-latest -t $CI_REGISTRY_IMAGE:notifier-$CI_COMMIT_REF_NAME .
+    - docker push $CI_REGISTRY_IMAGE:notifier-latest
+    - docker push $CI_REGISTRY_IMAGE:notifier-$CI_COMMIT_REF_NAME
