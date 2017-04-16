@@ -4,11 +4,6 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import it.sijmen.movienotifier.coder.Coder;
 import it.sijmen.movienotifier.coder.JsonCoder;
-import it.sijmen.movienotifier.notifier.notifiers.FBMessengerNotifier;
-import it.sijmen.movienotifier.notifier.notifiers.MailNotifier;
-import it.sijmen.movienotifier.notifier.notifiers.Notifier;
-import it.sijmen.movienotifier.notifier.notifiers.SMSNotifier;
-
 import javax.inject.Named;
 
 /**
