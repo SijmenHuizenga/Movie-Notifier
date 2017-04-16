@@ -1,0 +1,3 @@
+notifier:
+  script:
+    - ./notifier;mvn package;
