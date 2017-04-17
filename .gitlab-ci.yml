@@ -10,23 +10,30 @@ cache:
   paths:
     - /root/.m2/repository/
 
-build-notifier-service:
+build:
   image: maven:3-jdk-8
   stage: build
   script:
     - mvn -B -f common/pom.xml install
     - mvn -B -f notifier/pom.xml package
+    - mvn -B -f configurator/pom.xml package
   artifacts:
     paths:
       - notifier/target/notifierservice.fat.jar
+      - notifier/target/notifierservice.fat.jar
     expire_in: 1 week
 
-publish-notifier-service:
+publish:
   stage: deploy
   services:
     - docker:dind
   script:
-    - cp notifier/target/notifierservice.fat.jar service.jar
     - docker login -u sijmenhuizenga -p $DOCKERPWD
+
+    - cp notifier/target/notifierservice.fat.jar service.jar
     - docker build -t sijmenhuizenga/movienotifier:notifier-service .
     - docker push sijmenhuizenga/movienotifier:notifier-service
+
+    - cp notifier/target/configuratorservice.fat.jar service.jar
+    - docker build -t sijmenhuizenga/movienotifier:configurator-service .
+    - docker push sijmenhuizenga/movienotifier:configurator-service

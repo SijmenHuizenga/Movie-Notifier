@@ -43,7 +43,6 @@ class NotifyRequestHandler {
         try {
             return coder.decode(requestBody, NotifyRequest.class);
         } catch (IOException e) {
-            e.printStackTrace();
             throw halt(400, "Bad request. Could not parse json.");
         }
     }

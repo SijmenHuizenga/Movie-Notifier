@@ -27,7 +27,7 @@ class NotificationSender {
 
     @Inject
     NotificationSender(
-            @Notifier.FBMSG Notifier smsNotifier,
+            @Notifier.SMS Notifier smsNotifier,
             @Notifier.FBMSG Notifier fbMessengerNotifier,
             @Notifier.MAIL Notifier mailNotifier) {
         this.smsNotifier = smsNotifier;

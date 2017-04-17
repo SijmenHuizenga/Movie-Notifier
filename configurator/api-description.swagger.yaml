@@ -1,0 +1,65 @@
+swagger: '2.0'
+
+info:
+  version: "1.0"
+  title: Configurator Service
+paths:
+  /ping:
+    get:
+      description: Ping to this server to check the health
+      responses:
+        200:
+          description: The service is ok.
+        503:
+          description: The service is not ok.
+          schema:
+             type: string
+             title: description
+             description: The reason of the failure of the service
+definitions:
+  APIKey:
+    type: string
+    description: A 64 character string that authenticates the request.
+  UUID:
+    type: string
+    description: A Universally Unique IDentifier as described in RFC 4122.
+  EMail:
+    type: string
+    description: A valid email adres.
+  PhoneNumber:
+    type: string
+    description: A valid, Global Number as described in RFC 3966 section 5.1.4 (always in the format of +[countrycode][phonenumber]).
+  Recipient:
+    type: object
+    required:
+      - uuid
+      - name
+      - email
+      - phonenumber
+    properties:
+      uuid:
+        $ref: "#/definitions/UUID"
+      name:
+        title: Username
+        type: string
+        description: The user-friendly name of this recipient.
+      email:
+        $ref: "#/definitions/EMail"
+      phonenumber:
+        $ref: "#/definitions/PhoneNumber"
+  RecipientSettings:
+    type: object
+    required:
+      - receiveEmails
+      - receiveSms
+      - receiveFbMessge
+    properties:
+      receiveEmails:
+        type: boolean
+        description: Wether or not the recipient wants to receive email notifications
+      receiveSms:
+        type: boolean
+        description: Wether or not the recipient wants to receive sms notifications
+      receiveFbMessge:
+        type: boolean
+        description: Wether or not the recipient wants to receive facebook messenger notifications
