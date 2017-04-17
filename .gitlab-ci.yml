@@ -1,7 +1,4 @@
 image: docker:git
-#services:
-#  - docker:dind
-
 stages:
   - build
   - deploy
@@ -25,8 +22,6 @@ build:
 
 publish:
   stage: deploy
-  services:
-    - docker:dind
   script:
     - docker login -u sijmenhuizenga -p $DOCKERPWD
 
