@@ -20,10 +20,10 @@ public class ConfiguratorService extends AbstractService {
     }
 
     void start(){
-        get("/ping", (req, resp) -> "The service is ok.");
-
-        RedisClient client = RedisClient.create("redis://localhost");
+        RedisClient client = RedisClient.create("redis://configuratordb");
         client.connect();
+
+        get("/ping", (req, resp) -> "The service is ok.");
     }
 
     public static void main(String[] args) {
