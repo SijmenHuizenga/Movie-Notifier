@@ -20,7 +20,7 @@ build:
   artifacts:
     paths:
       - notifier/target/notifierservice.fat.jar
-      - configurator/target/notifierservice.fat.jar
+      - configurator/target/configuratorservice.fat.jar
     expire_in: 1 week
 
 publish:
