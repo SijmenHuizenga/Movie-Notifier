@@ -3,6 +3,7 @@ package it.sijmen.movienotifier.configurator;
 import com.google.inject.Guice;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
+import com.lambdaworks.redis.RedisClient;
 import it.sijmen.movienotifier.coder.Coder;
 import it.sijmen.movienotifier.service.AbstractService;
 
@@ -20,6 +21,9 @@ public class ConfiguratorService extends AbstractService {
 
     void start(){
         get("/ping", (req, resp) -> "The service is ok.");
+
+        RedisClient client = RedisClient.create("redis://configuratordb");
+        client.connect();
     }
 
     public static void main(String[] args) {
