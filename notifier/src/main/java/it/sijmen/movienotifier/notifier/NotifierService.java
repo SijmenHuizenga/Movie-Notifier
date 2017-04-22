@@ -27,7 +27,7 @@ public class NotifierService extends AbstractService {
             notifyRequestHandler.notify(req.body());
             return "";
         });
-        get("/ping", (req, resp) -> "The service is ok.");
+        get("/ping", (req, resp) -> "The service is ok!");
     }
 
     public static void main(String[] args) {
