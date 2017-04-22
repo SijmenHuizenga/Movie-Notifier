@@ -1,5 +1,6 @@
 image: docker:git
 stages:
+  - prepare
   - build
   - deploy
 
@@ -7,20 +8,32 @@ cache:
   paths:
     - /root/.m2/repository/
 
-build:
+install-common:
+  image: maven:3-jdk-8
+  stage: prepare
+  script:
+    - mvn -B -f common/pom.xml install
+
+build-notifier:
   image: maven:3-jdk-8
   stage: build
   script:
-    - mvn -B -f common/pom.xml install
     - mvn -B -f notifier/pom.xml package
-    - mvn -B -f configurator/pom.xml package
   artifacts:
     paths:
       - notifier/target/notifierservice.fat.jar
+    expire_in: 6 hrs
+build-configurator:
+  image: maven:3-jdk-8
+  stage: build
+  script:
+    - mvn -B -f configurator/pom.xml package
+  artifacts:
+    paths:
       - configurator/target/configuratorservice.fat.jar
-    expire_in: 1 week
+    expire_in: 6 hrs
 
-publish:
+publish-notifier:
   stage: deploy
   script:
     - docker login -u sijmenhuizenga -p $DOCKERPWD
@@ -28,6 +41,10 @@ publish:
     - cp notifier/target/notifierservice.fat.jar service.jar
     - docker build -t sijmenhuizenga/movienotifier:notifier-service .
     - docker push sijmenhuizenga/movienotifier:notifier-service
+publish-configurator:
+  stage: deploy
+  script:
+    - docker login -u sijmenhuizenga -p $DOCKERPWD
 
     - cp configurator/target/configuratorservice.fat.jar service.jar
     - docker build -t sijmenhuizenga/movienotifier:configurator-service .

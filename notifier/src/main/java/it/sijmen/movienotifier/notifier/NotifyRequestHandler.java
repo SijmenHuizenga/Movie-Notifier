@@ -1,6 +1,7 @@
 package it.sijmen.movienotifier.notifier;
 
 import com.google.inject.Inject;
+import com.google.inject.Provider;
 import it.sijmen.movienotifier.notifier.requests.NotifyRequest;
 import it.sijmen.movienotifier.coder.Coder;
 import spark.HaltException;
@@ -14,13 +15,16 @@ import static spark.Spark.halt;
  */
 class NotifyRequestHandler {
 
-    private Coder coder;
-    private NotificationSender sender;
+    private final Provider<NotifyRequest> requestProvider;
+
+    private final Coder coder;
+    private final NotificationSender sender;
 
     @Inject
-    public NotifyRequestHandler(NotificationSender sender, Coder coder) {
+    public NotifyRequestHandler(NotificationSender sender, Coder coder, Provider<NotifyRequest> requestProvider) {
         this.coder = coder;
         this.sender = sender;
+        this.requestProvider = requestProvider;
     }
 
     void notify(String requestBody) {
@@ -41,7 +45,7 @@ class NotifyRequestHandler {
 
     private NotifyRequest makeRequest(String requestBody) {
         try {
-            return coder.decode(requestBody, NotifyRequest.class);
+            return coder.decode(requestBody, requestProvider.get());
         } catch (IOException e) {
             throw halt(400, "Bad request. Could not parse json.");
         }

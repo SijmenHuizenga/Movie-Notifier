@@ -1,7 +1,9 @@
 package it.sijmen.movienotifier.coder;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import it.sijmen.movienotifier.data.Notifier;
 import spark.ResponseTransformer;
 
 import java.io.IOException;
@@ -11,7 +13,7 @@ import java.io.IOException;
  */
 public class JsonCoder implements Coder {
 
-    protected ObjectMapper mapper;
+    private ObjectMapper mapper;
 
     public JsonCoder() {
         this.mapper = new ObjectMapper();
@@ -21,6 +23,11 @@ public class JsonCoder implements Coder {
     @Override
     public <T> T decode(String json, Class<? extends T> dataClass) throws IOException {
         return mapper.readValue(json, dataClass);
+    }
+
+    @Override
+    public <T> T decode(String json, T obj) throws IOException {
+        return mapper.readerForUpdating(obj).readValue(json);
     }
 
     @Override

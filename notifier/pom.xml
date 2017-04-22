@@ -81,6 +81,11 @@
             <artifactId>aws-java-sdk</artifactId>
             <version>1.11.115</version>
         </dependency>
+        <dependency>
+            <groupId>com.github.stefanbirkner</groupId>
+            <artifactId>system-rules</artifactId>
+            <version>1.16.1</version>
+        </dependency>
     </dependencies>
 
     <build>

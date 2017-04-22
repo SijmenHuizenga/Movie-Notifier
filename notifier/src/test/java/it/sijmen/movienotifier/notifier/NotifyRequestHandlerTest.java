@@ -1,7 +1,9 @@
 package it.sijmen.movienotifier.notifier;
 
+import com.google.inject.Provider;
 import it.sijmen.movienotifier.coder.JsonCoder;
 import it.sijmen.movienotifier.notifier.notifiers.Notifier;
+import it.sijmen.movienotifier.notifier.requests.NotifyRequest;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -25,10 +27,11 @@ public class NotifyRequestHandlerTest {
     public void notifyTest() throws Exception {
         NotifyRequestHandler handler = new NotifyRequestHandler(
                 new NotificationSender(sms, fbMsg, mail),
-                new JsonCoder()
+                new JsonCoder(),
+                () -> new NotifyRequest(new String[]{"abc"})
         );
         handler.notify("{\n" +
-                "  \"apikey\": \"F5735948F1A6C8A4F79AD6B80D67FED6BD8F6AED974CC8BF6D5EB7CD291406A1\",\n" +
+                "  \"apikey\": \"abc\",\n" +
                 "  \"recipient\": {\n" +
                 "    \"uuid\": \"66de7d60-22ef-11e7-93ae-92361f002671\",\n" +
                 "    \"name\": \"Sijmen\",\n" +

@@ -1,10 +1,23 @@
 version: "3"
+
+networks:
+  frontnet:
+  dbnet:
+
 services:
+  nginx-proxy:
+    image: jwilder/nginx-proxy
+    container_name: nginx-proxy
+    ports:
+      - "80:80"
+    volumes:
+      - /var/run/docker.sock:/tmp/docker.sock:ro
   notifier:
     image: sijmenhuizenga/movienotifier:notifier-service
-    ports:
-      - 81:80
+    depends_on:
+      - nginx-proxy
     environment:
+      VIRTUAL_HOST: ...
       NOTIFIER_FB_MESSENGER_TOKEN: ...
       NOTIFIER_MAILGUN_SECRET: ...
       NOTIFIER_MAILGUN_DOMAIN: ...
@@ -12,7 +25,26 @@ services:
       NOTIFIER_MAILGUN_FROMEMAIL: ...
       NOTIFIER_AWSSNS_ACCESSKEY: ...
       NOTIFIER_AWSSNS_SECRETKEY: ...
+      NOTIFIER_APIKEYS: ...
+    networks:
+      - frontnet
   configurator:
     image: sijmenhuizenga/movienotifier:configurator-service
-    ports:
-      - 82:80
+    environment:
+      VIRTUAL_HOST: ...
+    depends_on:
+      - configuratordb
+      - nginx-proxy
+    networks:
+      - frontnet
+      - dbnet
+  configuratordb:
+    container_name: configuratordb
+    image: redis
+    ports: ["6379"]
+    command: redis-server --appendonly yes
+    hostname: configuratordb
+    volumes:
+      - /var/docker-persistance/configuratordb:/data
+    networks:
+      - dbnet
