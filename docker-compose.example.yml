@@ -12,6 +12,8 @@ services:
       - "80:80"
     volumes:
       - /var/run/docker.sock:/tmp/docker.sock:ro
+    networks:
+      - frontnet
   notifier:
     image: sijmenhuizenga/movienotifier:notifier-service
     depends_on:
@@ -41,7 +43,6 @@ services:
   configuratordb:
     container_name: configuratordb
     image: redis
-    ports: ["6379"]
     command: redis-server --appendonly yes
     hostname: configuratordb
     volumes:

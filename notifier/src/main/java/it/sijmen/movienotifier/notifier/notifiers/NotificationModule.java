@@ -35,9 +35,6 @@ public class NotificationModule extends AbstractModule {
             NOTIFIER_APIKEYS
     };
 
-    @Inject
-    private Env env;
-
     @Override
     protected void configure() {
         bind(Notifier.class).annotatedWith(Notifier.SMS.class).to(SMSNotifier.class);
@@ -46,50 +43,58 @@ public class NotificationModule extends AbstractModule {
     }
 
     @Provides
+    @Inject
     @Named("fb-messenger-token")
-    public String getFbMessengerApiToken(){
+    public String getFbMessengerApiToken(Env env){
         return env.getenv(NOTIFIER_FB_MESSENGER_TOKEN);
     }
 
     @Provides
+    @Inject
     @Named("mailgun-secret")
-    public String getMailgunSecrent(){
+    public String getMailgunSecrent(Env env){
         return env.getenv(NOTIFIER_MAILGUN_SECRET);
     }
 
     @Provides
+    @Inject
     @Named("mailgun-domain")
-    public String getMailgunDomain(){
+    public String getMailgunDomain(Env env){
         return env.getenv(NOTIFIER_MAILGUN_DOMAIN);
     }
 
     @Provides
+    @Inject
     @Named("mailgun-from-name")
-    public String getMailgunFromName(){
+    public String getMailgunFromName(Env env){
         return env.getenv(NOTIFIER_MAILGUN_FROMNAME);
     }
 
     @Provides
+    @Inject
     @Named("mailgun-from-mail")
-    public String getMailgunFromEmail(){
+    public String getMailgunFromEmail(Env env){
         return env.getenv(NOTIFIER_MAILGUN_FROMEMAIL);
     }
 
     @Provides
+    @Inject
     @Named("aws-sns-accesskey")
-    public String getAwsSnsAccesskey(){
+    public String getAwsSnsAccesskey(Env env){
         return env.getenv(NOTIFIER_AWSSNS_ACCESSKEY);
     }
 
     @Provides
+    @Inject
     @Named("aws-sns-secretkey")
-    public String getAwsSnsSecretkey(){
+    public String getAwsSnsSecretkey(Env env){
         return env.getenv(NOTIFIER_AWSSNS_SECRETKEY);
     }
 
     @Provides
+    @Inject
     @Named("api-keys")
-    public String[] getApiKeys(){
+    public String[] getApiKeys(Env env){
         return env.getenv(NOTIFIER_APIKEYS).split(",");
     }
 }
