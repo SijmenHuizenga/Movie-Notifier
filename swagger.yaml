@@ -1,0 +1,800 @@
+swagger: '2.0'
+
+info:
+  version: "3.0"
+  title: Movie Notifier
+paths:
+  /notifications:
+    get:
+      description: Get a list of the available notification types.
+      responses:
+        200:
+          description: The available notification types.
+          schema:
+            type: array
+            items:
+              type: object
+              properties:
+                notificationtypeid:
+                  $ref: '#/definitions/notificationtypeid'
+                title:
+                  description: The title of this notification type
+                  type: string
+                description:
+                  description: The description of this notification type
+                  type: string
+        400:
+          description: Bad Request
+        401:
+          $ref: "#/responses/UnauthorizedError"
+        500:
+          description: Internal server error
+      security:
+        - API-KEY: []
+  /notifications/{userid}:
+    get:
+      description: Get the notification settings of a user.
+      parameters:
+        - $ref: '#/parameters/userid'
+      responses:
+        200:
+          description: The notification settings of the given user
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/notificationsetting'
+        400:
+          description: Bad Request
+        401:
+          $ref: "#/responses/UnauthorizedError"
+        500:
+          description: Internal server error
+      security:
+        - API-KEY: []
+    post:
+      description: Update the notification settings of a user.
+      parameters:
+        - $ref: '#/parameters/userid'
+        - name: notificationsettings
+          in: body
+          required: true
+          description: The new notification settings of a given user. All notification types that are not specified are set to the default value false.
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/notificationsetting'
+      responses:
+        200:
+          description: The updates are saved. Response are the new total notification settings.
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/notificationsetting'
+        400:
+          description: Bad Request
+        401:
+          $ref: "#/responses/UnauthorizedError"
+        500:
+          description: Internal server error
+      security:
+        - API-KEY: []
+  /notifications/{userid}/send:
+    post:
+      description: Send a notification to a user
+      parameters:
+        - $ref: '#/parameters/userid'
+        - name: message
+          in: body
+          schema:
+            type: string
+          description: The message to send to the user.
+          required: true
+      responses:
+        200:
+          description: The notification(s) have been sent according to the user's notification settings.
+        400:
+          description: Bad Request
+        401:
+          $ref: "#/responses/UnauthorizedError"
+        500:
+          description: Internal server error
+      security:
+        - API-KEY: []
+  /user:
+    put:
+      description: Create a new user.
+      parameters:
+        - name: details
+          in: body
+          description: The user data of the new user.
+          required: true
+          schema:
+            type: object
+            required:
+              - name
+              - email
+              - phonenumber
+              - password
+            properties:
+              name:
+                $ref: '#/definitions/name'
+              email:
+                $ref: '#/definitions/email'
+              phonenumber:
+                $ref: '#/definitions/phonenumber'
+              password:
+                $ref: '#/definitions/password'
+      responses:
+        200:
+         description: Returns the details about the created user
+         schema:
+           $ref: '#/definitions/User'
+        400:
+          description: Bad Request. This reason is described in the body.
+          schema:
+            type: string
+            description: The reason for creation failure.
+        500:
+          description: Internal server error
+  /user/auth:
+    get:
+      description: Login a user.
+      parameters:
+        - name: details
+          in: body
+          description: The login details
+          required: true
+          schema:
+            type: object
+            required:
+              - name
+              - password
+            properties:
+              name:
+                $ref: '#/definitions/name'
+              password:
+                $ref: '#/definitions/password'
+      responses:
+        200:
+         description: The login is successfull. The user details are returned.
+         schema:
+           $ref: '#/definitions/User'
+        400:
+          description: Bad Request
+        403:
+          description: Not Authorized. The name/password combination is not correct.
+        500:
+          description: Internal server error
+  /user/{userid}:
+    get:
+      description: Get user details
+      parameters:
+        - $ref: '#/parameters/userid'
+      responses:
+        200:
+         description: Returns the details about the user
+         schema:
+           $ref: '#/definitions/User'
+        400:
+          description: Bad Request
+        401:
+          $ref: "#/responses/UnauthorizedError"
+        500:
+          description: Internal server error
+      security:
+        - API-KEY: []
+    post:
+      description: Updates a user
+      parameters:
+        - $ref: '#/parameters/userid'
+        - name: details
+          in: body
+          description: The fields that should be updated. Fields that do not require updates can be omitted.
+          required: true
+          schema:
+            type: object
+            properties:
+              name:
+                $ref: '#/definitions/name'
+              email:
+                $ref: '#/definitions/email'
+              phonenumber:
+                $ref: '#/definitions/phonenumber'
+              password:
+                $ref: '#/definitions/password'
+      responses:
+        200:
+         description: Returns the details about the updated user
+         schema:
+           $ref: '#/definitions/User'
+        400:
+          description: Bad Request
+        401:
+          $ref: "#/responses/UnauthorizedError"
+        500:
+          description: Internal server error
+      security:
+        - API-KEY: []
+    delete:
+      description: Deletes a user and all corresponding data in the system.
+      parameters:
+        - $ref: '#/parameters/userid'
+      responses:
+        200:
+         description: The user is succesfully deleted
+        400:
+          description: Bad Request
+        401:
+          $ref: "#/responses/UnauthorizedError"
+        500:
+          description: Internal server error
+      security:
+        - API-KEY: []
+  /auth/{apikey}:
+    get:
+      description: Given a user api key, check weather or not a user is authorized to use the system.
+      parameters:
+        - name: apikey
+          in: path
+          description: The api key to check.
+          type: string
+          minLength: 64
+          maxLength: 64
+          required: true
+      responses:
+        200:
+          description: The user is authenticated to use the system.
+          schema:
+            type: string
+            description: The uuid of the authenticated user.
+            format: uuid
+        401:
+          description: The given api key does not authorize any user.
+        400:
+          description: Bad Request
+        500:
+          description: Internal server error
+      security:
+        - API-KEY: []
+  /watchers:
+    get:
+      description: Get a list of all watchers
+      responses:
+        200:
+          description: All the watchers.
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Watcher'
+        400:
+          description: Bad Request
+        401:
+          $ref: "#/responses/UnauthorizedError"
+        500:
+          description: Internal server error
+      security:
+        - API-KEY: []
+  /watchers/{watcherid}:
+    get:
+      description: Get the details of the given watcher id
+      parameters:
+        - $ref: '#/parameters/watcherid'
+      responses:
+        200:
+          description: Watcher details.
+          schema:
+            $ref: '#/definitions/Watcher'
+        400:
+          description: Bad Request
+        401:
+          $ref: "#/responses/UnauthorizedError"
+        500:
+          description: Internal server error
+      security:
+        - API-KEY: []
+    post:
+      description: Update the details of the given watcher id
+      parameters:
+        - $ref: '#/parameters/watcherid'
+        - name: watcher
+          in: body
+          description: The watcher data to update.
+          schema:
+            $ref: '#/definitions/UDWatcher'
+          required: true
+      responses:
+        200:
+          description: The update is succesful. Returned is the created watcher.
+          schema:
+            $ref: '#/definitions/Watcher'
+        400:
+          description: Bad Request
+          schema:
+            type: string
+            description: The reason for creation failure.
+        401:
+          $ref: "#/responses/UnauthorizedError"
+        500:
+          description: Internal server error
+      security:
+        - API-KEY: []
+    delete:
+      description: Delete the watcher given the watcher id
+      parameters:
+        - $ref: '#/parameters/watcherid'
+      responses:
+        200:
+          description: The deletion is succesful.
+        400:
+          description: Bad Request
+        401:
+          $ref: "#/responses/UnauthorizedError"
+        500:
+          description: Internal server error
+      security:
+        - API-KEY: []
+  /watchers/user/{userid}:
+    get:
+      description: Get a list of all watchers given a user.
+      parameters:
+        - $ref: '#/parameters/userid'
+      responses:
+        200:
+          description: All the watchers for the given user.
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Watcher'
+        400:
+          description: Bad Request
+        401:
+          $ref: "#/responses/UnauthorizedError"
+        500:
+          description: Internal server error
+      security:
+        - API-KEY: []
+    put:
+      description: Create a new watcher
+      parameters:
+        - $ref: '#/parameters/userid'
+        - name: watcher
+          in: body
+          description: The new watcher data.
+          schema:
+            $ref: '#/definitions/UDWatcher'
+          required: true
+      responses:
+        200:
+          description: The creation is succesful. Returned is the created watcher.
+          schema:
+            $ref: '#/definitions/Watcher'
+        400:
+          description: Bad Request
+          schema:
+            type: string
+            description: The reason for creation failure.
+        401:
+          $ref: "#/responses/UnauthorizedError"
+        500:
+          description: Internal server error
+      security:
+        - API-KEY: []
+  /watchers/movies:
+    get:
+      description: Get a list of all movies that have watchers
+      responses:
+        200:
+          description: All the movie ID's that contain watchers
+          schema:
+            type: array
+            items:
+              type: integer
+              title: movieid
+              description: The unique identifier of the movie
+        400:
+          description: Bad Request
+        401:
+          $ref: "#/responses/UnauthorizedError"
+        500:
+          description: Internal server error
+      security:
+        - API-KEY: []
+  /watchers/movies/{movieid}:
+    get:
+      description: Get a list of all watchers that watch the given movie id
+      parameters:
+        - name: movieid
+          in: path
+          description: The unique identifier of the movie that is searched for.
+          required: true
+          type: integer
+      responses:
+        200:
+          description: All the watchers for the given movie.
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Watcher'
+        400:
+          description: Bad Request
+        401:
+          $ref: "#/responses/UnauthorizedError"
+        500:
+          description: Internal server error
+      security:
+        - API-KEY: []
+  /status:
+    get:
+      description: Ping to this server to check the health
+      responses:
+        200:
+          description: The service is ok.
+        503:
+          description: The service is not ok.
+          schema:
+             type: string
+             title: description
+             description: The reason of the failure of the service
+  /status/notifications:
+    get:
+      description: Get the status of the notification service
+      responses:
+        200:
+          description: The status
+          schema:
+            type: array
+            title: Notification service status
+            items:
+              type: object
+              properties:
+                notificationtypeid:
+                  $ref: '#/definitions/notificationtypeid'
+                usercountenabled:
+                  description: the amount of users that have this notification type enabled.
+  /status/watchers:
+    get:
+      description: Get the status of this watcher service
+      responses:
+        200:
+          description: The status
+          schema:
+            type: object
+            title: Watcher Service Status
+            properties:
+              servicestart:
+                description: The moment this service was first started. All statistics are from this date.
+                type: string
+                format: date-time
+              watchercounts:
+                description: The total amount of watchers
+  /status/monitor:
+    get:
+      description: Get the status of the pathe monitor service
+      responses:
+        200:
+          description: The status
+          schema:
+            type: object
+            title: Monitor Service Status
+            properties:
+              servicestart:
+                description: The moment this service was first started. All statistics are from this date.
+                type: string
+                format: date-time
+              lastcheck:
+                description: The last timestamp of a succesfull pathé api call
+                type: string
+                format: date-time
+              lastfailedcheck:
+                description: The last timestamp of a failed pathé api call
+                type: string
+                format: date-time
+              apicallstotal:
+                description: The total amount of api calls since the start of this module
+                type: integer
+              apicallsfailed:
+                description: The total amount of failed api calls since the start of this module
+                type: integer
+              apicallstotaltoday:
+                description: The total amount of api calls today
+                type: integer
+              apicallsfailedtoday:
+                description: The total amount of failed api calls today
+                type: integer
+              apicallstotallasthour:
+                description: The total amount of api calls last hour
+                type: integer
+              apicallsfailedlasthour:
+                description: The total amount of failed api calls last hour
+                type: integer
+              pollrate:
+                description: The amount of seconds between polls at this current moment
+                type: integer
+              pollrates:
+                description: The schema of how often the api is polled in what time periods.
+                type: array
+                items:
+                  type: object
+                  properties:
+                    start:
+                      description: The moment this pollrate is activated.
+                      type: string
+                    end:
+                      description: The moment this pollrate is stopped.
+                      type: string
+                    rate:
+                      description: The amount of seconds between polls
+                      type: integer
+securityDefinitions:
+  apikey:
+    type: apiKey
+    name: API-KEY
+    in: header
+parameters:
+  apikey:
+    name: apikey
+    in: header
+    description: A 64 character string that authenticates the request.
+    type: string
+    minLength: 64
+    maxLength: 64
+    required: true
+  userid:
+    name: userid
+    in: path
+    description: The unique identifier of the user. The format is a Universally Unique IDentifier as described in RFC 4122.
+    required: true
+    type: string
+    format: uuid
+  watcherid:
+    name: watcherid
+    in: path
+    description: The unique identifier of a watcher. The format is a Universally Unique IDentifier as described in RFC 4122.
+    required: true
+    type: string
+    format: uuid
+definitions:
+  notificationtypeid:
+    description: A three character string that uniquely identifies a notification type.
+    type: string
+  notificationsetting:
+    type: object
+    properties:
+      notificationtypeid:
+       $ref: '#/definitions/notificationtypeid'
+      enabled:
+        description: Weather or not this notification type is enabled
+        type: boolean
+  User:
+    type: object
+    description: The full representation of a user.
+    required:
+      - uuid
+      - name
+      - email
+      - phonenumber
+      - apikey
+    properties:
+      uuid:
+        type: string
+        description: A Universally Unique IDentifier as described in RFC 4122.
+        format: uuid
+      name:
+        $ref: '#/definitions/name'
+      email:
+        $ref: '#/definitions/email'
+      phonenumber:
+        $ref: '#/definitions/phonenumber'
+      apikey:
+        description: A 64 character string that authenticates the user in api requests.
+        type: string
+        minLength: 64
+        maxLength: 64
+  Recipient:
+    type: object
+    required:
+      - name
+      - email
+      - phonenumber
+    properties:
+      name:
+        title: Username
+        type: string
+        description: The user-friendly name of this recipient.
+      email:
+        type: string
+        format: email
+        description: A valid email adres.
+      phonenumber:
+        type: string
+        description: A valid, Global Number as described in RFC 3966 section 5.1.4 (always in the format of +[countrycode][phonenumber]).
+  RecipientSettings:
+    type: object
+    required:
+      - receiveEmails
+      - receiveSms
+      - receiveFbMessge
+    properties:
+      receiveEmails:
+        type: boolean
+        description: Wether or not the recipient wants to receive email notifications
+      receiveSms:
+        type: boolean
+        description: Wether or not the recipient wants to receive sms notifications
+      receiveFbMessge:
+        type: boolean
+        description: Wether or not the recipient wants to receive facebook messenger notifications
+  email:
+    title: Email
+    type: string
+    format: email
+    description: A valid email adres.
+  name:
+    title: Username
+    type: string
+    description: The user-friendly name of this recipient. The name must be between 4 and 16 charcters and can only contain letters (a-z) and numbers (0-9), but no capital letters (A-Z). The first 4 characters must always be letters.
+  phonenumber:
+    title: Phone Number
+    type: string
+    description: A valid, Global Number as described in RFC 3966 section 5.1.4 (always in the format of +[countrycode][phonenumber]).
+  password:
+    title: Password
+    type: string
+    format: password
+    description: The password of the user. The password must at least be 6 characters long and may only contain the letters (a-z), capital letters (A-Z), numbers (0-9) and the following special characters between (and thus except) the quotation marks "!@#$%^&*()_-+={}[]:;?><.,".
+  Watcher:
+    type: object
+    description: The full representation of a watcher.
+    required:
+      - uuid
+      - user
+      - name
+      - movieid
+      - cinemaid
+    properties:
+      uuid:
+        type: string
+        format: uuid
+        description: The unique identifier that identifies this watcher. Format is a Universally Unique IDentifier as described in RFC 4122.
+      user:
+        type: string
+        format: uuid
+        description: The unique identifier of the user that owns this watcher.
+      name:
+        type: string
+        description: The displayname of this watcher.
+      movieid:
+        type: integer
+        description: The unique identifier of the movie to watch for.
+      cinemaid:
+        type: integer
+        description: The unique identifier of the movie to watch for. If empty than every cinema is acceptable.
+      startafter:
+        type: string
+        format: date-time
+        description: The ealyest moment of a showing to watch for.
+      startBefore:
+        type: string
+        format: date-time
+        description: The latest moment of a showing to watch for.
+      props:
+        type: object
+        properties:
+          imax:
+            type: boolean
+            description: whether or not the showing is in
+          3d:
+            type: boolean
+            description: whether or not the showing is in 3D
+          ov:
+            type: boolean
+            description: whether or not the showing is in the original language
+          nl:
+            type: boolean
+            description: whether or not the showing is in the dutch language
+          vip:
+            type: boolean
+            description: whether or not the showing is a VIP showing
+          hfr:
+            type: boolean
+            description: whether or not the showing is in HFR
+          largehall:
+            type: boolean
+            description: whether or not the showing is in displayed in a large hall
+          atmos:
+            type: boolean
+            description: whether or not the showing is in dolbey atmos
+          4k:
+            type: boolean
+            description: whether or not the showing is in 4K resolution
+          laser:
+            type: boolean
+            description: whether or not the showing is projected with a laser projector
+          premium:
+            type: boolean
+            description: whether or not the showing is available with preview
+          rooftop:
+            type: boolean
+            description: whether or not the showing is on a rooftop
+          dbox:
+            type: boolean
+            description: whether or not the showing is in D-Box seats
+          dolbycinema:
+            type: boolean
+            description: whether or not the showing uses Dolby Cinema.
+  UDWatcher:
+    type: object
+    description: The representation of a watcher used to create and update
+    required:
+      - name
+      - movieid
+      - cinemaid
+    properties:
+      name:
+        type: string
+        description: The displayname of this watcher.
+      movieid:
+        type: integer
+        description: The unique identifier of the movie to watch for.
+      cinemaid:
+        type: integer
+        description: The unique identifier of the movie to watch for. If empty than every cinema is acceptable.
+      startafter:
+        type: string
+        format: date-time
+        description: The ealyest moment of a showing to watch for.
+      startBefore:
+        type: string
+        format: date-time
+        description: The latest moment of a showing to watch for.
+      props:
+        type: object
+        properties:
+          imax:
+            type: boolean
+            description: whether or not the showing is in
+          3d:
+            type: boolean
+            description: whether or not the showing is in 3D
+          ov:
+            type: boolean
+            description: whether or not the showing is in the original language
+          nl:
+            type: boolean
+            description: whether or not the showing is in the dutch language
+          vip:
+            type: boolean
+            description: whether or not the showing is a VIP showing
+          hfr:
+            type: boolean
+            description: whether or not the showing is in HFR
+          largehall:
+            type: boolean
+            description: whether or not the showing is in displayed in a large hall
+          atmos:
+            type: boolean
+            description: whether or not the showing is in dolbey atmos
+          4k:
+            type: boolean
+            description: whether or not the showing is in 4K resolution
+          laser:
+            type: boolean
+            description: whether or not the showing is projected with a laser projector
+          premium:
+            type: boolean
+            description: whether or not the showing is available with preview
+          rooftop:
+            type: boolean
+            description: whether or not the showing is on a rooftop
+          dbox:
+            type: boolean
+            description: whether or not the showing is in D-Box seats
+          dolbycinema:
+            type: boolean
+            description: whether or not the showing uses Dolby Cinema.
+responses:
+  UnauthorizedError:
+    description: API key is missing or invalid
+    headers:
+      WWW_Authenticate:
+        type: string
