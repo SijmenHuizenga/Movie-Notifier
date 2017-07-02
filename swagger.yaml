@@ -3,105 +3,21 @@ swagger: '2.0'
 info:
   version: "3.0"
   title: Movie Notifier
+  description: "This is a Movie Notifier server specification. Read more about the movie notifier at https://github.com/SijmenHuizenga/Movie-Notifier"
+tags:
+  - name: User
+    description: Everything about user management and authentication.
+  - name: Watcher
+    description: Everything about watchers.
+  - name: Operations
+    description: Server status, statistics and system management.
+schemes:
+  - https
 paths:
-  /notifications:
-    get:
-      description: Get a list of the available notification types.
-      responses:
-        200:
-          description: The available notification types.
-          schema:
-            type: array
-            items:
-              type: object
-              properties:
-                notificationtypeid:
-                  $ref: '#/definitions/notificationtypeid'
-                title:
-                  description: The title of this notification type
-                  type: string
-                description:
-                  description: The description of this notification type
-                  type: string
-        400:
-          description: Bad Request
-        401:
-          $ref: "#/responses/UnauthorizedError"
-        500:
-          description: Internal server error
-      security:
-        - API-KEY: []
-  /notifications/{userid}:
-    get:
-      description: Get the notification settings of a user.
-      parameters:
-        - $ref: '#/parameters/userid'
-      responses:
-        200:
-          description: The notification settings of the given user
-          schema:
-            type: array
-            items:
-              $ref: '#/definitions/notificationsetting'
-        400:
-          description: Bad Request
-        401:
-          $ref: "#/responses/UnauthorizedError"
-        500:
-          description: Internal server error
-      security:
-        - API-KEY: []
-    post:
-      description: Update the notification settings of a user.
-      parameters:
-        - $ref: '#/parameters/userid'
-        - name: notificationsettings
-          in: body
-          required: true
-          description: The new notification settings of a given user. All notification types that are not specified are set to the default value false.
-          schema:
-            type: array
-            items:
-              $ref: '#/definitions/notificationsetting'
-      responses:
-        200:
-          description: The updates are saved. Response are the new total notification settings.
-          schema:
-            type: array
-            items:
-              $ref: '#/definitions/notificationsetting'
-        400:
-          description: Bad Request
-        401:
-          $ref: "#/responses/UnauthorizedError"
-        500:
-          description: Internal server error
-      security:
-        - API-KEY: []
-  /notifications/{userid}/send:
-    post:
-      description: Send a notification to a user
-      parameters:
-        - $ref: '#/parameters/userid'
-        - name: message
-          in: body
-          schema:
-            type: string
-          description: The message to send to the user.
-          required: true
-      responses:
-        200:
-          description: The notification(s) have been sent according to the user's notification settings.
-        400:
-          description: Bad Request
-        401:
-          $ref: "#/responses/UnauthorizedError"
-        500:
-          description: Internal server error
-      security:
-        - API-KEY: []
   /user:
     put:
+      tags:
+        - User
       description: Create a new user.
       parameters:
         - name: details
@@ -136,8 +52,10 @@ paths:
             description: The reason for creation failure.
         500:
           description: Internal server error
-  /user/auth:
+  /user/login:
     get:
+      tags:
+        - User
       description: Login a user.
       parameters:
         - name: details
@@ -167,6 +85,8 @@ paths:
           description: Internal server error
   /user/{userid}:
     get:
+      tags:
+        - User
       description: Get user details
       parameters:
         - $ref: '#/parameters/userid'
@@ -182,8 +102,10 @@ paths:
         500:
           description: Internal server error
       security:
-        - API-KEY: []
+        - APIKEY: []
     post:
+      tags:
+        - User
       description: Updates a user
       parameters:
         - $ref: '#/parameters/userid'
@@ -214,8 +136,10 @@ paths:
         500:
           description: Internal server error
       security:
-        - API-KEY: []
+        - APIKEY: []
     delete:
+      tags:
+        - User
       description: Deletes a user and all corresponding data in the system.
       parameters:
         - $ref: '#/parameters/userid'
@@ -229,35 +153,62 @@ paths:
         500:
           description: Internal server error
       security:
-        - API-KEY: []
-  /auth/{apikey}:
+        - APIKEY: []
+  /user/{userid}/notifications/:
     get:
-      description: Given a user api key, check weather or not a user is authorized to use the system.
+      tags:
+        - User
+      description: Get the notification settings of a user.
       parameters:
-        - name: apikey
-          in: path
-          description: The api key to check.
-          type: string
-          minLength: 64
-          maxLength: 64
-          required: true
+        - $ref: '#/parameters/userid'
       responses:
         200:
-          description: The user is authenticated to use the system.
+          description: The notification settings of the given user
           schema:
-            type: string
-            description: The uuid of the authenticated user.
-            format: uuid
-        401:
-          description: The given api key does not authorize any user.
+            type: array
+            items:
+              $ref: '#/definitions/NotificationSetting'
         400:
           description: Bad Request
+        401:
+          $ref: "#/responses/UnauthorizedError"
         500:
           description: Internal server error
       security:
-        - API-KEY: []
+        - APIKEY: []
+    post:
+      tags:
+        - User
+      description: Update the notification settings of a user.
+      parameters:
+        - $ref: '#/parameters/userid'
+        - name: notificationsettings
+          in: body
+          required: true
+          description: The new notification settings of a given user. All notification types that are not specified are set to the default value false.
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/NotificationSetting'
+      responses:
+        200:
+          description: The updates are saved. Response are the new total notification settings.
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/NotificationSetting'
+        400:
+          description: Bad Request
+        401:
+          $ref: "#/responses/UnauthorizedError"
+        500:
+          description: Internal server error
+      security:
+        - APIKEY: []
   /watchers:
     get:
+      tags:
+        - Watcher
       description: Get a list of all watchers
       responses:
         200:
@@ -273,9 +224,11 @@ paths:
         500:
           description: Internal server error
       security:
-        - API-KEY: []
+        - APIKEY: []
   /watchers/{watcherid}:
     get:
+      tags:
+        - Watcher
       description: Get the details of the given watcher id
       parameters:
         - $ref: '#/parameters/watcherid'
@@ -291,16 +244,18 @@ paths:
         500:
           description: Internal server error
       security:
-        - API-KEY: []
+        - APIKEY: []
     post:
+      tags:
+        - Watcher
       description: Update the details of the given watcher id
       parameters:
         - $ref: '#/parameters/watcherid'
         - name: watcher
           in: body
-          description: The watcher data to update.
+          description: The watcher data to update. The fields `uuid` and `user` should not be provided as it is not possible to update these fields.
           schema:
-            $ref: '#/definitions/UDWatcher'
+            $ref: '#/definitions/Watcher'
           required: true
       responses:
         200:
@@ -317,8 +272,10 @@ paths:
         500:
           description: Internal server error
       security:
-        - API-KEY: []
+        - APIKEY: []
     delete:
+      tags:
+        - Watcher
       description: Delete the watcher given the watcher id
       parameters:
         - $ref: '#/parameters/watcherid'
@@ -332,9 +289,11 @@ paths:
         500:
           description: Internal server error
       security:
-        - API-KEY: []
+        - APIKEY: []
   /watchers/user/{userid}:
     get:
+      tags:
+        - Watcher
       description: Get a list of all watchers given a user.
       parameters:
         - $ref: '#/parameters/userid'
@@ -352,16 +311,18 @@ paths:
         500:
           description: Internal server error
       security:
-        - API-KEY: []
+        - APIKEY: []
     put:
+      tags:
+        - Watcher
       description: Create a new watcher
       parameters:
         - $ref: '#/parameters/userid'
         - name: watcher
           in: body
-          description: The new watcher data.
+          description: The new watcher data. The field `uuid` must be omitted since this field will be created by the system. The field `user` can be ommitted. When empty the current user will be assigned to this watcher.
           schema:
-            $ref: '#/definitions/UDWatcher'
+            $ref: '#/definitions/Watcher'
           required: true
       responses:
         200:
@@ -378,9 +339,11 @@ paths:
         500:
           description: Internal server error
       security:
-        - API-KEY: []
+        - APIKEY: []
   /watchers/movies:
     get:
+      tags:
+        - Watcher
       description: Get a list of all movies that have watchers
       responses:
         200:
@@ -398,9 +361,11 @@ paths:
         500:
           description: Internal server error
       security:
-        - API-KEY: []
+        - APIKEY: []
   /watchers/movies/{movieid}:
     get:
+      tags:
+        - Watcher
       description: Get a list of all watchers that watch the given movie id
       parameters:
         - name: movieid
@@ -422,9 +387,11 @@ paths:
         500:
           description: Internal server error
       security:
-        - API-KEY: []
+        - APIKEY: []
   /status:
     get:
+      tags:
+        - Operations
       description: Ping to this server to check the health
       responses:
         200:
@@ -437,6 +404,8 @@ paths:
              description: The reason of the failure of the service
   /status/notifications:
     get:
+      tags:
+        - Operations
       description: Get the status of the notification service
       responses:
         200:
@@ -448,11 +417,14 @@ paths:
               type: object
               properties:
                 notificationtypeid:
-                  $ref: '#/definitions/notificationtypeid'
+                  description: A three character string that uniquely identifies a notification type.
+                  type: string
                 usercountenabled:
                   description: the amount of users that have this notification type enabled.
   /status/watchers:
     get:
+      tags:
+        - Operations
       description: Get the status of this watcher service
       responses:
         200:
@@ -469,6 +441,8 @@ paths:
                 description: The total amount of watchers
   /status/monitor:
     get:
+      tags:
+        - Operations
       description: Get the status of the pathe monitor service
       responses:
         200:
@@ -526,19 +500,14 @@ paths:
                       description: The amount of seconds between polls
                       type: integer
 securityDefinitions:
-  apikey:
+  APIKEY:
     type: apiKey
-    name: API-KEY
+    description: |
+      A 64 character string that authenticates the request.
+      This apikey is received by loggin in using the url /user/login.
+    name: APIKEY
     in: header
 parameters:
-  apikey:
-    name: apikey
-    in: header
-    description: A 64 character string that authenticates the request.
-    type: string
-    minLength: 64
-    maxLength: 64
-    required: true
   userid:
     name: userid
     in: path
@@ -554,17 +523,6 @@ parameters:
     type: string
     format: uuid
 definitions:
-  notificationtypeid:
-    description: A three character string that uniquely identifies a notification type.
-    type: string
-  notificationsetting:
-    type: object
-    properties:
-      notificationtypeid:
-       $ref: '#/definitions/notificationtypeid'
-      enabled:
-        description: Weather or not this notification type is enabled
-        type: boolean
   User:
     type: object
     description: The full representation of a user.
@@ -590,64 +548,25 @@ definitions:
         type: string
         minLength: 64
         maxLength: 64
-  Recipient:
+  NotificationSetting:
     type: object
-    required:
-      - name
-      - email
-      - phonenumber
     properties:
+      notificationtypeid:
+        description: A three character string that uniquely identifies a notification type.
+        type: string
       name:
-        title: Username
+        description: The name of this notification type
         type: string
-        description: The user-friendly name of this recipient.
-      email:
+      description:
+        description: The extended description of this notification type
         type: string
-        format: email
-        description: A valid email adres.
-      phonenumber:
-        type: string
-        description: A valid, Global Number as described in RFC 3966 section 5.1.4 (always in the format of +[countrycode][phonenumber]).
-  RecipientSettings:
-    type: object
-    required:
-      - receiveEmails
-      - receiveSms
-      - receiveFbMessge
-    properties:
-      receiveEmails:
+      enabled:
+        description: Weather or not this notification type is enabled
         type: boolean
-        description: Wether or not the recipient wants to receive email notifications
-      receiveSms:
-        type: boolean
-        description: Wether or not the recipient wants to receive sms notifications
-      receiveFbMessge:
-        type: boolean
-        description: Wether or not the recipient wants to receive facebook messenger notifications
-  email:
-    title: Email
-    type: string
-    format: email
-    description: A valid email adres.
-  name:
-    title: Username
-    type: string
-    description: The user-friendly name of this recipient. The name must be between 4 and 16 charcters and can only contain letters (a-z) and numbers (0-9), but no capital letters (A-Z). The first 4 characters must always be letters.
-  phonenumber:
-    title: Phone Number
-    type: string
-    description: A valid, Global Number as described in RFC 3966 section 5.1.4 (always in the format of +[countrycode][phonenumber]).
-  password:
-    title: Password
-    type: string
-    format: password
-    description: The password of the user. The password must at least be 6 characters long and may only contain the letters (a-z), capital letters (A-Z), numbers (0-9) and the following special characters between (and thus except) the quotation marks "!@#$%^&*()_-+={}[]:;?><.,".
   Watcher:
     type: object
     description: The full representation of a watcher.
     required:
-      - uuid
-      - user
       - name
       - movieid
       - cinemaid
@@ -722,76 +641,25 @@ definitions:
           dolbycinema:
             type: boolean
             description: whether or not the showing uses Dolby Cinema.
-  UDWatcher:
-    type: object
-    description: The representation of a watcher used to create and update
-    required:
-      - name
-      - movieid
-      - cinemaid
-    properties:
-      name:
-        type: string
-        description: The displayname of this watcher.
-      movieid:
-        type: integer
-        description: The unique identifier of the movie to watch for.
-      cinemaid:
-        type: integer
-        description: The unique identifier of the movie to watch for. If empty than every cinema is acceptable.
-      startafter:
-        type: string
-        format: date-time
-        description: The ealyest moment of a showing to watch for.
-      startBefore:
-        type: string
-        format: date-time
-        description: The latest moment of a showing to watch for.
-      props:
-        type: object
-        properties:
-          imax:
-            type: boolean
-            description: whether or not the showing is in
-          3d:
-            type: boolean
-            description: whether or not the showing is in 3D
-          ov:
-            type: boolean
-            description: whether or not the showing is in the original language
-          nl:
-            type: boolean
-            description: whether or not the showing is in the dutch language
-          vip:
-            type: boolean
-            description: whether or not the showing is a VIP showing
-          hfr:
-            type: boolean
-            description: whether or not the showing is in HFR
-          largehall:
-            type: boolean
-            description: whether or not the showing is in displayed in a large hall
-          atmos:
-            type: boolean
-            description: whether or not the showing is in dolbey atmos
-          4k:
-            type: boolean
-            description: whether or not the showing is in 4K resolution
-          laser:
-            type: boolean
-            description: whether or not the showing is projected with a laser projector
-          premium:
-            type: boolean
-            description: whether or not the showing is available with preview
-          rooftop:
-            type: boolean
-            description: whether or not the showing is on a rooftop
-          dbox:
-            type: boolean
-            description: whether or not the showing is in D-Box seats
-          dolbycinema:
-            type: boolean
-            description: whether or not the showing uses Dolby Cinema.
+  email:
+    title: Email
+    type: string
+    format: email
+    description: A valid email adres.
+  name:
+    title: Username
+    type: string
+    description: The user-friendly name of the user. The name must be between 4 and 16 charcters and can only contain letters (a-z) and numbers (0-9), but no capital letters (A-Z). The first 4 characters must always be letters.
+  phonenumber:
+    title: Phone Number
+    type: string
+    description: A valid, Global Number as described in RFC 3966 section 5.1.4 (always in the format of +[countrycode][phonenumber]).
+  password:
+    title: Password
+    type: string
+    format: password
+    description: The password of the user. The password must at least be 6 characters long and may only contain the letters (a-z), capital letters (A-Z), numbers (0-9) and the following special characters between (and thus except) the quotation marks "!@#$%^&*()_-+={}[]:;?><.,".
+
 responses:
   UnauthorizedError:
     description: API key is missing or invalid
