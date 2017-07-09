@@ -1,4 +1,4 @@
-package it.sijmen.movienotifier.controller;
+package it.sijmen.movienotifier.api;
 
 import io.swagger.api.StatusApi;
 import io.swagger.model.InlineResponse200;
@@ -10,7 +10,7 @@ import org.springframework.stereotype.Controller;
 import java.util.List;
 
 @Controller
-public class StatusController implements StatusApi {
+public class StatusApiController implements StatusApi {
     @Override
     public ResponseEntity<Void> statusGet() {
         return null;

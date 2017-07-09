@@ -1,11 +1,12 @@
-package it.sijmen.movienotifier.controller;
+package it.sijmen.movienotifier.api;
 
 import io.swagger.annotations.ApiParam;
 import io.swagger.api.UserApi;
 import io.swagger.model.*;
 import io.swagger.model.User;
+import it.sijmen.movienotifier.controllers.UserControllerImpl;
+import it.sijmen.movienotifier.model.exceptions.BadRequestException;
 import it.sijmen.movienotifier.repositories.UserRepository;
-import it.sijmen.movienotifier.util.ApiKeyHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,26 +17,27 @@ import org.springframework.web.bind.annotation.RequestBody;
 import java.util.List;
 
 @Controller
-public class UserController implements UserApi {
+public class UserApiController implements UserApi {
 
-    final private UserRepository userRepository;
+    private final UserControllerImpl userController;
 
     @Autowired
-    public UserController(UserRepository userRepository) {
-        this.userRepository = userRepository;
+    public UserApiController(UserControllerImpl userController) {
+        this.userController = userController;
     }
 
     @Override
-    public ResponseEntity userPut(@ApiParam(value = "The user data of the new user.", required = true) @RequestBody Details details) {
+    public ResponseEntity<User> userPut(@ApiParam(value = "The user data of the new user.", required = true) @RequestBody Details details) {
         if (details == null)
-            throw new IllegalArgumentException("No details provided");
-        it.sijmen.movienotifier.model.User newUser = new it.sijmen.movienotifier.model.User(
-                details.getName(), details.getEmail(), details.getPhonenumber(),
-                details.getPassword());
-        newUser.validate();
+            throw new BadRequestException("No details provided");
 
-        it.sijmen.movienotifier.model.User save = userRepository.save(newUser);
-        return new ResponseEntity<>(save.toSwaggerUser(), HttpStatus.CREATED);
+        return new ResponseEntity<>(
+                userController.createUser(
+                        new it.sijmen.movienotifier.model.User(
+                                details.getName(), details.getEmail(), details.getPhonenumber(),
+                                details.getPassword())
+                ).toSwaggerUser()
+                , HttpStatus.CREATED);
     }
 
     public ResponseEntity<User> userLoginGet(@ApiParam(value = "The login details", required = true) @RequestBody Details1 details) {

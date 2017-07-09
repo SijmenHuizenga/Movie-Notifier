@@ -60,12 +60,14 @@ paths:
           schema:
             type: object
             required:
-              - message
+              - errors
             properties:
-              message:
-                title: Error Message
-                description: The reason for creation failure.
-                type: string
+              errors:
+                type: array
+                items:
+                  title: Error Message
+                  description: The reason for creation failure.
+                  type: string
         500:
           description: Internal server error
           schema:

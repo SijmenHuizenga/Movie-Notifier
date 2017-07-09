@@ -1,4 +1,4 @@
-package it.sijmen.movienotifier.controller;
+package it.sijmen.movienotifier.api;
 
 import io.swagger.api.WatchersApi;
 import io.swagger.model.Watcher;
@@ -6,10 +6,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 
 import java.util.List;
-import java.util.UUID;
 
 @Controller
-public class WatcherController implements WatchersApi {
+public class WatcherApiController implements WatchersApi {
     @Override
     public ResponseEntity<List<Watcher>> watchersGet() {
         return null;

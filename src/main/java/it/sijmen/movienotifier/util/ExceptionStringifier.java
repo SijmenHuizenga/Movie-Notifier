@@ -6,6 +6,8 @@ import javax.validation.ConstraintValidatorContext;
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 import java.sql.SQLIntegrityConstraintViolationException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -25,10 +27,13 @@ public class ExceptionStringifier {
     }
 
     public static String makeNice(Set<ConstraintViolation<User>> result) {
-        StringBuilder builder = new StringBuilder();
-        for(ConstraintViolation<User> v : result) {
-            builder.append(v.getPropertyPath()).append(" ").append(v.getMessage()).append("\n");
-        }
-        return builder.toString().trim();
+        return String.join("\n", makeNiceArray(result));
+    }
+
+    public static List<String> makeNiceArray(Set<ConstraintViolation<User>> result) {
+        List<String> out = new ArrayList<>();
+        for(ConstraintViolation<User> v : result)
+            out.add(v.getPropertyPath() + " " + v.getMessage());
+        return out;
     }
 }

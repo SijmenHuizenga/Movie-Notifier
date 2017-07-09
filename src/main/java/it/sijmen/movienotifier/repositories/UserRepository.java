@@ -9,5 +9,6 @@ public interface UserRepository extends MongoRepository<User, String> {
 
     public User findById(String id);
     public List<User> findByApikey(String apiKey);
-
+    public int countDistinctByName(String name);
+    public int countDistinctByEmail(String name);
 }

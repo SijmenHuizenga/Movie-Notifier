@@ -1,9 +1,10 @@
-package it.sijmen.movienotifier.controller;
+package it.sijmen.movienotifier.api;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.model.InlineResponse400;
 import io.swagger.model.InlineResponse500;
+import it.sijmen.movienotifier.model.exceptions.BadRequestException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -23,12 +24,12 @@ public class BadRequestHandler {
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(IllegalArgumentException.class)
+    @ExceptionHandler(BadRequestException.class)
     @ResponseBody
-    public String handleBadRequest(IllegalArgumentException e) {
+    public String handleBadRequest(BadRequestException e) {
         try {
             return mapper.writeValueAsString(
-                    new InlineResponse400().message(e.getMessage())
+                    new InlineResponse400().errors(e.getErrors())
             );
         } catch (JsonProcessingException e1) {
             return e.getMessage();
