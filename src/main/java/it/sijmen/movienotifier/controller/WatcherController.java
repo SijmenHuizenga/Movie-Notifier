@@ -26,27 +26,27 @@ public class WatcherController implements WatchersApi {
     }
 
     @Override
-    public ResponseEntity<List<Watcher>> watchersUserUseridGet(UUID userid) {
+    public ResponseEntity<List<Watcher>> watchersUserUseridGet(String userid) {
         return null;
     }
 
     @Override
-    public ResponseEntity<Watcher> watchersUserUseridPut(UUID userid, Watcher watcher) {
+    public ResponseEntity<Watcher> watchersUserUseridPut(String userid, Watcher watcher) {
         return null;
     }
 
     @Override
-    public ResponseEntity<Void> watchersWatcheridDelete(UUID watcherid) {
+    public ResponseEntity<Void> watchersWatcheridDelete(String watcherid) {
         return null;
     }
 
     @Override
-    public ResponseEntity<Watcher> watchersWatcheridGet(UUID watcherid) {
+    public ResponseEntity<Watcher> watchersWatcheridGet(String watcherid) {
         return null;
     }
 
     @Override
-    public ResponseEntity<Watcher> watchersWatcheridPost(UUID watcherid, Watcher watcher) {
+    public ResponseEntity<Watcher> watchersWatcheridPost(String watcherid, Watcher watcher) {
         return null;
     }
 }

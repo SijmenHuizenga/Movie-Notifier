@@ -33,25 +33,50 @@ paths:
               - password
             properties:
               name:
-                $ref: '#/definitions/name'
+                title: Username
+                type: string
+                description: The user-friendly name of the user. The name must be between 4 and 16 charcters and can only contain letters (a-z) and numbers (0-9), but no capital letters (A-Z). The first 4 characters must always be letters.
               email:
-                $ref: '#/definitions/email'
+                title: Email
+                type: string
+                format: email
+                description: A valid email adres.
               phonenumber:
-                $ref: '#/definitions/phonenumber'
+                title: Phone Number
+                type: string
+                description: A valid, Global Number as described in RFC 3966 section 5.1.4 (always in the format of +[countrycode][phonenumber]).
               password:
-                $ref: '#/definitions/password'
+                title: Password
+                type: string
+                format: password
+                description: The password of the user. The password must at least be 6 characters long and may only contain the letters (a-z), capital letters (A-Z), numbers (0-9) and the following special characters between (and thus except) the quotation marks "!@#$%^&*()_-+={}[]:;?><.,".
       responses:
-        200:
+        201:
          description: Returns the details about the created user
          schema:
            $ref: '#/definitions/User'
         400:
           description: Bad Request. This reason is described in the body.
           schema:
-            type: string
-            description: The reason for creation failure.
+            type: object
+            required:
+              - message
+            properties:
+              message:
+                title: Error Message
+                description: The reason for creation failure.
+                type: string
         500:
           description: Internal server error
+          schema:
+            type: object
+            required:
+              - message
+            properties:
+              message:
+                title: Error Message
+                description: The reason for server error
+                type: string
   /user/login:
     get:
       tags:
@@ -69,9 +94,15 @@ paths:
               - password
             properties:
               name:
-                $ref: '#/definitions/name'
+                title: Username
+                type: string
+                description: The user-friendly name of the user.
               password:
-                $ref: '#/definitions/password'
+                title: Password
+                type: string
+                format: password
+                description: The password of the user.
+
       responses:
         200:
          description: The login is successfull. The user details are returned.
@@ -117,13 +148,23 @@ paths:
             type: object
             properties:
               name:
-                $ref: '#/definitions/name'
+                title: Username
+                type: string
+                description: The user-friendly name of the user. The name must be between 4 and 16 charcters and can only contain letters (a-z) and numbers (0-9), but no capital letters (A-Z). The first 4 characters must always be letters.
               email:
-                $ref: '#/definitions/email'
+                title: Email
+                type: string
+                format: email
+                description: A valid email adres.
               phonenumber:
-                $ref: '#/definitions/phonenumber'
+                title: Phone Number
+                type: string
+                description: A valid, Global Number as described in RFC 3966 section 5.1.4 (always in the format of +[countrycode][phonenumber]).
               password:
-                $ref: '#/definitions/password'
+                title: Password
+                type: string
+                format: password
+                description: The password of the user. The password must at least be 6 characters long and may only contain the letters (a-z), capital letters (A-Z), numbers (0-9) and the following special characters between (and thus except) the quotation marks "!@#$%^&*()_-+={}[]:;?><.,".
       responses:
         200:
          description: Returns the details about the updated user
@@ -511,17 +552,15 @@ parameters:
   userid:
     name: userid
     in: path
-    description: The unique identifier of the user. The format is a Universally Unique IDentifier as described in RFC 4122.
+    description: The unique identifier of the user.
     required: true
     type: string
-    format: uuid
   watcherid:
     name: watcherid
     in: path
-    description: The unique identifier of a watcher. The format is a Universally Unique IDentifier as described in RFC 4122.
+    description: The unique identifier of a watcher.
     required: true
     type: string
-    format: uuid
 definitions:
   User:
     type: object
@@ -535,14 +574,20 @@ definitions:
     properties:
       uuid:
         type: string
-        description: A Universally Unique IDentifier as described in RFC 4122.
-        format: uuid
+        description: A Universally Unique IDentifier.
       name:
-        $ref: '#/definitions/name'
+        title: Username
+        type: string
+        description: The user-friendly name of the user. Is always between 4 and 16 charcters and only contains letters (a-z) and numbers (0-9), but no capital letters (A-Z). The first 4 characters are always letters.
       email:
-        $ref: '#/definitions/email'
+        title: Email
+        type: string
+        format: email
+        description: A valid email adres.
       phonenumber:
-        $ref: '#/definitions/phonenumber'
+        title: Phone Number
+        type: string
+        description: A valid, Global Number as described in RFC 3966 section 5.1.4 (always in the format of +[countrycode][phonenumber]).
       apikey:
         description: A 64 character string that authenticates the user in api requests.
         type: string
@@ -573,11 +618,9 @@ definitions:
     properties:
       uuid:
         type: string
-        format: uuid
         description: The unique identifier that identifies this watcher. Format is a Universally Unique IDentifier as described in RFC 4122.
       user:
         type: string
-        format: uuid
         description: The unique identifier of the user that owns this watcher.
       name:
         type: string
@@ -641,25 +684,6 @@ definitions:
           dolbycinema:
             type: boolean
             description: whether or not the showing uses Dolby Cinema.
-  email:
-    title: Email
-    type: string
-    format: email
-    description: A valid email adres.
-  name:
-    title: Username
-    type: string
-    description: The user-friendly name of the user. The name must be between 4 and 16 charcters and can only contain letters (a-z) and numbers (0-9), but no capital letters (A-Z). The first 4 characters must always be letters.
-  phonenumber:
-    title: Phone Number
-    type: string
-    description: A valid, Global Number as described in RFC 3966 section 5.1.4 (always in the format of +[countrycode][phonenumber]).
-  password:
-    title: Password
-    type: string
-    format: password
-    description: The password of the user. The password must at least be 6 characters long and may only contain the letters (a-z), capital letters (A-Z), numbers (0-9) and the following special characters between (and thus except) the quotation marks "!@#$%^&*()_-+={}[]:;?><.,".
-
 responses:
   UnauthorizedError:
     description: API key is missing or invalid
