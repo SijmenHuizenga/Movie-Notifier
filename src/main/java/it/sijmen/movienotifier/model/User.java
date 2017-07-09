@@ -2,6 +2,7 @@ package it.sijmen.movienotifier.model;
 
 import it.sijmen.movienotifier.model.exceptions.BadRequestException;
 import it.sijmen.movienotifier.repositories.UserRepository;
+import it.sijmen.movienotifier.service.notification.validation.ValidNotification;
 import it.sijmen.movienotifier.util.ApiKeyHelper;
 import org.hibernate.annotations.Where;
 import org.hibernate.validator.constraints.Email;
@@ -71,21 +72,11 @@ public class User extends Model{
     @Field
     private Date created;
 
+    @Field
+    @ValidNotification
+    private List<String> enabledNotifications = new ArrayList<>();
 
     public User() {
-    }
-
-    /**
-     * Used to create a User object of a existing user.
-     */
-    public User(String id, String name, String email, String phonenumber, String password, String apikey, Date created) {
-        this.id = id;
-        this.name = name;
-        this.email = email;
-        this.phonenumber = phonenumber;
-        this.password = password;
-        this.apikey = apikey;
-        this.created = created;
     }
 
     /**
@@ -124,7 +115,8 @@ public class User extends Model{
                 .email(this.email)
                 .name(this.name)
                 .phonenumber(this.phonenumber)
-                .uuid(this.id);
+                .uuid(this.id)
+                .notifications(this.enabledNotifications);
     }
 
     public String getId() {
@@ -173,6 +165,14 @@ public class User extends Model{
 
     public Date getCreated() {
         return created;
+    }
+
+    public List<String> getEnabledNotifications() {
+        return enabledNotifications;
+    }
+
+    public void setEnabledNotifications(List<String> enabledNotifications) {
+        this.enabledNotifications = enabledNotifications;
     }
 }
 

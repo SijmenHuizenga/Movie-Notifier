@@ -14,7 +14,7 @@ import java.util.List;
 
 @Controller
 @RequestMapping("Status")
-public class StatusApi {
+public class StatusApiController {
 
     @RequestMapping(method = RequestMethod.GET)
     @ResponseStatus(HttpStatus.OK)

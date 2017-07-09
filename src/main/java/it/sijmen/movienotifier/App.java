@@ -8,7 +8,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 @SpringBootApplication
 @EnableSwagger2
-@ComponentScan(basePackages = {"it.sijmen.movienotifier.api"})
+@ComponentScan(basePackages = {"it.sijmen.movienotifier"})
 public class App implements CommandLineRunner {
 
     @Override

@@ -1,9 +1,11 @@
-package it.sijmen.movienotifier.controllers;
+package it.sijmen.movienotifier.service;
 
 import it.sijmen.movienotifier.model.User;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.stereotype.Service;
 
-public class AuthenticationController {
+@Service
+public class AuthenticationService {
 
     boolean canDelete(@NotNull User executingUser, @NotNull User toDeleteUser) {
         return executingUser.getId().equals(toDeleteUser.getId());

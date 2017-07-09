@@ -2,6 +2,7 @@ package it.sijmen.movienotifier.repositories;
 
 import it.sijmen.movienotifier.model.User;
 import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 

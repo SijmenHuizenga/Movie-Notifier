@@ -1,4 +1,4 @@
-package it.sijmen.movienotifier.api;
+package it.sijmen.movienotifier.api.advice;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
+import javax.inject.Inject;
 import java.util.Arrays;
 import java.util.Collections;
 
@@ -23,7 +24,7 @@ public class ApiExceptionHandler {
 
     private final ObjectMapper mapper;
 
-    @Autowired
+    @Inject
     public ApiExceptionHandler(ObjectMapper mapper) {
         this.mapper = mapper;
     }

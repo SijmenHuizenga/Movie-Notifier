@@ -1,4 +1,4 @@
-package it.sijmen.movienotifier.api;
+package it.sijmen.movienotifier.api.filters;
 
 import org.springframework.stereotype.Component;
 

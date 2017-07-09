@@ -1,4 +1,4 @@
-package it.sijmen.movienotifier.controllers;
+package it.sijmen.movienotifier.service;
 
 import it.sijmen.movienotifier.model.LoginDetails;
 import it.sijmen.movienotifier.model.User;
@@ -6,26 +6,33 @@ import it.sijmen.movienotifier.model.UserUpdateDetails;
 import it.sijmen.movienotifier.model.exceptions.UnauthorizedException;
 import it.sijmen.movienotifier.repositories.UserRepository;
 import it.sijmen.movienotifier.util.PasswordAuthentication;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.jetbrains.annotations.NotNull;
-import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
 
-public class UserController {
+import javax.inject.Inject;
+import javax.inject.Named;
+import java.util.List;
+
+@Service
+public class UserService {
 
     private final UserRepository userRepository;
-    private final AuthenticationController authController;
+    private final AuthenticationService authController;
+    private final List<String> defaultNotifications;
 
-    @Autowired
-    public UserController(UserRepository userRepository, AuthenticationController authenticationService) {
+    @Inject
+    public UserService(UserRepository userRepository, AuthenticationService authenticationService,
+                       @Named("default-notifications") List<String> defaultNotifications) {
         this.userRepository = userRepository;
         this.authController = authenticationService;
+        this.defaultNotifications = defaultNotifications;
     }
 
     public User createUser(@NotNull User newUser) {
         newUser.validate();
         newUser.validateUniqueness(userRepository);
-
         newUser.setPassword(PasswordAuthentication.hash(newUser.getPassword()));
+        newUser.setEnabledNotifications(defaultNotifications);
         return userRepository.save(newUser);
     }
 
@@ -66,8 +73,7 @@ public class UserController {
         throw new UnauthorizedException();
     }
 
-    public User update(@NotNull String userid, @NotNull String apikey,
-                                                        @NotNull UserUpdateDetails details) {
+    public User update(@NotNull String userid, @NotNull String apikey, @NotNull UserUpdateDetails details) {
         User executingUser = userRepository.findFirstByApikey(apikey);
         User updatingUser = userRepository.findFirstById(userid);
         if(executingUser == null || updatingUser == null)
@@ -83,6 +89,8 @@ public class UserController {
             updatingUser.setName(details.getName());
         if(details.getPhonenumber() != null)
             updatingUser.setPhonenumber(details.getPhonenumber());
+        if(details.getEnabledNotifications() != null)
+            updatingUser.setEnabledNotifications(details.getEnabledNotifications());
         return userRepository.save(updatingUser);
     }
 }

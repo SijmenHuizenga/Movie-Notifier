@@ -9,6 +9,8 @@ tags:
     description: Everything about user management and authentication.
   - name: Watcher
     description: Everything about watchers.
+  - name: Notification Type
+    description: Methods of communication that can be enabled by the user to notifie the user when new movie show is available.
   - name: Operations
     description: Server status, statistics and system management.
 schemes:
@@ -84,7 +86,6 @@ paths:
                 type: string
                 format: password
                 description: The password of the user.
-
       responses:
         200:
          description: The login is successfull. The user details are returned.
@@ -147,6 +148,14 @@ paths:
                 type: string
                 format: password
                 description: The password of the user. The password must at least be 6 characters long and may only contain the letters (a-z), capital letters (A-Z), numbers (0-9) and the following special characters between (and thus except) the quotation marks "!@#$%^&*()_-+={}[]:;?><.,".
+              notifications:
+                title: Enabled Notifications
+                description: A list of enabled notificaiton types for this user.
+                type: array
+                items:
+                  title: Notification Type Key
+                  type: string
+                  description: A three character string that uniquely identifies a notification type.
       responses:
         200:
          description: Returns the details about the updated user
@@ -177,57 +186,42 @@ paths:
           $ref: '#/responses/InternalServerError'
       security:
         - APIKEY: []
-  /user/{userid}/notifications/:
+
+  /notificationtypes:
     get:
       tags:
-        - User
-      description: Get the notification settings of a user.
-      parameters:
-        - $ref: '#/parameters/userid'
+        - Notification Type
+      description: Get a list of all notification types
       responses:
         200:
-          description: The notification settings of the given user
+          description: All the notification types in the system.
           schema:
             type: array
             items:
-              $ref: '#/definitions/NotificationSetting'
-        400:
-          description: Bad Request
-        401:
-          $ref: "#/responses/UnauthorizedError"
+              $ref: "#/definitions/NotificationType"
         500:
-          description: Internal server error
-      security:
-        - APIKEY: []
-    post:
+          $ref: '#/responses/InternalServerError'
+  /notificationtypes/{notificationtypekey}:
+    get:
       tags:
-        - User
-      description: Update the notification settings of a user.
+        - Notification Type
+      description: Get the details of a single notificaiton type
       parameters:
-        - $ref: '#/parameters/userid'
-        - name: notificationsettings
-          in: body
+        - name: notificationtypekey
+          in: path
+          description: The key of the notification type.
           required: true
-          description: The new notification settings of a given user. All notification types that are not specified are set to the default value false.
-          schema:
-            type: array
-            items:
-              $ref: '#/definitions/NotificationSetting'
+          type: string
       responses:
         200:
-          description: The updates are saved. Response are the new total notification settings.
+          description: The details of the notification identified by notificationtypekey
           schema:
-            type: array
-            items:
-              $ref: '#/definitions/NotificationSetting'
+            $ref: "#/definitions/NotificationType"
         400:
-          description: Bad Request
-        401:
-          $ref: "#/responses/UnauthorizedError"
+          $ref: '#/responses/BadRequestError'
         500:
-          description: Internal server error
-      security:
-        - APIKEY: []
+          $ref: '#/responses/InternalServerError'
+
   /watchers:
     get:
       tags:
@@ -411,6 +405,7 @@ paths:
           description: Internal server error
       security:
         - APIKEY: []
+
   /status:
     get:
       tags:
@@ -552,6 +547,7 @@ definitions:
       - name
       - email
       - phonenumber
+      - notifications
       - apikey
     properties:
       uuid:
@@ -570,15 +566,23 @@ definitions:
         title: Phone Number
         type: string
         description: A valid, Global Number as described in RFC 3966 section 5.1.4 (always in the format of +[countrycode][phonenumber]).
+      notifications:
+        title: Enabled Notifications
+        description: A list of enabled notificaiton types for this user.
+        type: array
+        items:
+          title: Notification Type Key
+          type: string
+          description: A three character string that uniquely identifies a notification type.
       apikey:
         description: A 64 character string that authenticates the user in api requests.
         type: string
         minLength: 64
         maxLength: 64
-  NotificationSetting:
+  NotificationType:
     type: object
     properties:
-      notificationtypeid:
+      key:
         description: A three character string that uniquely identifies a notification type.
         type: string
       name:
@@ -587,9 +591,6 @@ definitions:
       description:
         description: The extended description of this notification type
         type: string
-      enabled:
-        description: Weather or not this notification type is enabled
-        type: boolean
   Watcher:
     type: object
     description: The full representation of a watcher.
