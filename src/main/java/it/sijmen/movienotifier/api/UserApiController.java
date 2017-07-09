@@ -5,6 +5,7 @@ import io.swagger.api.UserApi;
 import io.swagger.model.*;
 import io.swagger.model.User;
 import it.sijmen.movienotifier.controllers.UserControllerImpl;
+import it.sijmen.movienotifier.model.LoginDetails;
 import it.sijmen.movienotifier.model.exceptions.BadRequestException;
 import it.sijmen.movienotifier.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +28,7 @@ public class UserApiController implements UserApi {
     }
 
     @Override
-    public ResponseEntity<User> userPut(@ApiParam(value = "The user data of the new user.", required = true) @RequestBody Details details) {
+    public ResponseEntity<User> userPut(@ApiParam(value = "The user data of the new user.", required = true) @RequestBody UserCreationDetails details) {
         if (details == null)
             throw new BadRequestException("No details provided");
 
@@ -40,9 +41,19 @@ public class UserApiController implements UserApi {
                 , HttpStatus.CREATED);
     }
 
-    public ResponseEntity<User> userLoginGet(@ApiParam(value = "The login details", required = true) @RequestBody Details1 details) {
-        // do some magic!
-        return new ResponseEntity<>(HttpStatus.OK);
+    @Override
+    public ResponseEntity<User> userLoginPost(@ApiParam(value = "The login details", required = true) @RequestBody UserLoginDetails details) {
+        if(details == null)
+            throw new BadRequestException("No details provided");
+
+        return new ResponseEntity<>(
+                userController.login(
+                        new LoginDetails(
+                                details.getName(),
+                                details.getPassword()
+                        )
+                ).toSwaggerUser(),
+                HttpStatus.OK);
     }
 
     public ResponseEntity<Void> userUseridDelete(@ApiParam(value = "The unique identifier of the user.", required = true) @PathVariable("userid") String userid) {
@@ -67,7 +78,7 @@ public class UserApiController implements UserApi {
     }
 
     public ResponseEntity<User> userUseridPost(@ApiParam(value = "The unique identifier of the user.", required = true) @PathVariable("userid") String userid,
-                                               @ApiParam(value = "The fields that should be updated. Fields that do not require updates can be omitted.", required = true) @RequestBody Details2 details) {
+                                               @ApiParam(value = "The fields that should be updated. Fields that do not require updates can be omitted.", required = true) @RequestBody UserUpdateDetails details) {
         // do some magic!
         return new ResponseEntity<>(HttpStatus.OK);
     }

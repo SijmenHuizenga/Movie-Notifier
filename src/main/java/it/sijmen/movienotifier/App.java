@@ -1,6 +1,7 @@
 package it.sijmen.movienotifier;
 
 import it.sijmen.movienotifier.controllers.UserControllerImpl;
+import it.sijmen.movienotifier.repositories.UserRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -21,8 +22,8 @@ public class App implements CommandLineRunner {
     }
 
     @Bean
-    public UserControllerImpl userController(){
-        return new UserControllerImpl(userRepository);
+    public UserControllerImpl userController(UserRepository repository){
+        return new UserControllerImpl(repository);
     }
 
 }

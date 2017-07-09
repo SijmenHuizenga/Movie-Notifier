@@ -1,5 +1,6 @@
 package it.sijmen.movienotifier.util;
 
+import it.sijmen.movienotifier.model.Model;
 import it.sijmen.movienotifier.model.User;
 
 import javax.validation.ConstraintValidatorContext;
@@ -26,13 +27,13 @@ public class ExceptionStringifier {
         return e.getMessage();
     }
 
-    public static String makeNice(Set<ConstraintViolation<User>> result) {
+    public static String makeNice(Set<ConstraintViolation<Model>> result) {
         return String.join("\n", makeNiceArray(result));
     }
 
-    public static List<String> makeNiceArray(Set<ConstraintViolation<User>> result) {
+    public static List<String> makeNiceArray(Set<ConstraintViolation<Model>> result) {
         List<String> out = new ArrayList<>();
-        for(ConstraintViolation<User> v : result)
+        for(ConstraintViolation v : result)
             out.add(v.getPropertyPath() + " " + v.getMessage());
         return out;
     }

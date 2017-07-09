@@ -3,7 +3,6 @@ package it.sijmen.movienotifier.model;
 import it.sijmen.movienotifier.model.exceptions.BadRequestException;
 import it.sijmen.movienotifier.repositories.UserRepository;
 import it.sijmen.movienotifier.util.ApiKeyHelper;
-import it.sijmen.movienotifier.util.ExceptionStringifier;
 import org.hibernate.annotations.Where;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotBlank;
@@ -12,20 +11,15 @@ import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
-import javax.validation.ConstraintViolation;
-import javax.validation.Validation;
-import javax.validation.Validator;
-import javax.validation.ValidatorFactory;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Set;
 
 @Document
 @Where(clause = "active = true")
-public class User {
+public class User extends Model{
 
     @Id
     private String id;
@@ -105,18 +99,6 @@ public class User {
         this.password = password;
         this.apikey = ApiKeyHelper.randomAPIKey();
         this.created = new Date();
-    }
-
-    /**
-     * Validates the user. When something is wrong a error message is returned.
-     * Else null.
-     */
-    public void validate() throws IllegalArgumentException {
-        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
-        Validator validator = factory.getValidator();
-        Set<ConstraintViolation<User>> result = validator.validate(this);
-        if(result.size() != 0)
-            throw new BadRequestException(ExceptionStringifier.makeNiceArray(result));
     }
 
     public void validateUniqueness(UserRepository userRepository) {

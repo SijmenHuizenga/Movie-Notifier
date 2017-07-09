@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.model.InlineResponse400;
 import io.swagger.model.InlineResponse500;
 import it.sijmen.movienotifier.model.exceptions.BadRequestException;
+import it.sijmen.movienotifier.model.exceptions.UnauthorizedException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -36,6 +37,13 @@ public class BadRequestHandler {
         }
     }
 
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    @ExceptionHandler(UnauthorizedException.class)
+    @ResponseBody
+    public String handleUnauthorizedException(UnauthorizedException e) {
+        return "";
+    }
+
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(Exception.class)
     @ResponseBody
@@ -53,11 +61,17 @@ public class BadRequestHandler {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(HttpMessageNotReadableException.class)
     @ResponseBody
-    public String handleInternalServerError(HttpMessageNotReadableException e) {
+    public String handleHttpMessageNotReadableException(HttpMessageNotReadableException e) {
+        e.printStackTrace();
         try {
+            String s = e.getMostSpecificCause().getMessage();
+            if(s.contains(":"))
+                s = s.split(":")[0];
+            else
+                s = s.split("\n")[0];
+
             return mapper.writeValueAsString(
-                    new InlineResponse500().message("Internal server error: " +
-                            e.getMostSpecificCause().getMessage().split("\n")[0])
+                    new InlineResponse500().message("JSON not valid: " + s)
             );
         } catch (JsonProcessingException e1) {
             return e.getMessage();
