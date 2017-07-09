@@ -9,10 +9,14 @@ import it.sijmen.movienotifier.model.exceptions.UnauthorizedException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.web.bind.ServletRequestBindingException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
+
+import java.util.Arrays;
+import java.util.Collections;
 
 @ControllerAdvice
 public class BadRequestHandler {
@@ -31,6 +35,19 @@ public class BadRequestHandler {
         try {
             return mapper.writeValueAsString(
                     new InlineResponse400().errors(e.getErrors())
+            );
+        } catch (JsonProcessingException e1) {
+            return e.getMessage();
+        }
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(ServletRequestBindingException.class)
+    @ResponseBody
+    public String handleBadRequest(ServletRequestBindingException e) {
+        try {
+            return mapper.writeValueAsString(
+                    new InlineResponse400().errors(Collections.singletonList(e.getMessage()))
             );
         } catch (JsonProcessingException e1) {
             return e.getMessage();

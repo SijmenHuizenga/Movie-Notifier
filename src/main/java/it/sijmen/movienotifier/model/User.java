@@ -11,6 +11,7 @@ import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
+import javax.persistence.Entity;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.util.ArrayList;
@@ -18,6 +19,7 @@ import java.util.Date;
 import java.util.List;
 
 @Document
+@Entity
 @Where(clause = "active = true")
 public class User extends Model{
 
@@ -69,8 +71,6 @@ public class User extends Model{
     @Field
     private Date created;
 
-    @Field
-    private boolean active;
 
     public User() {
     }
@@ -78,7 +78,7 @@ public class User extends Model{
     /**
      * Used to create a User object of a existing user.
      */
-    public User(String id, String name, String email, String phonenumber, String password, String apikey, Date created, boolean active) {
+    public User(String id, String name, String email, String phonenumber, String password, String apikey, Date created) {
         this.id = id;
         this.name = name;
         this.email = email;
@@ -86,7 +86,6 @@ public class User extends Model{
         this.password = password;
         this.apikey = apikey;
         this.created = created;
-        this.active = active;
     }
 
     /**
@@ -166,14 +165,6 @@ public class User extends Model{
 
     public Date getCreated() {
         return created;
-    }
-
-    public boolean isActive() {
-        return active;
-    }
-
-    public void setActive(boolean active) {
-        this.active = active;
     }
 }
 

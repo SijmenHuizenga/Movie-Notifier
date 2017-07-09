@@ -170,11 +170,11 @@ paths:
         200:
          description: The user is succesfully deleted
         400:
-          description: Bad Request
+          $ref: '#/responses/BadRequestError'
         401:
           $ref: "#/responses/UnauthorizedError"
         500:
-          description: Internal server error
+          $ref: '#/responses/InternalServerError'
       security:
         - APIKEY: []
   /user/{userid}/notifications/:

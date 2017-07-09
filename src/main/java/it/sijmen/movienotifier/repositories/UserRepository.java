@@ -7,8 +7,8 @@ import java.util.List;
 
 public interface UserRepository extends MongoRepository<User, String> {
 
-    public User findById(String id);
-    public List<User> findByApikey(String apiKey);
+    public User findFirstById(String id);
+    public User findFirstByApikey(String apiKey);
     public User findFirstByName(String name);
     public int countDistinctByName(String name);
     public int countDistinctByEmail(String name);

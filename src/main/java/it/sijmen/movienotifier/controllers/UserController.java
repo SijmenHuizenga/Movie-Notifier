@@ -6,17 +6,20 @@ import it.sijmen.movienotifier.model.exceptions.UnauthorizedException;
 import it.sijmen.movienotifier.repositories.UserRepository;
 import it.sijmen.movienotifier.util.PasswordAuthentication;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.jetbrains.annotations.NotNull;
 
-public class UserControllerImpl{
+public class UserController {
 
     private final UserRepository userRepository;
+    private final AuthenticationController authController;
 
     @Autowired
-    public UserControllerImpl(UserRepository userRepository) {
+    public UserController(UserRepository userRepository, AuthenticationController authenticationService) {
         this.userRepository = userRepository;
+        this.authController = authenticationService;
     }
 
-    public User createUser(User newUser) {
+    public User createUser(@NotNull User newUser) {
         newUser.validate();
         newUser.validateUniqueness(userRepository);
 
@@ -24,7 +27,7 @@ public class UserControllerImpl{
         return userRepository.save(newUser);
     }
 
-    public User login(LoginDetails loginDetails) {
+    public User login(@NotNull LoginDetails loginDetails) {
         loginDetails.validate();
 
         User user = userRepository.findFirstByName(loginDetails.getName());
@@ -35,5 +38,17 @@ public class UserControllerImpl{
             throw new UnauthorizedException();
 
         return user;
+    }
+
+    public void delete(@NotNull String userid, @NotNull String apikey) {
+        User executingUser = userRepository.findFirstByApikey(apikey);
+        User toDeleteUser = userRepository.findFirstById(userid);
+        if(executingUser == null || toDeleteUser == null)
+            throw new UnauthorizedException();
+        if(!authController.canDelete(executingUser, toDeleteUser))
+            throw new UnauthorizedException();
+        userRepository.delete(toDeleteUser);
+        //todo: delete from all other places?
+        //todo: set inactive? Soft deletes?
     }
 }
