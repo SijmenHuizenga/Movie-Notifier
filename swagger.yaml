@@ -105,15 +105,15 @@ paths:
         - $ref: '#/parameters/userid'
       responses:
         200:
-         description: Returns the details about the user
+         description: Returns the details about the user. Only the fields that you have permission to see are returned.
          schema:
            $ref: '#/definitions/User'
         400:
-          description: Bad Request
+          $ref: '#/responses/BadRequestError'
         401:
           $ref: "#/responses/UnauthorizedError"
         500:
-          description: Internal server error
+          $ref: '#/responses/InternalServerError'
       security:
         - APIKEY: []
     post:
@@ -153,11 +153,11 @@ paths:
          schema:
            $ref: '#/definitions/User'
         400:
-          description: Bad Request
+          $ref: '#/responses/BadRequestError'
         401:
           $ref: "#/responses/UnauthorizedError"
         500:
-          description: Internal server error
+          $ref: '#/responses/InternalServerError'
       security:
         - APIKEY: []
     delete:

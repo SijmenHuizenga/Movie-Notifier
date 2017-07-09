@@ -100,6 +100,14 @@ public class User extends Model{
         this.created = new Date();
     }
 
+    /**
+     * Make a user object with only a username used to return when
+     * no more permissions are available
+     */
+    public User(String name) {
+        this.name = name;
+    }
+
     public void validateUniqueness(UserRepository userRepository) {
         List<String> errors = new ArrayList<>();
         if(userRepository.countDistinctByName(getName()) > 0)

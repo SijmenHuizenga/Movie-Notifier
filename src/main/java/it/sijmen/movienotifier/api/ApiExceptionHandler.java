@@ -19,12 +19,12 @@ import java.util.Arrays;
 import java.util.Collections;
 
 @ControllerAdvice
-public class BadRequestHandler {
+public class ApiExceptionHandler {
 
     private final ObjectMapper mapper;
 
     @Autowired
-    public BadRequestHandler(ObjectMapper mapper) {
+    public ApiExceptionHandler(ObjectMapper mapper) {
         this.mapper = mapper;
     }
 
