@@ -4,6 +4,10 @@ import it.sijmen.movienotifier.model.User;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
+
 @Service
 public class AuthenticationService {
 
@@ -21,5 +25,10 @@ public class AuthenticationService {
 
     boolean canUpdate(User executingUser, User searchUser) {
         return executingUser.getId().equals(searchUser.getId());
+    }
+
+    public boolean allowNotification(User executingUser, String notificationKey){
+        //todo: reference keys?
+        return "FBM".equals(notificationKey) || "MIL".equals(notificationKey);
     }
 }

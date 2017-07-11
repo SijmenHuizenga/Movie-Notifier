@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import java.util.List;
 
 @Controller
-@RequestMapping("Status")
+@RequestMapping("status")
 public class StatusApiController {
 
     @RequestMapping(method = RequestMethod.GET)
