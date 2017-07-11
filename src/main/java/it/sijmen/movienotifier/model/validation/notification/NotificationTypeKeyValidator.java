@@ -1,4 +1,4 @@
-package it.sijmen.movienotifier.service.notification.validation;
+package it.sijmen.movienotifier.model.validation.notification;
 
 import it.sijmen.movienotifier.service.notification.NotificationModule;
 import org.jetbrains.annotations.NotNull;

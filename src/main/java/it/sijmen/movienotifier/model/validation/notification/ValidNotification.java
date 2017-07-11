@@ -1,4 +1,4 @@
-package it.sijmen.movienotifier.service.notification.validation;
+package it.sijmen.movienotifier.model.validation.notification;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;

@@ -612,12 +612,12 @@ definitions:
         type: integer
         description: The unique identifier of the movie to watch for.
       cinemaid:
-        type: integer
+        type: string
         description: The unique identifier of the movie to watch for. If empty than every cinema is acceptable.
       startafter:
         type: string
         format: date-time
-        description: The ealyest moment of a showing to watch for.
+        description: The earliest moment of a showing to watch for.
       startBefore:
         type: string
         format: date-time
@@ -625,48 +625,36 @@ definitions:
       props:
         type: object
         properties:
-          imax:
-            type: boolean
-            description: whether or not the showing is in
-          3d:
-            type: boolean
-            description: whether or not the showing is in 3D
           ov:
             type: boolean
             description: whether or not the showing is in the original language
           nl:
             type: boolean
             description: whether or not the showing is in the dutch language
-          vip:
+          imax:
             type: boolean
-            description: whether or not the showing is a VIP showing
+            description: whether or not the showing is in
+          3d:
+            type: boolean
+            description: whether or not the showing is in 3D
           hfr:
             type: boolean
             description: whether or not the showing is in HFR
-          largehall:
-            type: boolean
-            description: whether or not the showing is in displayed in a large hall
-          atmos:
-            type: boolean
-            description: whether or not the showing is in dolbey atmos
           4k:
             type: boolean
             description: whether or not the showing is in 4K resolution
           laser:
             type: boolean
             description: whether or not the showing is projected with a laser projector
-          premium:
-            type: boolean
-            description: whether or not the showing is available with preview
-          rooftop:
-            type: boolean
-            description: whether or not the showing is on a rooftop
           dbox:
             type: boolean
             description: whether or not the showing is in D-Box seats
           dolbycinema:
             type: boolean
             description: whether or not the showing uses Dolby Cinema.
+          dolbyatmos:
+            type: boolean
+            description: whether or not the showing is in dolbey atmos
 responses:
   UnauthorizedError:
     description: API key is missing or invalid

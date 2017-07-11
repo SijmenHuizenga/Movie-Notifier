@@ -1,7 +1,7 @@
 package it.sijmen.movienotifier.model.requests;
 
 import it.sijmen.movienotifier.model.Model;
-import it.sijmen.movienotifier.service.notification.validation.ValidNotification;
+import it.sijmen.movienotifier.model.validation.notification.ValidNotification;
 import org.hibernate.validator.constraints.Email;
 
 import javax.validation.constraints.Pattern;
