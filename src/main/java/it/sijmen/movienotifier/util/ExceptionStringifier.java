@@ -1,9 +1,7 @@
 package it.sijmen.movienotifier.util;
 
 import it.sijmen.movienotifier.model.Model;
-import it.sijmen.movienotifier.model.User;
 
-import javax.validation.ConstraintValidatorContext;
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 import java.sql.SQLIntegrityConstraintViolationException;

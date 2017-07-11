@@ -7,13 +7,12 @@ import com.restfb.Version;
 import com.restfb.types.send.Message;
 import com.restfb.types.send.PhoneMessageRecipient;
 import com.restfb.types.send.SendResponse;
+import it.sijmen.movienotifier.model.Notifier;
 import it.sijmen.movienotifier.model.User;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-
 import javax.inject.Inject;
-import javax.inject.Named;
 import javax.inject.Singleton;
 import java.io.IOException;
 

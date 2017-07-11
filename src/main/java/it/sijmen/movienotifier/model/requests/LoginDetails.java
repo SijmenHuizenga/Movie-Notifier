@@ -1,5 +1,6 @@
-package it.sijmen.movienotifier.model;
+package it.sijmen.movienotifier.model.requests;
 
+import it.sijmen.movienotifier.model.Model;
 import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.data.mongodb.core.mapping.Field;
 

@@ -1,18 +1,17 @@
 package it.sijmen.movienotifier.api;
 
-import io.swagger.model.*;
 import io.swagger.model.User;
+import io.swagger.model.UserCreationDetails;
+import io.swagger.model.UserLoginDetails;
 import io.swagger.model.UserUpdateDetails;
-import it.sijmen.movienotifier.service.UserService;
-import it.sijmen.movienotifier.model.*;
 import it.sijmen.movienotifier.model.exceptions.BadRequestException;
-import it.sijmen.movienotifier.service.notification.Notifier;
+import it.sijmen.movienotifier.model.requests.LoginDetails;
+import it.sijmen.movienotifier.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.inject.Inject;
-import java.util.List;
 
 @Controller
 @RequestMapping("/user")
@@ -90,7 +89,7 @@ public class UserApiController {
         return userService.update(
                 userid,
                 apikey,
-                new it.sijmen.movienotifier.model.UserUpdateDetails(
+                new it.sijmen.movienotifier.model.requests.UserUpdateDetails(
                         userUpdateDetails.getName(),
                         userUpdateDetails.getEmail(),
                         userUpdateDetails.getPhonenumber(),

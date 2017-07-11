@@ -1,6 +1,7 @@
 package it.sijmen.movienotifier.service.notification;
 
 import com.google.common.collect.Lists;
+import it.sijmen.movienotifier.model.Notifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 

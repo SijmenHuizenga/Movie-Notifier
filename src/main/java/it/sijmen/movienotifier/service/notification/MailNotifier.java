@@ -1,5 +1,6 @@
 package it.sijmen.movienotifier.service.notification;
 
+import it.sijmen.movienotifier.model.Notifier;
 import it.sijmen.movienotifier.model.User;
 import net.sargue.mailgun.Configuration;
 import net.sargue.mailgun.Mail;
@@ -8,7 +9,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import javax.inject.Inject;
-import javax.inject.Named;
 import javax.inject.Singleton;
 import java.io.IOException;
 

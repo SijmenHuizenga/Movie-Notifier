@@ -1,9 +1,9 @@
 package it.sijmen.movienotifier.api;
 
 import io.swagger.model.NotificationType;
+import it.sijmen.movienotifier.model.Notifier;
 import it.sijmen.movienotifier.model.exceptions.BadRequestException;
 import it.sijmen.movienotifier.service.NotificationTypeService;
-import it.sijmen.movienotifier.service.notification.Notifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;

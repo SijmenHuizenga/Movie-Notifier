@@ -5,7 +5,9 @@ import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.regions.Regions;
 import com.amazonaws.services.sns.AmazonSNS;
 import com.amazonaws.services.sns.AmazonSNSClientBuilder;
-import com.amazonaws.services.sns.model.*;
+import com.amazonaws.services.sns.model.MessageAttributeValue;
+import com.amazonaws.services.sns.model.PublishRequest;
+import it.sijmen.movienotifier.model.Notifier;
 import it.sijmen.movienotifier.model.User;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -18,7 +20,7 @@ import java.util.Map;
 
 @Singleton
 @Service
-class SMSNotifier extends Notifier{
+class SMSNotifier extends Notifier {
 
     public static final String ID = "SMS";
 

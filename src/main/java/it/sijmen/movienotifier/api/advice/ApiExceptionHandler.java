@@ -6,7 +6,6 @@ import io.swagger.model.InlineResponse400;
 import io.swagger.model.InlineResponse500;
 import it.sijmen.movienotifier.model.exceptions.BadRequestException;
 import it.sijmen.movienotifier.model.exceptions.UnauthorizedException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.ServletRequestBindingException;
@@ -16,7 +15,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 import javax.inject.Inject;
-import java.util.Arrays;
 import java.util.Collections;
 
 @ControllerAdvice

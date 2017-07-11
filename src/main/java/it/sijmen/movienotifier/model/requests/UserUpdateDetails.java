@@ -1,5 +1,6 @@
-package it.sijmen.movienotifier.model;
+package it.sijmen.movienotifier.model.requests;
 
+import it.sijmen.movienotifier.model.Model;
 import it.sijmen.movienotifier.service.notification.validation.ValidNotification;
 import org.hibernate.validator.constraints.Email;
 
@@ -7,7 +8,7 @@ import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.util.List;
 
-public class UserUpdateDetails extends Model{
+public class UserUpdateDetails extends Model {
 
     @Size(min=4, max = 16)
     @Pattern(regexp="^([a-z]{4}[a-z0-9]{0,12})$", message = "may only contain letters (a-z) and numbers (0-9), but no capital letters (A-Z). The first 4 characters must always be letters")

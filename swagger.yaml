@@ -670,9 +670,6 @@ definitions:
 responses:
   UnauthorizedError:
     description: API key is missing or invalid
-    headers:
-      WWW_Authenticate:
-        type: string
   BadRequestError:
     description: Bad Request. This reason is described in the body.
     schema:

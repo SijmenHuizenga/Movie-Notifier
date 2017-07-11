@@ -1,7 +1,7 @@
 package it.sijmen.movienotifier.service;
 
+import it.sijmen.movienotifier.model.Notifier;
 import it.sijmen.movienotifier.model.exceptions.BadRequestException;
-import it.sijmen.movienotifier.service.notification.Notifier;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
 

@@ -1,10 +1,10 @@
 package it.sijmen.movienotifier.service;
 
-import it.sijmen.movienotifier.model.LoginDetails;
 import it.sijmen.movienotifier.model.User;
-import it.sijmen.movienotifier.model.UserUpdateDetails;
 import it.sijmen.movienotifier.model.exceptions.BadRequestException;
 import it.sijmen.movienotifier.model.exceptions.UnauthorizedException;
+import it.sijmen.movienotifier.model.requests.LoginDetails;
+import it.sijmen.movienotifier.model.requests.UserUpdateDetails;
 import it.sijmen.movienotifier.repositories.UserRepository;
 import it.sijmen.movienotifier.util.PasswordAuthentication;
 import org.jetbrains.annotations.NotNull;

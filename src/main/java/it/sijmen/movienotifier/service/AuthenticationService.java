@@ -4,10 +4,6 @@ import it.sijmen.movienotifier.model.User;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
-
 @Service
 public class AuthenticationService {
 

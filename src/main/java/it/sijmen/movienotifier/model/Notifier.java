@@ -1,7 +1,6 @@
-package it.sijmen.movienotifier.service.notification;
+package it.sijmen.movienotifier.model;
 
 import io.swagger.model.NotificationType;
-import it.sijmen.movienotifier.model.User;
 
 import java.io.IOException;
 
