@@ -99,9 +99,9 @@ public class User extends Model {
 
     public void validateUniqueness(UserRepository userRepository) {
         List<String> errors = new ArrayList<>();
-        if(userRepository.countDistinctByName(getName()) > 0)
+        if(userRepository.getAllByName(getName()).stream().filter(o -> !o.getId().equals(this.getId())).count() > 0)
             errors.add("The given username is already in use.");
-        if(userRepository.countDistinctByEmail(getEmail()) > 0)
+        if(userRepository.getAllByEmail(getEmail()).stream().filter(o -> !o.getId().equals(this.getId())).count() > 0)
             errors.add("The given email is already in use.");
         if(errors.size() > 0)
             throw new BadRequestException(errors);

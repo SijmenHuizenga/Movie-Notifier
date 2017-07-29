@@ -97,6 +97,7 @@ public class UserService {
             updatingUser.setPhonenumber(details.getPhonenumber());
         if(details.getEnabledNotifications() != null)
             updatingUser.setEnabledNotifications(details.getEnabledNotifications());
+        updatingUser.validateUniqueness(userRepository);
         return userRepository.save(updatingUser);
     }
 
