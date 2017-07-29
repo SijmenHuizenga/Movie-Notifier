@@ -1,5 +1,6 @@
 package it.sijmen.movienotifier.model.requests;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import it.sijmen.movienotifier.model.Model;
 import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.data.mongodb.core.mapping.Field;
@@ -13,11 +14,12 @@ public class LoginDetails extends Model {
      */
     @NotBlank
     @Size(min=4, max = 16)
+    @JsonProperty
     private String name;
 
     @NotBlank
     @Size(min=6, max = 128)
-    @Field
+    @JsonProperty
     private String password;
 
     public LoginDetails(String name, String password) {

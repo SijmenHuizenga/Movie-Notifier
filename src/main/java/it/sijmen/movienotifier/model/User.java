@@ -1,5 +1,8 @@
 package it.sijmen.movienotifier.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import it.sijmen.movienotifier.model.exceptions.BadRequestException;
 import it.sijmen.movienotifier.repositories.UserRepository;
 import it.sijmen.movienotifier.model.validation.notification.ValidNotification;
@@ -23,6 +26,7 @@ import java.util.List;
 public class User extends Model {
 
     @Id
+    @JsonProperty(value = "uuid", access = JsonProperty.Access.READ_ONLY)
     private String id;
 
     /**
@@ -33,6 +37,7 @@ public class User extends Model {
     @Pattern(regexp="^([a-z]{4}[a-z0-9]{0,12})$", message = "may only contain letters (a-z) and numbers (0-9), but no capital letters (A-Z). The first 4 characters must always be letters")
     @Field
     @Indexed(unique = true)
+    @JsonProperty
     private String name;
 
     /**
@@ -42,13 +47,16 @@ public class User extends Model {
     @Email
     @Field
     @Indexed(unique = true)
+    @JsonProperty
     private String email;
 
     /**
      * A valid, Global Number as described in RFC 3966 section 5.1.4 (always in the format of +[countrycode][phonenumber])
      */
     @NotBlank
+    @Field
     @Pattern(regexp = "^\\+([0-9]{2}[0-9]{9})$", message = "must be in the format +[countrycode][phonenumber]")
+    @JsonProperty
     private String phonenumber;
 
     /**
@@ -57,6 +65,7 @@ public class User extends Model {
     @Size(min=6, max = 128)
     @Pattern(regexp = "^([a-zA-z0-9!@#$%^&*()_\\-+={}\\[\\]:;?><.,]+)$", message = "may only contain the letters (a-z), capital letters (A-Z), numbers (0-9) and the following special characters between (and thus except) the quotation marks \"!@#$%^&*()_-+={}[]:;?><.,\"")
     @Field
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 
     /**
@@ -65,13 +74,16 @@ public class User extends Model {
     @Size(max = 64, min = 64, message = "size must be 64")
     @Field
     @Indexed(unique=true)
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private String apikey;
 
     @Field
+    @JsonIgnore
     private Date created;
 
     @Field
     @ValidNotification
+    @JsonProperty
     private List<String> enabledNotifications = new ArrayList<>();
 
     public User() {
@@ -171,6 +183,10 @@ public class User extends Model {
 
     public void setEnabledNotifications(List<String> enabledNotifications) {
         this.enabledNotifications = enabledNotifications;
+    }
+
+    public void setCreated(Date created) {
+        this.created = created;
     }
 }
 
