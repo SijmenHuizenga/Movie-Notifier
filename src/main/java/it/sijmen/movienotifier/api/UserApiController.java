@@ -60,7 +60,7 @@ public class UserApiController {
     public void delete(
             @PathVariable("userid") String userid,
             @RequestHeader("APIKEY") String apikey) {
-        checkUseridApikeyAvailable(userid, apikey);
+        checkUseridApikeyNotNull(userid, apikey);
         userService.delete(userid, apikey);
     }
 
@@ -70,7 +70,7 @@ public class UserApiController {
     public User get(
             @PathVariable("userid") String userid,
             @RequestHeader("APIKEY") String apikey) {
-        checkUseridApikeyAvailable(userid, apikey);
+        checkUseridApikeyNotNull(userid, apikey);
 
         return userService.get(userid, apikey).toSwaggerUser();
     }
@@ -82,7 +82,7 @@ public class UserApiController {
             @PathVariable("userid") String userid,
             @RequestBody UserUpdateDetails userUpdateDetails,
             @RequestHeader("APIKEY") String apikey) {
-        checkUseridApikeyAvailable(userid, apikey);
+        checkUseridApikeyNotNull(userid, apikey);
 
         if(userUpdateDetails == null)
             throw new BadRequestException("user details not provided");
@@ -99,7 +99,7 @@ public class UserApiController {
         ).toSwaggerUser();
     }
 
-    private void checkUseridApikeyAvailable(String userid, String apikey){
+    private void checkUseridApikeyNotNull(String userid, String apikey){
         if(userid == null)
             throw new BadRequestException("userid not provided");
         if(apikey == null)

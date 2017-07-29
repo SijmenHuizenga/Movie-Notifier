@@ -1,5 +1,7 @@
 package it.sijmen.movienotifier.model;
 
+import io.swagger.model.WatcherProps;
+
 public class WatcherDetails {
 
     /**
@@ -51,6 +53,22 @@ public class WatcherDetails {
      * whether or not the showing is in dolbey atmos
      */
     private boolean dolbyatmos;
+
+    public WatcherDetails(boolean ov, boolean nl, boolean imax, boolean d3, boolean hfr, boolean k4, boolean laser, boolean dbox, boolean dolbycinema, boolean dolbyatmos) {
+        this.ov = ov;
+        this.nl = nl;
+        this.imax = imax;
+        this.d3 = d3;
+        this.hfr = hfr;
+        this.k4 = k4;
+        this.laser = laser;
+        this.dbox = dbox;
+        this.dolbycinema = dolbycinema;
+        this.dolbyatmos = dolbyatmos;
+    }
+
+    public WatcherDetails() {
+    }
 
     public boolean isOv() {
         return ov;
@@ -130,5 +148,22 @@ public class WatcherDetails {
 
     public void setDolbyatmos(boolean dolbyatmos) {
         this.dolbyatmos = dolbyatmos;
+    }
+
+    public WatcherProps toSwaggerProps() {
+        WatcherProps props = new WatcherProps();
+
+        props.set3d(this.isD3());
+        props.set4k(this.isK4());
+        props.setDbox(this.isDbox());
+        props.setDolbyatmos(this.isDolbyatmos());
+        props.setDolbycinema(this.isDolbycinema());
+        props.setHfr(this.isHfr());
+        props.setImax(this.isImax());
+        props.setLaser(this.isLaser());
+        props.setNl(this.isNl());
+        props.setOv(this.isOv());
+
+        return props;
     }
 }

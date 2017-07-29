@@ -242,6 +242,33 @@ paths:
           description: Internal server error
       security:
         - APIKEY: []
+    put:
+      tags:
+        - Watcher
+      description: Create a new watcher
+      parameters:
+        - name: watcher
+          in: body
+          description: The new watcher data. The field `uuid` must be omitted since this field will be created by the system.
+          schema:
+            $ref: '#/definitions/Watcher'
+          required: true
+      responses:
+        200:
+          description: The creation is succesful. Returned is the created watcher.
+          schema:
+            $ref: '#/definitions/Watcher'
+        400:
+          description: Bad Request
+          schema:
+            type: string
+            description: The reason for creation failure.
+        401:
+          $ref: "#/responses/UnauthorizedError"
+        500:
+          description: Internal server error
+      security:
+        - APIKEY: []
   /watchers/{watcherid}:
     get:
       tags:
@@ -323,34 +350,6 @@ paths:
               $ref: '#/definitions/Watcher'
         400:
           description: Bad Request
-        401:
-          $ref: "#/responses/UnauthorizedError"
-        500:
-          description: Internal server error
-      security:
-        - APIKEY: []
-    put:
-      tags:
-        - Watcher
-      description: Create a new watcher
-      parameters:
-        - $ref: '#/parameters/userid'
-        - name: watcher
-          in: body
-          description: The new watcher data. The field `uuid` must be omitted since this field will be created by the system. The field `user` can be ommitted. When empty the current user will be assigned to this watcher.
-          schema:
-            $ref: '#/definitions/Watcher'
-          required: true
-      responses:
-        200:
-          description: The creation is succesful. Returned is the created watcher.
-          schema:
-            $ref: '#/definitions/Watcher'
-        400:
-          description: Bad Request
-          schema:
-            type: string
-            description: The reason for creation failure.
         401:
           $ref: "#/responses/UnauthorizedError"
         500:
@@ -614,7 +613,7 @@ definitions:
       cinemaid:
         type: string
         description: The unique identifier of the movie to watch for. If empty than every cinema is acceptable.
-      startafter:
+      startAfter:
         type: string
         format: date-time
         description: The earliest moment of a showing to watch for.
