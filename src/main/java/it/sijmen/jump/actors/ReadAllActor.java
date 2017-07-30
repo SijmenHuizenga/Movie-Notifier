@@ -24,8 +24,9 @@ public class ReadAllActor<T extends Model> extends Actor<T, ReadAllListener<T>> 
 
     @Override
     public ResponseEntity handle(JumpRequest request) {
+        listener.checkReadAllRequest(request);
         List<T> result = repository.findAll();
-        if(!listener.allowReadAll(getApiKey(request.getHeaders()), result))
+        if(!listener.allowReadAll(request, result))
             throw new UnauthorizedException();
         return ResponseEntity.ok(result);
     }

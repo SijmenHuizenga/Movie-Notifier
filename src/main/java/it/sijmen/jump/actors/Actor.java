@@ -10,7 +10,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 
 import java.io.IOException;
-import java.util.Map;
 
 public abstract class Actor<T extends Model, L extends ActorListener> {
 
@@ -29,10 +28,6 @@ public abstract class Actor<T extends Model, L extends ActorListener> {
     public abstract boolean accepts(JumpRequest request);
 
     public abstract ResponseEntity handle(JumpRequest request);
-
-    protected String getApiKey(Map<String, String> requestHeaders) {
-        return requestHeaders == null ? null : requestHeaders.getOrDefault("APIKEY", null);
-    }
 
     protected T readModelFromBody(Class<? extends T> modelClass, String body) {
         if(body == null)

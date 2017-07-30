@@ -24,15 +24,17 @@ public class CreateActor<T extends Model> extends Actor<T, CreateListener<T>> {
 
     @Override
     public ResponseEntity handle(JumpRequest request) {
+        listener.checkCreateRequest(request);
+
         T model = readModelFromBody(this.modelClass, request.getBody());
 
-        if(!listener.allowCreation(getApiKey(request.getHeaders()), model))
+        if(!listener.allowCreate(request, model))
             throw new UnauthorizedException();
 
-        model = listener.beforeCreationValidation(model);
+        model = listener.beforeCreateValidation(model);
         model.validate();
 
-        model = listener.beforeCreationStore(model);
+        model = listener.beforeCreateStore(model);
         repository.save(model);
 
         //todo replace with .created(location) ???

@@ -1,7 +1,11 @@
 package it.sijmen.jump.listeners;
 
+import it.sijmen.jump.JumpRequest;
+
 public interface ReadListener<T> extends ActorListener<T> {
 
-    boolean allowRead(String apiKey, T result);
+    void checkReadRequest(JumpRequest request);
+
+    boolean allowRead(JumpRequest request, T result);
 
 }

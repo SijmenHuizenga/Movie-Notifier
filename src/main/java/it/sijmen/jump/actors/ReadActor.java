@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import it.sijmen.jump.JumpRequest;
 import it.sijmen.jump.listeners.ReadListener;
 import it.sijmen.movienotifier.model.Model;
+import it.sijmen.movienotifier.model.exceptions.BadRequestException;
 import it.sijmen.movienotifier.model.exceptions.UnauthorizedException;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.http.HttpMethod;
@@ -22,8 +23,9 @@ public class ReadActor<T extends Model> extends Actor<T, ReadListener<T>> {
 
     @Override
     public ResponseEntity handle(JumpRequest request) {
+        listener.checkReadRequest(request);
         T result = repository.findOne(request.getUrldata());
-        if(!listener.allowRead(getApiKey(request.getHeaders()), result))
+        if(result == null || !listener.allowRead(request, result))
             throw new UnauthorizedException();
         return ResponseEntity.ok(result);
     }

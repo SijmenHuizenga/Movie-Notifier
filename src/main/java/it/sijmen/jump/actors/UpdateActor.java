@@ -28,10 +28,12 @@ public class UpdateActor<T extends Model> extends Actor<T, UpdateListener<T>> {
 
     @Override
     public ResponseEntity handle(JumpRequest request) {
+        listener.checkUpdateRequest(request);
+
         T model = repository.findOne(request.getUrldata());
         T updatingData = readModelFromBody(modelClass, request.getBody());
 
-        if(!listener.allowUpdate(getApiKey(request.getHeaders()), model))
+        if(!listener.allowUpdate(request, model))
             throw new UnauthorizedException();
 
         final T finalModel = model;

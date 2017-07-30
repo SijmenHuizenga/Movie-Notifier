@@ -22,8 +22,9 @@ public class DeleteActor<T extends Model> extends Actor<T, DeleteListener<T>> {
 
     @Override
     public ResponseEntity handle(JumpRequest request) {
+        listener.checkDeleteRequest(request);
         T toDelete = repository.findOne(request.getUrldata());
-        if(!listener.allowDelete(getApiKey(request.getHeaders()), toDelete))
+        if(!listener.allowDelete(request, toDelete))
             throw new UnauthorizedException();
         repository.delete(toDelete);
         return ResponseEntity.ok().build();

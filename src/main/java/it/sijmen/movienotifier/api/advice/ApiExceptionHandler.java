@@ -57,7 +57,7 @@ public class ApiExceptionHandler {
     @ExceptionHandler(UnauthorizedException.class)
     @ResponseBody
     public String handleUnauthorizedException(UnauthorizedException e) {
-        return "";
+        return e.getMessage();
     }
 
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)

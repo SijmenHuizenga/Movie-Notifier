@@ -101,6 +101,18 @@ public class User extends Model {
         this.created = new Date();
     }
 
+    public User(String id, String name, String email, String phonenumber, String password, String apikey,
+                Date created, List<String> enabledNotifications) {
+        this.id = id;
+        this.name = name;
+        this.email = email;
+        this.phonenumber = phonenumber;
+        this.password = password;
+        this.apikey = apikey;
+        this.created = created;
+        this.enabledNotifications = enabledNotifications;
+    }
+
     /**
      * Make a user object with only a username used to return when
      * no more permissions are available
@@ -187,6 +199,10 @@ public class User extends Model {
 
     public void setCreated(Date created) {
         this.created = created;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 }
 

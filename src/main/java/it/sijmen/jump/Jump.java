@@ -3,7 +3,9 @@ package it.sijmen.jump;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import it.sijmen.jump.actors.*;
 import it.sijmen.jump.listeners.*;
+import it.sijmen.movienotifier.api.UserApiController;
 import it.sijmen.movienotifier.model.Model;
+import it.sijmen.movienotifier.model.User;
 import it.sijmen.movienotifier.model.exceptions.BadRequestException;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.data.mongodb.repository.MongoRepository;
@@ -54,4 +56,11 @@ public class Jump<T extends Model> {
         actors.add(new ReadAllActor<>(modelClass, listener, mapper, repository));
     }
 
+    public void enableAll(JumpListenerAdapter<T> listener) {
+        enableCreate(listener);
+        enableUpdate(listener);
+        enableDelete(listener);
+        enableRead(listener);
+        enableReadAll(listener);
+    }
 }

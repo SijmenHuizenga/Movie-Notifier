@@ -11,6 +11,7 @@ import it.sijmen.movienotifier.repositories.UserRepository;
 import it.sijmen.jump.Jump;
 import it.sijmen.movienotifier.util.ApiKeyHelper;
 import it.sijmen.movienotifier.util.PasswordAuthentication;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
@@ -39,6 +40,12 @@ public class UserApiController extends JumpListenerAdapter<User> {
                            @Named("default-notifications") List<String> defaultNotifications,
                            ObjectMapper mapper) {
         this.userJump = new Jump<>(mapper, userRepository, User.class);
+        this.userJump.enableCreate(this);
+        this.userJump.enableRead(this);
+        this.userJump.enableUpdate(this);
+        this.userJump.enableRead(this);
+
+
         this.userRepository = userRepository;
         this.defaultNotifications = defaultNotifications;
     }
@@ -73,13 +80,13 @@ public class UserApiController extends JumpListenerAdapter<User> {
     }
 
     @Override
-    public User beforeCreationStore(User newUser) {
+    public User beforeCreateStore(User newUser) {
         newUser.validateUniqueness(userRepository);
         return newUser;
     }
 
     @Override
-    public User beforeCreationValidation(User newUser) {
+    public User beforeCreateValidation(User newUser) {
         newUser.setPassword(PasswordAuthentication.hash(newUser.getPassword()));
         newUser.setEnabledNotifications(defaultNotifications);
         newUser.setApikey(ApiKeyHelper.randomAPIKey());
@@ -88,37 +95,43 @@ public class UserApiController extends JumpListenerAdapter<User> {
     }
 
     @Override
-    public boolean allowCreation(String apikey, User model) {
+    public boolean allowCreate(JumpRequest apikey, User model) {
         return true;
     }
 
     @Override
-    public boolean allowRead(String apiKey, User searchUser) {
-        return getExecutingUser(apiKey).getId().equals(searchUser.getId());
+    public void checkReadRequest(JumpRequest request) {
+        checkApiKeyExistence(request);
     }
 
     @Override
-    public boolean allowReadAll(String apiKey, List<User> result) {
+    public boolean allowRead(JumpRequest request, User searchUser) {
+        return getExecutingUser(getApiKey(request)).getId().equals(searchUser.getId());
+    }
+
+    @Override
+    public boolean allowReadAll(JumpRequest apiKey, List<User> result) {
         return false;
     }
 
     @Override
-    public boolean allowDelete(String apiKey, User toDelete) {
-        return getExecutingUser(apiKey).getId().equals(toDelete.getId());
+    public boolean allowDelete(JumpRequest request, User toDelete) {
+        return getExecutingUser(getApiKey(request)).getId().equals(toDelete.getId());
     }
 
     @Override
-    public boolean allowUpdate(String apiKey, User originalModel) {
-        return getExecutingUser(apiKey).getId().equals(originalModel.getId());
+    public void checkDeleteRequest(JumpRequest request) {
+        checkApiKeyExistence(request);
     }
 
-    private User getExecutingUser(String apiKey) {
-        if(apiKey == null)
-            throw new BadRequestException("apikey is not provided");
-        User executingUser = userRepository.findFirstByApikey(apiKey);
-        if(executingUser == null)
-            throw new UnauthorizedException();
-        return executingUser;
+    @Override
+    public void checkUpdateRequest(JumpRequest request) {
+        checkApiKeyExistence(request);
+    }
+
+    @Override
+    public boolean allowUpdate(JumpRequest request, User originalModel) {
+        return getExecutingUser(getApiKey(request)).getId().equals(originalModel.getId());
     }
 
     @Override
@@ -138,10 +151,30 @@ public class UserApiController extends JumpListenerAdapter<User> {
         return updatingUser;
     }
 
+    private User getExecutingUser(@NotNull String apiKey) {
+        User executingUser = userRepository.findFirstByApikey(apiKey);
+        if(executingUser == null)
+            throw new UnauthorizedException();
+        return executingUser;
+    }
+
     private List<String> allowNotifications(List<String> notificationKeys) {
         return notificationKeys.stream().map(
                 n -> ("FBM".equals(n) || "MIL".equals(n)) ? null :
                         "You do not have permission to use the " + n + " notification type."
         ).filter(Objects::nonNull).collect(Collectors.toList());
+    }
+
+    private String getApiKey(JumpRequest request) {
+        return getApiKey(request.getHeaders());
+    }
+
+    private String getApiKey(Map<String, String> requestHeaders) {
+        return requestHeaders == null ? null : requestHeaders.getOrDefault("APIKEY", null);
+    }
+
+    private void checkApiKeyExistence(JumpRequest request){
+        if(getApiKey(request.getHeaders()) == null)
+            throw new BadRequestException("apikey is not provided");
     }
 }
