@@ -1,13 +1,14 @@
 package it.sijmen.movienotifier.api;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import it.sijmen.jump.JumpRequest;
+import it.sijmen.jump.listeners.JumpListenerAdapter;
 import it.sijmen.movienotifier.model.User;
 import it.sijmen.movienotifier.model.exceptions.BadRequestException;
 import it.sijmen.movienotifier.model.exceptions.UnauthorizedException;
 import it.sijmen.movienotifier.model.requests.LoginDetails;
 import it.sijmen.movienotifier.repositories.UserRepository;
-import it.sijmen.movienotifier.api.dynamiccrud.DynamicCrudController;
-import it.sijmen.movienotifier.api.dynamiccrud.DynamicCrudControllerListener;
+import it.sijmen.jump.Jump;
 import it.sijmen.movienotifier.util.ApiKeyHelper;
 import it.sijmen.movienotifier.util.PasswordAuthentication;
 import org.springframework.http.HttpEntity;
@@ -26,9 +27,9 @@ import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/user")
-public class UserApiController implements DynamicCrudControllerListener<User> {
+public class UserApiController extends JumpListenerAdapter<User> {
 
-    private final DynamicCrudController<User> crudController;
+    private final Jump<User> userJump;
 
     private final UserRepository userRepository;
     private final List<String> defaultNotifications;
@@ -37,7 +38,7 @@ public class UserApiController implements DynamicCrudControllerListener<User> {
     public UserApiController(UserRepository userRepository,
                            @Named("default-notifications") List<String> defaultNotifications,
                            ObjectMapper mapper) {
-        this.crudController = new DynamicCrudController<>(mapper, userRepository, this);
+        this.userJump = new Jump<>(mapper, userRepository, User.class);
         this.userRepository = userRepository;
         this.defaultNotifications = defaultNotifications;
     }
@@ -66,7 +67,9 @@ public class UserApiController implements DynamicCrudControllerListener<User> {
                                            @RequestHeader(required = false) Map<String, String> requestHeaders,
                                            @PathVariable(required = false) String urldata,
                                            @RequestBody(required = false) String body) throws Exception{
-        return crudController.handle(User.class, requestMethod, requestHeaders, urldata, body);
+        return userJump.handle(new JumpRequest(
+                requestMethod, requestHeaders, urldata, body
+        ));
     }
 
     @Override
