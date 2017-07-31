@@ -27,9 +27,7 @@ public class JumpListenerAdapter<T> implements CreateListener<T>, DeleteListener
     }
 
     @Override
-    public void checkUpdateRequest(JumpRequest request) {
-
-    }
+    public void checkUpdateRequest(JumpRequest request) {}
 
     @Override
     public void checkCreateRequest(JumpRequest request) {}
@@ -63,9 +61,7 @@ public class JumpListenerAdapter<T> implements CreateListener<T>, DeleteListener
     }
 
     @Override
-    public void checkReadAllRequest(JumpRequest request) {
-
-    }
+    public void checkReadAllRequest(JumpRequest request) {}
 
     @Override
     public boolean allowReadAll(JumpRequest request, List<T> result) {
