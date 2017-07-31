@@ -4,8 +4,8 @@ import it.sijmen.jump.JumpRequest;
 
 public interface ReadListener<T> extends ActorListener<T> {
 
-    void checkReadRequest(JumpRequest request);
+    default void checkReadRequest(JumpRequest request) {}
 
-    boolean allowRead(JumpRequest request, T result);
+    default boolean allowRead(JumpRequest request, T result) {return true; }
 
 }

@@ -113,16 +113,6 @@ public class User extends Model {
             throw new BadRequestException(errors);
     }
 
-    public io.swagger.model.User toSwaggerUser() {
-        return new io.swagger.model.User()
-                .apikey(this.apikey)
-                .email(this.email)
-                .name(this.name)
-                .phonenumber(this.phonenumber)
-                .uuid(this.id)
-                .notifications(this.enabledNotifications);
-    }
-
     public String getId() {
         return id;
     }
@@ -165,10 +155,6 @@ public class User extends Model {
 
     public void setApikey(String apikey) {
         this.apikey = apikey;
-    }
-
-    public Date getCreated() {
-        return created;
     }
 
     public List<String> getEnabledNotifications() {

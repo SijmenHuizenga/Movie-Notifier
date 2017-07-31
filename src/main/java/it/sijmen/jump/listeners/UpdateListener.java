@@ -4,11 +4,11 @@ import it.sijmen.jump.JumpRequest;
 
 public interface UpdateListener<T> extends ActorListener<T> {
 
-    boolean allowUpdate(JumpRequest apiKey, T originalModel);
+    default boolean allowUpdate(JumpRequest apiKey, T originalModel) {return true; }
 
-    T beforeUpdateValidation(T model);
+    default T beforeUpdateValidation(T model) {return model;}
 
-    T beforeUpdateStore(T model);
+    default T beforeUpdateStore(T model) {return model;}
 
-    void checkUpdateRequest(JumpRequest request);
+    default void checkUpdateRequest(JumpRequest request) {}
 }

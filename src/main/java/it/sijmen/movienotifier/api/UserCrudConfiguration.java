@@ -24,7 +24,7 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Configuration
-public class UserCrudConfiguration extends JumpListenerAdapter<User> {
+public class UserCrudConfiguration implements JumpListenerAdapter<User> {
 
     private List<String> defaultNotifications;
     private UserRepository userRepository;
@@ -65,11 +65,6 @@ public class UserCrudConfiguration extends JumpListenerAdapter<User> {
     }
 
     @Override
-    public boolean allowCreate(JumpRequest apikey, User model) {
-        return true;
-    }
-
-    @Override
     public void checkReadRequest(JumpRequest request) {
         checkApiKeyExistence(request);
     }
@@ -77,11 +72,6 @@ public class UserCrudConfiguration extends JumpListenerAdapter<User> {
     @Override
     public boolean allowRead(JumpRequest request, User searchUser) {
         return getExecutingUser(getApiKey(request)).getId().equals(searchUser.getId());
-    }
-
-    @Override
-    public boolean allowReadAll(JumpRequest apiKey, List<User> result) {
-        return false;
     }
 
     @Override

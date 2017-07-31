@@ -11,19 +11,17 @@ import org.springframework.stereotype.Service;
 @Service
 public class WatcherService {
 
-    private final AuthenticationService authService;
     private final WatcherRepository watcherRepo;
     private final UserRepository userRepo;
 
-    public WatcherService(AuthenticationService authService, WatcherRepository watcherRepo, UserRepository userRepo) {
-        this.authService = authService;
+    public WatcherService(WatcherRepository watcherRepo, UserRepository userRepo) {
         this.watcherRepo = watcherRepo;
         this.userRepo = userRepo;
     }
 
     public Watcher createWatcher(@NotNull String apikey, @NotNull Watcher watcher) {
         User executingUser = userRepo.findFirstByApikey(apikey);
-        if(executingUser == null || !authService.canCreate(executingUser, watcher))
+        if(executingUser == null || !executingUser.getId().equals(watcher.getUser()))
             throw new UnauthorizedException();
 
         watcher.validate();

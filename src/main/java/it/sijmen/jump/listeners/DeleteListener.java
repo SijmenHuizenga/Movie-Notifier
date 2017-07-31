@@ -4,7 +4,7 @@ import it.sijmen.jump.JumpRequest;
 
 public interface DeleteListener<T> extends ActorListener<T> {
 
-    void checkDeleteRequest(JumpRequest request);
+    default void checkDeleteRequest(JumpRequest request){  }
 
-    boolean allowDelete(JumpRequest apiKey, T toDelete);
+    default boolean allowDelete(JumpRequest apiKey, T toDelete){ return true; }
 }

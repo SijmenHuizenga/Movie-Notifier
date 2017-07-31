@@ -10,6 +10,7 @@ import org.jetbrains.annotations.NotNull;
 import org.springframework.core.GenericTypeResolver;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.http.HttpEntity;
+import org.springframework.http.ResponseEntity;
 
 import javax.inject.Inject;
 import java.lang.reflect.ParameterizedType;
@@ -33,12 +34,12 @@ public class Jump<T extends Model> {
         this.modelClass = modelClass;
     }
 
-    public HttpEntity<?> handle(JumpRequest request) {
+    public ResponseEntity handle(JumpRequest request) {
         for(Actor actor : actors){
             if(actor.accepts(request))
                 return actor.handle(request);
         }
-        throw new BadRequestException();
+        return ResponseEntity.notFound().build();
     }
 
     public Jump<T> enableCreate(CreateListener<T> listener){

@@ -20,7 +20,7 @@ public abstract class Model {
         Validator validator = factory.getValidator();
         Set<ConstraintViolation<Model>> result = validator.validate(this);
         if(result.size() != 0)
-            throw new BadRequestException(ExceptionStringifier.makeNiceArray(result));
+            throw new BadRequestException(new ExceptionStringifier().makeNiceArray(result));
     }
 
 }

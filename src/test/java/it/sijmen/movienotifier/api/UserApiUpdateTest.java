@@ -105,4 +105,9 @@ public class UserApiUpdateTest extends UserTestBase {
                         buildJson(null, null, null, null, null)
                 )).andExpect(status().isUnauthorized());
     }
+
+    public void updateEmptyBody() throws Exception {
+        this.mvc.perform(post("/user/" + testuser.getId()).accept(MediaType.APPLICATION_JSON)
+                .header("APIKEY", testuser.getApikey()).content("")).andExpect(status().isBadRequest());
+    }
 }

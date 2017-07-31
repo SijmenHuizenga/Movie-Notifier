@@ -161,6 +161,13 @@
             <artifactId>typetools</artifactId>
             <version>0.4.4</version>
         </dependency>
+        <dependency>
+            <groupId>org.jacoco</groupId>
+            <artifactId>org.jacoco.build</artifactId>
+            <version>0.7.9</version>
+            <type>pom</type>
+        </dependency>
+
 
     </dependencies>
 </project>

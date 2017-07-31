@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 
 public class ExceptionStringifier {
 
-    public static List<String> makeNiceArray(Set<ConstraintViolation<Model>> result) {
+    public List<String> makeNiceArray(Set<ConstraintViolation<Model>> result) {
         List<String> out = new ArrayList<>();
         for(ConstraintViolation v : result)
             out.add(v.getPropertyPath() + " " + v.getMessage());
