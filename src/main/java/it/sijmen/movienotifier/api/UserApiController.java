@@ -22,29 +22,9 @@ public class UserApiController  {
 
     private final Jump<User> userJump;
 
-    private final UserRepository userRepository;
-
     @Inject
-    public UserApiController(Jump<User> userJump, UserRepository userRepository) {
+    public UserApiController(Jump<User> userJump) {
         this.userJump = userJump;
-        this.userRepository = userRepository;
-    }
-
-    @RequestMapping(value = "/login", method = RequestMethod.POST)
-    @ResponseStatus(HttpStatus.OK)
-    @ResponseBody
-    public User login(
-            @RequestBody(required = true) LoginDetails loginDetails) {
-
-        loginDetails.validate();
-
-        User user = userRepository.findFirstByName(loginDetails.getName());
-        if(user == null)
-            throw new UnauthorizedException();
-
-        if(!PasswordAuthentication.authenticate(loginDetails.getPassword(), user.getPassword()))
-            throw new UnauthorizedException();
-        return user;
     }
 
     @RequestMapping(value = {"/user/{urldata:.*}", "/user"})

@@ -85,7 +85,7 @@ public class User extends Model {
 
     @Field
     @ValidNotification
-    @JsonProperty
+    @JsonProperty("notifications")
     private List<String> enabledNotifications = new ArrayList<>();
 
     public User() {

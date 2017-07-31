@@ -1,49 +1,22 @@
 package it.sijmen.movienotifier.api;
 
-import it.sijmen.movienotifier.repositories.UserRepository;
-import it.sijmen.movienotifier.repositories.WatcherRepository;
 import org.hamcrest.Matchers;
-import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mockito;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.test.web.servlet.MockMvc;
 
-import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @RunWith(SpringRunner.class)
 @WebMvcTest(UserApiController.class)
 public class UserApiLoginTest extends UserTestBase {
 
-    @Autowired
-    private MockMvc mvc;
-
-    @MockBean
-    private UserRepository userRepo;
-
-    @MockBean
-    private WatcherRepository watcherRepository;
-
-    @After
-    public void resetMocks() {
-        Mockito.reset(userRepo);
-        Mockito.reset(watcherRepository);
-    }
-
     @Test
     public void testLoginSucces() throws Exception {
-        when(userRepo.findOne(testuser.getId())).thenReturn(testuser);
-        when(userRepo.findFirstByApikey(testuser.getApikey())).thenReturn(testuser);
-        when(userRepo.findFirstByName(testuser.getName())).thenReturn(testuser);
+        addToMockedDb(testuser);
 
         this.mvc.perform(post("/login").accept(MediaType.APPLICATION_JSON).contentType(MediaType.APPLICATION_JSON).content(
                 "{\n" +
@@ -58,16 +31,14 @@ public class UserApiLoginTest extends UserTestBase {
                 "    \"email\": \""+testuser.getEmail()+"\",\n" +
                 "    \"phonenumber\": \""+testuser.getPhonenumber()+"\",\n" +
                 "    \"apikey\": \""+testuser.getApikey()+"\",\n" +
-                "    \"enabledNotifications\": [\""+String.join(",", testuser.getEnabledNotifications())+"\"]\n" +
+                "    \"notifications\": [\""+String.join(",", testuser.getEnabledNotifications())+"\"]\n" +
                 "}"
         ));
     }
 
     @Test
     public void testLoginWrongUsername() throws Exception {
-        when(userRepo.findOne(testuser.getId())).thenReturn(testuser);
-        when(userRepo.findFirstByApikey(testuser.getApikey())).thenReturn(testuser);
-        when(userRepo.findFirstByName(testuser.getName())).thenReturn(testuser);
+        addToMockedDb(testuser);
 
         this.mvc.perform(post("/login").accept(MediaType.APPLICATION_JSON).contentType(MediaType.APPLICATION_JSON).content(
                 "{\n" +
@@ -80,9 +51,7 @@ public class UserApiLoginTest extends UserTestBase {
 
     @Test
     public void testLoginWrongPassword() throws Exception {
-        when(userRepo.findOne(testuser.getId())).thenReturn(testuser);
-        when(userRepo.findFirstByApikey(testuser.getApikey())).thenReturn(testuser);
-        when(userRepo.findFirstByName(testuser.getName())).thenReturn(testuser);
+        addToMockedDb(testuser);
 
         this.mvc.perform(post("/login").accept(MediaType.APPLICATION_JSON).contentType(MediaType.APPLICATION_JSON).content(
                 "{\n" +
@@ -95,9 +64,7 @@ public class UserApiLoginTest extends UserTestBase {
 
     @Test
     public void testLoginInvalidData() throws Exception {
-        when(userRepo.findOne(testuser.getId())).thenReturn(testuser);
-        when(userRepo.findFirstByApikey(testuser.getApikey())).thenReturn(testuser);
-        when(userRepo.findFirstByName(testuser.getName())).thenReturn(testuser);
+        addToMockedDb(testuser);
 
         this.mvc.perform(post("/login").accept(MediaType.APPLICATION_JSON).contentType(MediaType.APPLICATION_JSON).content(
                 "{\n" +
