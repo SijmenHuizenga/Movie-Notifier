@@ -31,6 +31,7 @@ public class ApiExceptionHandler {
     @ExceptionHandler(BadRequestException.class)
     @ResponseBody
     public String handleBadRequest(BadRequestException e) {
+        e.printStackTrace();
         try {
             return mapper.writeValueAsString(
                     new InlineResponse400().errors(e.getErrors())
@@ -78,7 +79,6 @@ public class ApiExceptionHandler {
     @ExceptionHandler(HttpMessageNotReadableException.class)
     @ResponseBody
     public String handleHttpMessageNotReadableException(HttpMessageNotReadableException e) {
-        e.printStackTrace();
         try {
             String s = e.getMostSpecificCause().getMessage();
             if(s.contains(":"))

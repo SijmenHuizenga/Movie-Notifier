@@ -1,9 +1,7 @@
 package it.sijmen.movienotifier.api;
 
-import it.sijmen.movienotifier.model.User;
 import it.sijmen.movienotifier.repositories.UserRepository;
 import it.sijmen.movienotifier.repositories.WatcherRepository;
-import it.sijmen.movienotifier.util.PasswordAuthentication;
 import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -15,9 +13,6 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.util.Calendar;
-import java.util.Collections;
-
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -26,7 +21,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @RunWith(SpringRunner.class)
 @WebMvcTest(UserApiController.class)
-public class UserApiReadTest {
+public class UserApiReadTest extends UserTestBase {
 
     @Autowired
     private MockMvc mvc;
@@ -36,20 +31,6 @@ public class UserApiReadTest {
 
     @MockBean
     private WatcherRepository watcherRepository;
-
-    private final User testuser;
-    private final User testuser2;
-
-    public UserApiReadTest() {
-        testuser = new User("TESTUSERID", "TESTUSER", "TEST@example.com", "+31654321094",
-                PasswordAuthentication.hash("123456"), "TESTAIKEY",
-                new Calendar.Builder().setDate(2017,7,30).setTimeOfDay(20, 30, 15).build().getTime(),
-                Collections.singletonList("FBM"));
-        testuser2 = new User("TESTUSERID2", "TESTUSER2", "TEST2@example.com", "+31654321095",
-                PasswordAuthentication.hash("123455"), "TESTAIKEY2",
-                new Calendar.Builder().setDate(2017,7,30).setTimeOfDay(20, 50, 15).build().getTime(),
-                Collections.singletonList("FBM"));
-    }
 
     @After
     public void resetMocks() {

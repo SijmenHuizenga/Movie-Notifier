@@ -28,13 +28,16 @@ public class UserCrudConfiguration extends JumpListenerAdapter<User> {
 
     private List<String> defaultNotifications;
     private UserRepository userRepository;
+    private ApiKeyHelper apiKeyHelper;
 
     @Inject
     public UserCrudConfiguration(
             @Named("default-notifications") List<String> defaultNotifications,
-            @Autowired UserRepository userRepository) {
+            UserRepository userRepository,
+            ApiKeyHelper apiKeyHelper) {
         this.defaultNotifications = defaultNotifications;
         this.userRepository = userRepository;
+        this.apiKeyHelper = apiKeyHelper;
     }
 
     @Bean
@@ -56,7 +59,7 @@ public class UserCrudConfiguration extends JumpListenerAdapter<User> {
     @Override
     public User beforeCreateValidation(User newUser) {
         newUser.setEnabledNotifications(defaultNotifications);
-        newUser.setApikey(ApiKeyHelper.randomAPIKey());
+        newUser.setApikey(apiKeyHelper.randomAPIKey());
         newUser.setCreated(new Date());
         return newUser;
     }

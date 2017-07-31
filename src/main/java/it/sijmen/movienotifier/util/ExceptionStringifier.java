@@ -12,23 +12,6 @@ import java.util.stream.Collectors;
 
 public class ExceptionStringifier {
 
-    public static String exceptionToString(Throwable e){
-        if(e == null)
-            throw new IllegalArgumentException("Null throwable");
-        if(e instanceof SQLIntegrityConstraintViolationException)
-            return e.getMessage().replaceFirst("for key .+", "");
-        if(e instanceof ConstraintViolationException){
-            return " - " + ((ConstraintViolationException) e).getConstraintViolations().stream()
-                    .map(i -> i.getPropertyPath() + " " + i.getMessage())
-                    .collect(Collectors.joining(", \n - "));
-        }
-        return e.getMessage();
-    }
-
-    public static String makeNice(Set<ConstraintViolation<Model>> result) {
-        return String.join("\n", makeNiceArray(result));
-    }
-
     public static List<String> makeNiceArray(Set<ConstraintViolation<Model>> result) {
         List<String> out = new ArrayList<>();
         for(ConstraintViolation v : result)

@@ -91,18 +91,6 @@ public class User extends Model {
     public User() {
     }
 
-    /**
-     * Create a new user.
-     */
-    public User(String name, String email, String phonenumber, String password) throws IllegalArgumentException{
-        this.name = name;
-        this.email = email;
-        this.phonenumber = phonenumber;
-        this.password = password;
-        this.apikey = ApiKeyHelper.randomAPIKey();
-        this.created = new Date();
-    }
-
     public User(String id, String name, String email, String phonenumber, String password, String apikey,
                 Date created, List<String> enabledNotifications) {
         this.id = id;
@@ -113,14 +101,6 @@ public class User extends Model {
         this.apikey = apikey;
         this.created = created;
         this.enabledNotifications = enabledNotifications;
-    }
-
-    /**
-     * Make a user object with only a username used to return when
-     * no more permissions are available
-     */
-    public User(String name) {
-        this.name = name;
     }
 
     public void validateUniqueness(UserRepository userRepository) {

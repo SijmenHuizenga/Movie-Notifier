@@ -18,7 +18,6 @@ import javax.inject.Inject;
 import java.util.Map;
 
 @Controller
-@RequestMapping("/user")
 public class UserApiController  {
 
     private final Jump<User> userJump;
@@ -35,9 +34,7 @@ public class UserApiController  {
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public User login(
-            @RequestBody LoginDetails loginDetails) {
-        if (loginDetails == null)
-            throw new BadRequestException("No details provided");
+            @RequestBody(required = true) LoginDetails loginDetails) {
 
         loginDetails.validate();
 
@@ -50,7 +47,7 @@ public class UserApiController  {
         return user;
     }
 
-    @RequestMapping(value = {"/{urldata:.*}", "/"})
+    @RequestMapping(value = {"/user/{urldata:.*}", "/user"})
     public HttpEntity<?> genericUserMethod(HttpMethod requestMethod,
                                            @RequestHeader(required = false) Map<String, String> requestHeaders,
                                            @PathVariable(required = false) String urldata,

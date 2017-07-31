@@ -61,7 +61,7 @@ paths:
           $ref: '#/responses/BadRequestError'
         500:
           $ref: '#/responses/InternalServerError'
-  /user/login:
+  /login:
     post:
       tags:
         - User
