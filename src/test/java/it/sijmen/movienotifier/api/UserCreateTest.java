@@ -1,21 +1,14 @@
 package it.sijmen.movienotifier.api;
 
 import it.sijmen.movienotifier.model.User;
-import it.sijmen.movienotifier.repositories.UserRepository;
-import it.sijmen.movienotifier.repositories.WatcherRepository;
 import net.minidev.json.JSONArray;
 import org.hamcrest.Matchers;
 import org.hamcrest.core.IsNull;
-import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mockito;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.Collections;
 
@@ -26,8 +19,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
-@WebMvcTest(UserApiController.class)
-public class UserApiCreateTest extends UserTestBase {
+@WebMvcTest(JumpConfiguration.class)
+public class UserCreateTest extends UserTestBase {
 
     @Test
     public void testCreateSuccess() throws Exception {

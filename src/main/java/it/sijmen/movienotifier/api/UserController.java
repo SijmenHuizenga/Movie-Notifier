@@ -11,7 +11,6 @@ import it.sijmen.movienotifier.repositories.UserRepository;
 import it.sijmen.movienotifier.util.ApiKeyHelper;
 import it.sijmen.movienotifier.util.PasswordAuthentication;
 import org.jetbrains.annotations.NotNull;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -24,14 +23,14 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Configuration
-public class UserCrudConfiguration implements JumpListenerAdapter<User> {
+public class UserController implements JumpListenerAdapter<User> {
 
     private List<String> defaultNotifications;
     private UserRepository userRepository;
     private ApiKeyHelper apiKeyHelper;
 
     @Inject
-    public UserCrudConfiguration(
+    public UserController(
             @Named("default-notifications") List<String> defaultNotifications,
             UserRepository userRepository,
             ApiKeyHelper apiKeyHelper) {
@@ -41,7 +40,7 @@ public class UserCrudConfiguration implements JumpListenerAdapter<User> {
     }
 
     @Bean
-    public Jump<User> userJump(ObjectMapper mapper, UserRepository userRepository, UserCrudConfiguration configuration){
+    public Jump<User> userJump(ObjectMapper mapper, UserRepository userRepository, UserController configuration){
         return new Jump<>(mapper, userRepository, User.class)
                 .enableRead(configuration)
                 .enableUpdate(configuration)

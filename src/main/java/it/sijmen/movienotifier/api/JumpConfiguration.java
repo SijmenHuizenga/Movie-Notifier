@@ -18,12 +18,12 @@ import javax.inject.Inject;
 import java.util.Map;
 
 @Controller
-public class UserApiController  {
+public class JumpConfiguration {
 
     private final Jump<User> userJump;
 
     @Inject
-    public UserApiController(Jump<User> userJump) {
+    public JumpConfiguration(Jump<User> userJump) {
         this.userJump = userJump;
     }
 

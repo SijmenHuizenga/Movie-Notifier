@@ -11,8 +11,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
-@WebMvcTest(UserApiController.class)
-public class UserApiReadTest extends UserTestBase {
+@WebMvcTest(JumpConfiguration.class)
+public class UserReadTest extends UserTestBase {
 
     @Test
     public void testGetOwnUser() throws Exception {

@@ -12,12 +12,12 @@ import org.springframework.web.bind.annotation.*;
 import javax.inject.Inject;
 
 @Controller
-public class LoginApiController {
+public class LoginController {
 
     private final UserRepository userRepository;
 
     @Inject
-    public LoginApiController(UserRepository userRepository) {
+    public LoginController(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 

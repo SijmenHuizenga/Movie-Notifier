@@ -4,7 +4,6 @@ import io.swagger.model.Watcher;
 import io.swagger.model.WatcherProps;
 import it.sijmen.movienotifier.model.WatcherDetails;
 import it.sijmen.movienotifier.model.exceptions.BadRequestException;
-import it.sijmen.movienotifier.service.AuthenticationService;
 import it.sijmen.movienotifier.service.WatcherService;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -14,12 +13,12 @@ import javax.inject.Inject;
 
 @Controller
 @RequestMapping("/watchers")
-public class WatcherApiController {
+public class WatcherController {
 
     private final WatcherService watcherService;
 
     @Inject
-    public WatcherApiController(WatcherService watcherService) {
+    public WatcherController(WatcherService watcherService) {
         this.watcherService = watcherService;
     }
 

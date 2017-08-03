@@ -11,8 +11,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @RunWith(SpringRunner.class)
-@WebMvcTest(UserApiController.class)
-public class UserApiLoginTest extends UserTestBase {
+@WebMvcTest(JumpConfiguration.class)
+public class UserLoginTest extends UserTestBase {
 
     @Test
     public void testLoginSucces() throws Exception {
