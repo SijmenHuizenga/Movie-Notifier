@@ -1,63 +1,41 @@
 package it.sijmen.movienotifier.api;
 
-import io.swagger.model.Watcher;
-import io.swagger.model.WatcherProps;
-import it.sijmen.movienotifier.model.WatcherDetails;
-import it.sijmen.movienotifier.model.exceptions.BadRequestException;
-import it.sijmen.movienotifier.service.WatcherService;
-import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import it.sijmen.jump.Jump;
+import it.sijmen.jump.JumpRequest;
+import it.sijmen.jump.listeners.JumpListenerAdapter;
+import it.sijmen.movienotifier.model.Watcher;
+import it.sijmen.movienotifier.repositories.UserRepository;
+import it.sijmen.movienotifier.repositories.WatcherRepository;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
 import javax.inject.Inject;
 
-@Controller
-@RequestMapping("/watchers")
-public class WatcherController {
+@Configuration
+public class WatcherController extends ApiController implements JumpListenerAdapter<Watcher> {
 
-    private final WatcherService watcherService;
+    private final WatcherRepository watcherRepo;
 
     @Inject
-    public WatcherController(WatcherService watcherService) {
-        this.watcherService = watcherService;
+    public WatcherController(UserRepository userRepo, WatcherRepository watcherRepo) {
+        super(userRepo);
+        this.watcherRepo = watcherRepo;
     }
 
-    @RequestMapping(method = RequestMethod.PUT)
-    @ResponseStatus(HttpStatus.CREATED)
-    @ResponseBody
-    public Watcher create(
-            @RequestHeader("APIKEY") String apikey,
-            @RequestBody Watcher watcher) {
-        if (apikey == null)
-            throw new BadRequestException("apikey is not provided");
-        return watcherService.createWatcher(apikey, apiToModel(watcher)).toSwaggerWatcher();
+    @Bean
+    public Jump<Watcher> watcherJump(ObjectMapper mapper, WatcherRepository watcherRepo, WatcherController configuration){
+        return new Jump<>(mapper, watcherRepo, Watcher.class)
+                .enableCreate(configuration);
     }
 
-    private it.sijmen.movienotifier.model.Watcher apiToModel(Watcher watcher) {
-
-        return new it.sijmen.movienotifier.model.Watcher(
-                null, watcher.getUser(), watcher.getName(),
-                watcher.getMovieid(), watcher.getCinemaid(),
-                watcher.getStartAfter() == null ? null : watcher.getStartAfter().toDate(),
-                watcher.getStartBefore() == null ? null : watcher.getStartBefore().toDate(),
-                apiToModel(watcher.getProps())
-        );
+    @Override
+    public void checkCreateRequest(JumpRequest request) {
+        checkApiKeyExistence(request);
     }
 
-    private WatcherDetails apiToModel(WatcherProps props) {
-        if(props == null)
-            return null;
-        return new WatcherDetails(
-                props.getOv(),
-                props.getNl(),
-                props.getImax(),
-                props.get3d(),
-                props.getHfr(),
-                props.get4k(),
-                props.getLaser(),
-                props.getDbox(),
-                props.getDolbycinema(),
-                props.getDolbyatmos()
-        );
+    @Override
+    public boolean allowCreate(JumpRequest request, Watcher watcher) {
+        return getExecutingUser(getApiKey(request)).getId().equals(watcher.getUser());
     }
 }

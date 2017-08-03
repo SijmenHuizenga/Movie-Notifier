@@ -1,5 +1,6 @@
 package it.sijmen.movienotifier.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.model.WatcherProps;
 
 public class WatcherDetails {
@@ -7,51 +8,62 @@ public class WatcherDetails {
     /**
      * whether or not the showing is in the original language
      */
+    @JsonProperty
     private boolean ov;
 
     /**
      * whether or not the showing is in the dutch language
      */
+    @JsonProperty
     private boolean nl;
 
     /**
      * whether or not the showing is in
      */
+    @JsonProperty
     private boolean imax;
 
     /**
      * whether or not the showing is in 3D
      */
+    @JsonProperty("3d")
     private boolean d3;
 
     /**
      * whether or not the showing is in HFR
      */
+    @JsonProperty
     private boolean hfr;
 
     /**
      * whether or not the showing is in 4K resolution
      */
+    @JsonProperty("4k")
     private boolean k4;
 
     /**
      * whether or not the showing is projected with a laser projector
      */
+    @JsonProperty
     private boolean laser;
 
     /**
      * whether or not the showing is in D-Box seats
      */
+    @JsonProperty
     private boolean dbox;
 
     /**
-     * whether or not the showing uses Dolby Cinema.
+     * whether
+     * or not the showing uses Dolby Cinema.
      */
+    @JsonProperty
     private boolean dolbycinema;
 
     /**
      * whether or not the showing is in dolbey atmos
      */
+    @JsonProperty
     private boolean dolbyatmos;
 
     public WatcherDetails(boolean ov, boolean nl, boolean imax, boolean d3, boolean hfr, boolean k4, boolean laser, boolean dbox, boolean dolbycinema, boolean dolbyatmos) {

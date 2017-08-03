@@ -27,7 +27,7 @@ abstract class UserTestBase {
     UserRepository userRepo;
 
     @MockBean
-    WatcherRepository watcherRepository;
+    WatcherRepository watcherRepo;
 
     final User testuser;
     final User testuser2;
@@ -46,7 +46,7 @@ abstract class UserTestBase {
     @After
     public void resetMocks() {
         Mockito.reset(userRepo);
-        Mockito.reset(watcherRepository);
+        Mockito.reset(watcherRepo);
     }
 
     String buildJson(String name, String email, String phone, String password, List<String> notifications){

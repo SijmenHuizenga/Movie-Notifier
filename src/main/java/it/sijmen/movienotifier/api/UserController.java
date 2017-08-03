@@ -23,10 +23,9 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Configuration
-public class UserController implements JumpListenerAdapter<User> {
+public class UserController extends ApiController implements JumpListenerAdapter<User> {
 
     private List<String> defaultNotifications;
-    private UserRepository userRepository;
     private ApiKeyHelper apiKeyHelper;
 
     @Inject
@@ -34,8 +33,8 @@ public class UserController implements JumpListenerAdapter<User> {
             @Named("default-notifications") List<String> defaultNotifications,
             UserRepository userRepository,
             ApiKeyHelper apiKeyHelper) {
+        super(userRepository);
         this.defaultNotifications = defaultNotifications;
-        this.userRepository = userRepository;
         this.apiKeyHelper = apiKeyHelper;
     }
 
@@ -110,31 +109,11 @@ public class UserController implements JumpListenerAdapter<User> {
         return updatingUser;
     }
 
-    private User getExecutingUser(@NotNull String apiKey) {
-        User executingUser = userRepository.findFirstByApikey(apiKey);
-        if(executingUser == null)
-            throw new UnauthorizedException();
-        return executingUser;
-    }
-
     private List<String> allowNotifications(List<String> notificationKeys) {
         return notificationKeys.stream().map(
                 n -> ("FBM".equals(n) || "MIL".equals(n)) ? null :
                         "You do not have permission to use the " + n + " notification type."
         ).filter(Objects::nonNull).collect(Collectors.toList());
-    }
-
-    private String getApiKey(JumpRequest request) {
-        return getApiKey(request.getHeaders());
-    }
-
-    private String getApiKey(Map<String, String> requestHeaders) {
-        return requestHeaders == null ? null : requestHeaders.getOrDefault("APIKEY", null);
-    }
-
-    private void checkApiKeyExistence(JumpRequest request){
-        if(getApiKey(request.getHeaders()) == null)
-            throw new BadRequestException("apikey is not provided");
     }
 
 }
