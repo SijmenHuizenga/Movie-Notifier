@@ -164,4 +164,18 @@ public class Watcher extends Model{
     public void setProps(WatcherDetails props) {
         this.props = props;
     }
+
+    @Override
+    public String toString() {
+        return "Watcher{" +
+                "id='" + id + '\'' +
+                ", user='" + user + '\'' +
+                ", name='" + name + '\'' +
+                ", movieid=" + movieid +
+                ", cinemaid='" + cinemaid + '\'' +
+                ", startAfter=" + startAfter +
+                ", startBefore=" + startBefore +
+                ", props=" + props +
+                '}';
+    }
 }

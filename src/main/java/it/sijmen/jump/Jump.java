@@ -3,7 +3,9 @@ package it.sijmen.jump;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import it.sijmen.jump.actors.*;
 import it.sijmen.jump.listeners.*;
+import it.sijmen.movienotifier.api.WatcherController;
 import it.sijmen.movienotifier.model.Model;
+import it.sijmen.movienotifier.model.Watcher;
 import it.sijmen.movienotifier.model.exceptions.BadRequestException;
 import net.jodah.typetools.TypeResolver;
 import org.jetbrains.annotations.NotNull;
@@ -63,4 +65,8 @@ public class Jump<T extends Model> {
         return this;
     }
 
+    public Jump<T> enableReadSome(ReadSomeListener<T> listener) {
+        actors.add(new ReadSomeActor<>(modelClass, listener, mapper, repository));
+        return this;
+    }
 }

@@ -1,7 +1,6 @@
 package it.sijmen.movienotifier.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import io.swagger.model.WatcherProps;
 
 public class WatcherDetails {
 
@@ -9,64 +8,64 @@ public class WatcherDetails {
      * whether or not the showing is in the original language
      */
     @JsonProperty
-    private boolean ov;
+    private Boolean ov;
 
     /**
      * whether or not the showing is in the dutch language
      */
     @JsonProperty
-    private boolean nl;
+    private Boolean nl;
 
     /**
      * whether or not the showing is in
      */
     @JsonProperty
-    private boolean imax;
+    private Boolean imax;
 
     /**
      * whether or not the showing is in 3D
      */
     @JsonProperty("3d")
-    private boolean d3;
+    private Boolean d3;
 
     /**
      * whether or not the showing is in HFR
      */
     @JsonProperty
-    private boolean hfr;
+    private Boolean hfr;
 
     /**
      * whether or not the showing is in 4K resolution
      */
     @JsonProperty("4k")
-    private boolean k4;
+    private Boolean k4;
 
     /**
      * whether or not the showing is projected with a laser projector
      */
     @JsonProperty
-    private boolean laser;
+    private Boolean laser;
 
     /**
      * whether or not the showing is in D-Box seats
      */
     @JsonProperty
-    private boolean dbox;
+    private Boolean dbox;
 
     /**
      * whether
      * or not the showing uses Dolby Cinema.
      */
     @JsonProperty
-    private boolean dolbycinema;
+    private Boolean dolbycinema;
 
     /**
      * whether or not the showing is in dolbey atmos
      */
     @JsonProperty
-    private boolean dolbyatmos;
+    private Boolean dolbyatmos;
 
-    public WatcherDetails(boolean ov, boolean nl, boolean imax, boolean d3, boolean hfr, boolean k4, boolean laser, boolean dbox, boolean dolbycinema, boolean dolbyatmos) {
+    public WatcherDetails(Boolean ov, Boolean nl, Boolean imax, Boolean d3, Boolean hfr, Boolean k4, Boolean laser, Boolean dbox, Boolean dolbycinema, Boolean dolbyatmos) {
         this.ov = ov;
         this.nl = nl;
         this.imax = imax;
@@ -82,100 +81,99 @@ public class WatcherDetails {
     public WatcherDetails() {
     }
 
-    public boolean isOv() {
+    public Boolean isOv() {
         return ov;
     }
 
-    public void setOv(boolean ov) {
+    public void setOv(Boolean ov) {
         this.ov = ov;
     }
 
-    public boolean isNl() {
+    public Boolean isNl() {
         return nl;
     }
 
-    public void setNl(boolean nl) {
+    public void setNl(Boolean nl) {
         this.nl = nl;
     }
 
-    public boolean isImax() {
+    public Boolean isImax() {
         return imax;
     }
 
-    public void setImax(boolean imax) {
+    public void setImax(Boolean imax) {
         this.imax = imax;
     }
 
-    public boolean isD3() {
+    public Boolean isD3() {
         return d3;
     }
 
-    public void setD3(boolean d3) {
+    public void setD3(Boolean d3) {
         this.d3 = d3;
     }
 
-    public boolean isHfr() {
+    public Boolean isHfr() {
         return hfr;
     }
 
-    public void setHfr(boolean hfr) {
+    public void setHfr(Boolean hfr) {
         this.hfr = hfr;
     }
 
-    public boolean isK4() {
+    public Boolean isK4() {
         return k4;
     }
 
-    public void setK4(boolean k4) {
+    public void setK4(Boolean k4) {
         this.k4 = k4;
     }
 
-    public boolean isLaser() {
+    public Boolean isLaser() {
         return laser;
     }
 
-    public void setLaser(boolean laser) {
+    public void setLaser(Boolean laser) {
         this.laser = laser;
     }
 
-    public boolean isDbox() {
+    public Boolean isDbox() {
         return dbox;
     }
 
-    public void setDbox(boolean dbox) {
+    public void setDbox(Boolean dbox) {
         this.dbox = dbox;
     }
 
-    public boolean isDolbycinema() {
+    public Boolean isDolbycinema() {
         return dolbycinema;
     }
 
-    public void setDolbycinema(boolean dolbycinema) {
+    public void setDolbycinema(Boolean dolbycinema) {
         this.dolbycinema = dolbycinema;
     }
 
-    public boolean isDolbyatmos() {
+    public Boolean isDolbyatmos() {
         return dolbyatmos;
     }
 
-    public void setDolbyatmos(boolean dolbyatmos) {
+    public void setDolbyatmos(Boolean dolbyatmos) {
         this.dolbyatmos = dolbyatmos;
     }
 
-    public WatcherProps toSwaggerProps() {
-        WatcherProps props = new WatcherProps();
-
-        props.set3d(this.isD3());
-        props.set4k(this.isK4());
-        props.setDbox(this.isDbox());
-        props.setDolbyatmos(this.isDolbyatmos());
-        props.setDolbycinema(this.isDolbycinema());
-        props.setHfr(this.isHfr());
-        props.setImax(this.isImax());
-        props.setLaser(this.isLaser());
-        props.setNl(this.isNl());
-        props.setOv(this.isOv());
-
-        return props;
+    @Override
+    public String toString() {
+        return "WatcherDetails{" +
+                "ov=" + ov +
+                ", nl=" + nl +
+                ", imax=" + imax +
+                ", d3=" + d3 +
+                ", hfr=" + hfr +
+                ", k4=" + k4 +
+                ", laser=" + laser +
+                ", dbox=" + dbox +
+                ", dolbycinema=" + dolbycinema +
+                ", dolbyatmos=" + dolbyatmos +
+                '}';
     }
 }

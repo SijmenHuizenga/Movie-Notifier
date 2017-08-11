@@ -20,7 +20,7 @@ abstract class WatcherTestBase extends UserTestBase {
         testwatcher = new Watcher("WATCHERID", testuser.getId(), "First Watcher", 1, "A1",
                 new DateTime(2027, 8, 1, 20, 30, 15).getMillis(),
                 new DateTime(2027, 8, 7, 20, 30, 15).getMillis(),
-                new WatcherDetails(true, false, true, true, false, false, false, false, false, false));
+                new WatcherDetails(true, false, true, null, false, false, false, null, false, null));
     }
 
     @After

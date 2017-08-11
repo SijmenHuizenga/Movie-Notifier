@@ -226,7 +226,7 @@ paths:
     get:
       tags:
         - Watcher
-      description: Get a list of all watchers
+      description: Get a list of all watchers that you are authorized to see.
       responses:
         200:
           description: All the watchers.
@@ -334,77 +334,6 @@ paths:
           description: Internal server error
       security:
         - APIKEY: []
-  /watchers/user/{userid}:
-    get:
-      tags:
-        - Watcher
-      description: Get a list of all watchers given a user.
-      parameters:
-        - $ref: '#/parameters/userid'
-      responses:
-        200:
-          description: All the watchers for the given user.
-          schema:
-            type: array
-            items:
-              $ref: '#/definitions/Watcher'
-        400:
-          description: Bad Request
-        401:
-          $ref: "#/responses/UnauthorizedError"
-        500:
-          description: Internal server error
-      security:
-        - APIKEY: []
-  /watchers/movies:
-    get:
-      tags:
-        - Watcher
-      description: Get a list of all movies that have watchers
-      responses:
-        200:
-          description: All the movie ID's that contain watchers
-          schema:
-            type: array
-            items:
-              type: integer
-              title: movieid
-              description: The unique identifier of the movie
-        400:
-          description: Bad Request
-        401:
-          $ref: "#/responses/UnauthorizedError"
-        500:
-          description: Internal server error
-      security:
-        - APIKEY: []
-  /watchers/movies/{movieid}:
-    get:
-      tags:
-        - Watcher
-      description: Get a list of all watchers that watch the given movie id
-      parameters:
-        - name: movieid
-          in: path
-          description: The unique identifier of the movie that is searched for.
-          required: true
-          type: integer
-      responses:
-        200:
-          description: All the watchers for the given movie.
-          schema:
-            type: array
-            items:
-              $ref: '#/definitions/Watcher'
-        400:
-          description: Bad Request
-        401:
-          $ref: "#/responses/UnauthorizedError"
-        500:
-          description: Internal server error
-      security:
-        - APIKEY: []
-
   /status:
     get:
       tags:
@@ -623,6 +552,7 @@ definitions:
         description: The latest moment of a showing to watch for.
       props:
         type: object
+        description: These are the filter properties of this watcher. You will only get notificaitons about showings of this movie if the showing complies to all these properties. If a property is not defined or null than the property will be treated as 'no preference'.
         properties:
           ov:
             type: boolean
