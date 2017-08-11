@@ -22,15 +22,14 @@ class MailNotifier extends Notifier {
 
     @Inject
     public MailNotifier(
-            @Value("${notifier.mail.mailgun-secret}") String apikey,
-            @Value("${notifier.mail.mailgun-domain}") String domain,
-            @Value("${notifier.mail.mailgun-fromname}") String fromname,
-            @Value("${notifier.mail.mailgun-frommail}") String fromemail
-    ) {
+            @Value("${notification.mailgun.domnain}") String domain,
+            @Value("${notification.mailgun.apikey}") String apikey,
+            @Value("${notification.mailgun.from.name}") String fromName,
+            @Value("${notification.mailgun.from.mail}") String fromMail) {
         mailgunConfig = new Configuration()
                 .domain(domain)
                 .apiKey(apikey)
-                .from(fromname, fromemail);
+                .from(fromName, fromMail);
     }
 
     @Override

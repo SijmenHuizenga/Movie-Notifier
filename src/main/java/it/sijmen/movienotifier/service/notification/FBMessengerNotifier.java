@@ -26,7 +26,7 @@ class FBMessengerNotifier extends Notifier {
 
     @Inject
     public FBMessengerNotifier(
-            @Value("${notifier.fbm.fb-messenger-token}") String apiToken) {
+            @Value("${notification.facebook.token}") String apiToken) {
         pageClient = new DefaultFacebookClient(apiToken, Version.VERSION_2_6);
     }
 

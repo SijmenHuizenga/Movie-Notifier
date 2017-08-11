@@ -1,6 +1,6 @@
 package it.sijmen.movienotifier.model.validation.notification;
 
-import it.sijmen.movienotifier.service.notification.NotificationModule;
+import it.sijmen.movienotifier.service.notification.NotificationConfiguration;
 import org.jetbrains.annotations.NotNull;
 
 import javax.validation.ConstraintValidator;
@@ -9,7 +9,7 @@ import javax.validation.ConstraintValidatorContext;
 public class NotificationTypeKeyValidator implements ConstraintValidator<ValidNotification, String> {
 
     public static boolean isValidKey(@NotNull String key){
-        for(String valid : NotificationModule.allNotificationTypes())
+        for(String valid : NotificationConfiguration.allNotificationTypes())
             if(valid.equals(key))
                 return true;
         return false;

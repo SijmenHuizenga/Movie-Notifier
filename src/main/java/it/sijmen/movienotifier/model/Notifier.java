@@ -1,6 +1,6 @@
 package it.sijmen.movienotifier.model;
 
-import io.swagger.model.NotificationType;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.io.IOException;
 
@@ -8,15 +8,13 @@ public abstract class Notifier {
 
     public abstract void notify(User recipient, String message) throws IOException;
 
+    @JsonProperty(value="key", access = JsonProperty.Access.READ_ONLY)
     public abstract String getId();
-    public abstract String getName();
-    public abstract String getDescription();
 
-    public NotificationType toSwagger(){
-        return new NotificationType()
-                .description(getDescription())
-                .key(getId())
-                .name(getName());
-    }
+    @JsonProperty(value="name", access = JsonProperty.Access.READ_ONLY)
+    public abstract String getName();
+
+    @JsonProperty(value="description", access = JsonProperty.Access.READ_ONLY)
+    public abstract String getDescription();
 
 }

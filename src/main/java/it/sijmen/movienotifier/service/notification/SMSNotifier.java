@@ -28,8 +28,8 @@ class SMSNotifier extends Notifier {
 
     @Inject
     public SMSNotifier(
-            @Value("${notifier.sms.aws-sns-accesskey}") String accessKey,
-            @Value("${notifier.sms.aws-sns-secretkey}") String secretKey
+            @Value("${notification.awssns.key}") String accessKey,
+            @Value("${notification.awssns.secret}") String secretKey
     ) {
         snsClient = AmazonSNSClientBuilder
                 .standard()

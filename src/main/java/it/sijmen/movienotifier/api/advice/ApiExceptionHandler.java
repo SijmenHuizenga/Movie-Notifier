@@ -2,8 +2,7 @@ package it.sijmen.movienotifier.api.advice;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.swagger.model.InlineResponse400;
-import io.swagger.model.InlineResponse500;
+import it.sijmen.movienotifier.model.exceptions.ApiException;
 import it.sijmen.movienotifier.model.exceptions.BadRequestException;
 import it.sijmen.movienotifier.model.exceptions.UnauthorizedException;
 import org.springframework.http.HttpStatus;
@@ -31,11 +30,8 @@ public class ApiExceptionHandler {
     @ExceptionHandler(BadRequestException.class)
     @ResponseBody
     public String handleBadRequest(BadRequestException e) {
-        e.printStackTrace();
         try {
-            return mapper.writeValueAsString(
-                    new InlineResponse400().errors(e.getErrors())
-            );
+            return mapper.writeValueAsString(e);
         } catch (JsonProcessingException e1) {
             return e.getMessage();
         }
@@ -47,7 +43,7 @@ public class ApiExceptionHandler {
     public String handleBadRequest(ServletRequestBindingException e) {
         try {
             return mapper.writeValueAsString(
-                    new InlineResponse400().errors(Collections.singletonList(e.getMessage()))
+                    new BadRequestException(Collections.singletonList(e.getMessage()))
             );
         } catch (JsonProcessingException e1) {
             return e.getMessage();
@@ -65,10 +61,9 @@ public class ApiExceptionHandler {
     @ExceptionHandler(Exception.class)
     @ResponseBody
     public String handleInternalServerError(Exception e) {
-        e.printStackTrace();
         try {
             return mapper.writeValueAsString(
-                    new InlineResponse500().message("Internal server error: " + e.getMessage())
+                    new ApiException("Internal server error: " + e.getMessage())
             );
         } catch (JsonProcessingException e1) {
             return e.getMessage();
@@ -87,7 +82,7 @@ public class ApiExceptionHandler {
                 s = s.split("\n")[0];
 
             return mapper.writeValueAsString(
-                    new InlineResponse500().message("JSON not valid: " + s)
+                    new ApiException("JSON not valid: " + s)
             );
         } catch (JsonProcessingException e1) {
             return e.getMessage();

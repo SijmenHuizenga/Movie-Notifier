@@ -22,7 +22,9 @@ abstract class ApiController {
     }
 
     protected String getApiKey(Map<String, String> requestHeaders) {
-        return requestHeaders == null ? null : requestHeaders.getOrDefault("APIKEY", null);
+        return requestHeaders == null ? null :
+                requestHeaders.getOrDefault("APIKEY",
+                        requestHeaders.getOrDefault("apikey", null));
     }
 
     protected void checkApiKeyExistence(JumpRequest request){

@@ -1,6 +1,5 @@
 package it.sijmen.movienotifier.api;
 
-import io.swagger.model.NotificationType;
 import it.sijmen.movienotifier.model.Notifier;
 import it.sijmen.movienotifier.model.exceptions.BadRequestException;
 import it.sijmen.movienotifier.service.NotificationTypeService;
@@ -26,20 +25,19 @@ public class NotificationTypeController {
     @RequestMapping(method = RequestMethod.GET)
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public List<NotificationType> getAll() {
-        return notificationTypeService.getAllNotifiers()
-                .stream().map(Notifier::toSwagger).collect(Collectors.toList());
+    public List<Notifier> getAll() {
+        return notificationTypeService.getAllNotifiers();
     }
 
     @RequestMapping(value = "/{notificationtypekey}", method = RequestMethod.GET)
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public NotificationType getSingle(
+    public Notifier getSingle(
             @PathVariable("notificationtypekey") String notificationtypekey
     ) {
         if(notificationtypekey == null || notificationtypekey.isEmpty())
             throw new BadRequestException("notificationtypekey must be provided.");
-        return notificationTypeService.getNotifier(notificationtypekey).toSwagger();
+        return notificationTypeService.getNotifier(notificationtypekey);
     }
 
 }
