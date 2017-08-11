@@ -433,12 +433,12 @@ definitions:
         description: The unique identifier of the movie to watch for. If empty than every cinema is acceptable.
       startAfter:
         type: string
-        format: date-time
-        description: The earliest moment of a showing to watch for.
+        format: long
+        description: The earliest moment of a showing to watch for. UTC
       startBefore:
         type: string
-        format: date-time
-        description: The latest moment of a showing to watch for.
+        format: long
+        description: The latest moment of a showing to watch for. UTC
       props:
         type: object
         description: These are the filter properties of this watcher. You will only get notificaitons about showings of this movie if the showing complies to all these properties. If a property is not defined or null than the property will be treated as 'no preference'.

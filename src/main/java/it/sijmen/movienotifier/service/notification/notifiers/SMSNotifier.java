@@ -1,4 +1,4 @@
-package it.sijmen.movienotifier.service.notification;
+package it.sijmen.movienotifier.service.notification.notifiers;
 
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
@@ -20,7 +20,7 @@ import java.util.Map;
 
 @Singleton
 @Service
-class SMSNotifier extends Notifier {
+public class SMSNotifier extends Notifier {
 
     public static final String ID = "SMS";
 

@@ -1,4 +1,4 @@
-package it.sijmen.movienotifier.service.notification;
+package it.sijmen.movienotifier.service.notification.notifiers;
 
 import com.restfb.DefaultFacebookClient;
 import com.restfb.FacebookClient;
@@ -18,7 +18,7 @@ import java.io.IOException;
 
 @Singleton
 @Component
-class FBMessengerNotifier extends Notifier {
+public class FBMessengerNotifier extends Notifier {
 
     private FacebookClient pageClient;
 

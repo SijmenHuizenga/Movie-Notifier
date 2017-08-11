@@ -1,4 +1,4 @@
-package it.sijmen.movienotifier.service.notification;
+package it.sijmen.movienotifier.service.notification.notifiers;
 
 import it.sijmen.movienotifier.model.Notifier;
 import it.sijmen.movienotifier.model.User;
@@ -14,7 +14,7 @@ import java.io.IOException;
 
 @Singleton
 @Component
-class MailNotifier extends Notifier {
+public class MailNotifier extends Notifier {
 
     public static final String ID = "MIL";
 

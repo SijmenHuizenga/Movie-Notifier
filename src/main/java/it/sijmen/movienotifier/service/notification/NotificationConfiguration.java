@@ -1,6 +1,9 @@
 package it.sijmen.movienotifier.service.notification;
 
 import it.sijmen.movienotifier.model.Notifier;
+import it.sijmen.movienotifier.service.notification.notifiers.FBMessengerNotifier;
+import it.sijmen.movienotifier.service.notification.notifiers.MailNotifier;
+import it.sijmen.movienotifier.service.notification.notifiers.SMSNotifier;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.NestedConfigurationProperty;
 import org.springframework.context.annotation.Bean;
