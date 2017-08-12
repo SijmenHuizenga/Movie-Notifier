@@ -52,7 +52,6 @@ public class Watcher extends Model{
      */
     @Range(min=1)
     @JsonProperty
-    //todo: custom validator?
     private int movieid;
 
     /**
@@ -60,7 +59,6 @@ public class Watcher extends Model{
      */
     @NotBlank
     @JsonProperty
-    //todo: custom validator?
     private String cinemaid;
 
     /**

@@ -45,7 +45,6 @@ public class CreateActor<T extends Model> extends Actor<T, CreateListener<T>> {
 
         LOGGER.trace("Model stored in repository " + modelClass.getSimpleName(), model);
 
-        //todo replace with .created(location) ???
         return ResponseEntity.ok(model);
     }
 }
