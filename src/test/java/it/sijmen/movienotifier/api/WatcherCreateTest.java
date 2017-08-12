@@ -42,8 +42,6 @@ public class WatcherCreateTest extends WatcherTestBase {
             return arg;
         });
 
-        System.out.println(buildJsonCreation(testwatcher));
-
         this.mvc.perform(put("/watchers/").accept(MediaType.APPLICATION_JSON)
                 .header("APIKEY", testuser.getApikey()).content(buildJsonCreation(testwatcher)))
                 .andExpect(status().isOk())

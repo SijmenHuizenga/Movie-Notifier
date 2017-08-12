@@ -1,15 +1,12 @@
-package it.sijmen.movienotifier.api;
+package it.sijmen.movienotifier.api.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import it.sijmen.jump.Jump;
 import it.sijmen.jump.JumpRequest;
 import it.sijmen.jump.listeners.JumpListenerAdapter;
-import it.sijmen.movienotifier.model.User;
 import it.sijmen.movienotifier.model.Watcher;
-import it.sijmen.movienotifier.model.exceptions.BadRequestException;
 import it.sijmen.movienotifier.repositories.UserRepository;
 import it.sijmen.movienotifier.repositories.WatcherRepository;
-import it.sijmen.movienotifier.util.PasswordAuthentication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 

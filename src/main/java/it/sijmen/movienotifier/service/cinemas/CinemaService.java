@@ -2,6 +2,9 @@ package it.sijmen.movienotifier.service.cinemas;
 
 import it.sijmen.movienotifier.model.Watcher;
 import it.sijmen.movienotifier.repositories.WatcherRepository;
+import it.sijmen.movienotifier.service.notification.NotificationService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -9,6 +12,8 @@ import java.util.stream.Collectors;
 
 @Service
 public class CinemaService {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(CinemaService.class);
 
     private List<Cinema> cinemas;
 
@@ -33,7 +38,7 @@ public class CinemaService {
                 return;
             }
         }
-        //todo: notify someone that the notifier failed?
+        LOGGER.warn("Could not watch cinema " + cinemaId + " since there is no cinema configuration available for this id.", watchers);
     }
 
 }

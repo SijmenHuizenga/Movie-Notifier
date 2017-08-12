@@ -1,4 +1,4 @@
-package it.sijmen.movienotifier.api;
+package it.sijmen.movienotifier.api.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import it.sijmen.jump.Jump;
@@ -6,11 +6,11 @@ import it.sijmen.jump.JumpRequest;
 import it.sijmen.jump.listeners.JumpListenerAdapter;
 import it.sijmen.movienotifier.model.User;
 import it.sijmen.movienotifier.model.exceptions.BadRequestException;
-import it.sijmen.movienotifier.model.exceptions.UnauthorizedException;
 import it.sijmen.movienotifier.repositories.UserRepository;
 import it.sijmen.movienotifier.util.ApiKeyHelper;
 import it.sijmen.movienotifier.util.PasswordAuthentication;
-import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -18,7 +18,6 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 

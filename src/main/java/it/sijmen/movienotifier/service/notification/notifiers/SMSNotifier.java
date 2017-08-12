@@ -9,6 +9,8 @@ import com.amazonaws.services.sns.model.MessageAttributeValue;
 import com.amazonaws.services.sns.model.PublishRequest;
 import it.sijmen.movienotifier.model.Notifier;
 import it.sijmen.movienotifier.model.User;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +23,9 @@ import java.util.Map;
 @Singleton
 @Service
 public class SMSNotifier extends Notifier {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(SMSNotifier.class);
+
 
     public static final String ID = "SMS";
 
@@ -53,6 +58,7 @@ public class SMSNotifier extends Notifier {
         }catch (Exception e){
             throw new IOException("Could not send sms message. Error " + e.getMessage(), e);
         }
+        LOGGER.trace("Sent sms notification trough AWS SNS to " + recipient.getPhonenumber(), message);
     }
 
     @Override

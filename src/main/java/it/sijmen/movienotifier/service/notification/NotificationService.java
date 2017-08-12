@@ -5,14 +5,17 @@ import it.sijmen.movienotifier.model.User;
 import it.sijmen.movienotifier.model.exceptions.BadRequestException;
 import it.sijmen.movienotifier.repositories.UserRepository;
 import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import javax.inject.Inject;
 import java.io.IOException;
 import java.util.List;
 
 @Service
 public class NotificationService {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(NotificationService.class);
 
     private UserRepository userRepository;
     private final List<Notifier> allNotifiers;
@@ -36,6 +39,10 @@ public class NotificationService {
 
     public void notify(String userId, String message) {
         User user = userRepository.findOne(userId);
+        if(user.getEnabledNotifications() == null || user.getEnabledNotifications().isEmpty()){
+            LOGGER.error("Could not notify user because no notification types are enabled.", user, message);
+            return;
+        }
         user.getEnabledNotifications().forEach(
                 t -> notify(user, message, t)
         );
@@ -46,8 +53,7 @@ public class NotificationService {
         try {
             notifier.notify(user, message);
         } catch (IOException e) {
-            e.printStackTrace();
-            //todo: handle nicely
+            LOGGER.error("Notification failed", e, user, message);
         }
     }
 }

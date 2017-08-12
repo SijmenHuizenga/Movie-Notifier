@@ -5,6 +5,8 @@ import it.sijmen.movienotifier.model.User;
 import net.sargue.mailgun.Configuration;
 import net.sargue.mailgun.Mail;
 import net.sargue.mailgun.Response;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -15,6 +17,8 @@ import java.io.IOException;
 @Singleton
 @Component
 public class MailNotifier extends Notifier {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(MailNotifier.class);
 
     public static final String ID = "MIL";
 
@@ -43,6 +47,7 @@ public class MailNotifier extends Notifier {
         if(!response.isOk())
             throw new IOException("Mailgun returned not ok. Code: " + response.responseCode()
                     + ". Message: " + response.responseMessage());
+        LOGGER.trace("Sent mail message through mailgun to " + recipient.getEmail(), message);
     }
 
     private String getTitle(String message) {

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <include resource="org/springframework/boot/logging/logback/base.xml"/>
+
+    <springProperty scope="context" name="rollbarApikey" source="notification.rollbar.apikey"/>
+    <springProperty scope="context" name="rollbarEnv" source="notification.rollbar.environment"/>
+
+    <appender name="ROLLBAR" class="it.sijmen.movienotifier.util.RollbarAppender">
+        <apiKey>${rollbarApikey}</apiKey>
+        <environment>${rollbarEnv}</environment>
+    </appender>
+
+    <logger name="it.sijmen" level="trace" />
+
+    <root level="INFO">
+        <appender-ref ref="CONSOLE" />
+        <appender-ref ref="ROLLBAR" />
+    </root>
+
+</configuration>

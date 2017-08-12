@@ -334,6 +334,39 @@ paths:
           description: Internal server error
       security:
         - APIKEY: []
+
+  /health:
+    get:
+      tags:
+        - Operations
+      description: Get the current application health
+      responses:
+        200:
+          description: The application health as provided by Spring Framework and described here http://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#production-ready-health-access-restrictions
+  /mappings:
+    get:
+      tags:
+        - Operations
+      description: Get the current application mappings
+      responses:
+        200:
+          description: The application mappings as provided by Spring Framework. No documentation provided
+  /info:
+    get:
+      tags:
+        - Operations
+      description: Get server application information. For example applicaiton git version and build details.
+      responses:
+        200:
+          description: The application information. De details may change without notice.
+  /metrics:
+    get:
+      tags:
+        - Operations
+      description: Get server application metrics.
+      responses:
+        200:
+          description: The application metrics. De details may change without notice.
 securityDefinitions:
   APIKEY:
     type: apiKey

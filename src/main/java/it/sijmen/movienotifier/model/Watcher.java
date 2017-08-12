@@ -1,6 +1,7 @@
 package it.sijmen.movienotifier.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import it.sijmen.jump.actors.UpdateActor;
 import it.sijmen.movienotifier.model.validation.date.DateFuture;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotBlank;
@@ -86,6 +87,7 @@ public class Watcher extends Model{
     @JsonProperty
     @Valid
     @Nullable
+    @UpdateActor.RecursiveUpdate
     private WatcherDetails props;
 
     public Watcher(String id, String user, String name, int movieid, String cinemaid, long startAfter, long startBefore, WatcherDetails props) {

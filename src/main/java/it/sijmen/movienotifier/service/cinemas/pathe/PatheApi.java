@@ -9,6 +9,8 @@ import it.sijmen.movienotifier.model.WatcherDetails;
 import it.sijmen.movienotifier.repositories.PatheCacheRepository;
 import it.sijmen.movienotifier.service.cinemas.Cinema;
 import it.sijmen.movienotifier.service.notification.NotificationService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +24,8 @@ import java.util.stream.Collectors;
 @Singleton
 @Service
 public class PatheApi extends Cinema {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(PatheApi.class);
 
     private SimpleDateFormat format1 = new SimpleDateFormat("EEE d MMMM HH:mm");
     private SimpleDateFormat format2 = new SimpleDateFormat("HH:mm");
@@ -74,26 +78,32 @@ public class PatheApi extends Cinema {
             oldData = repository.getFirstByMovieid(movieId);
             newData = this.getShowingsPerCinema(movieId);
         } catch (Exception e) {
-            //todo: handle error
-            e.printStackTrace();
+            LOGGER.error("Could not load old or new data for movieId " + movieId, e);
             return;
         }
-        if(oldData.equals(newData))
+        if(oldData.equals(newData)) {
+            LOGGER.trace("Old and new data for movie " + movieId + " are equal");
             return;
+        }
         repository.save(newData);
+        LOGGER.trace("Stored new data for movie " + movieId);
+
         watchers.forEach(w -> this.sendUpdates(w, newData));
     }
 
     private void sendUpdates(Watcher watcher, PatheMoviesResponse showings) {
         for(PatheShowing showing : showings.getShowings())
-            if(accepts(watcher, showing))
+            if(accepts(watcher, showing)) {
+                LOGGER.trace("Watcher accepts Showing so now notifying user", watcher, showing);
                 notificationService.notify(watcher.getUser(), makeMessage(watcher, showing));
+            }
     }
 
     private boolean accepts(Watcher watcher, PatheShowing showing){
         int realWatcherCinemaId = Integer.parseInt(watcher.getCinemaid().substring(getCinemaIdPrefix().length()));
         WatcherDetails d = watcher.getProps();
-        return showing.getStart().getTimeInMillis() < watcher.getStartBefore() &&
+        return showing.getMovieId() == watcher.getMovieid() &&
+                showing.getStart().getTimeInMillis() < watcher.getStartBefore() &&
                 showing.getStart().getTimeInMillis() > watcher.getStartAfter() &&
                 showing.getCinemaId() == realWatcherCinemaId &&
                 eq(d.isD3(), showing.getIs3d()) &&

@@ -1,6 +1,7 @@
 package it.sijmen.movienotifier.api;
 
 import it.sijmen.movienotifier.model.User;
+import it.sijmen.movienotifier.repositories.PatheCacheRepository;
 import it.sijmen.movienotifier.repositories.UserRepository;
 import it.sijmen.movienotifier.repositories.WatcherRepository;
 import it.sijmen.movienotifier.util.PasswordAuthentication;
@@ -28,6 +29,9 @@ abstract class UserTestBase {
 
     @MockBean
     WatcherRepository watcherRepo;
+
+    @MockBean
+    PatheCacheRepository patheCacheRepository;
 
     final User testuser;
     final User testuser2;

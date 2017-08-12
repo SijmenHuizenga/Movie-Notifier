@@ -7,10 +7,17 @@ import it.sijmen.jump.listeners.UpdateListener;
 import it.sijmen.movienotifier.model.Model;
 import it.sijmen.movienotifier.model.exceptions.UnauthorizedException;
 import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 
+import javax.ws.rs.InternalServerErrorException;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -20,6 +27,8 @@ import java.util.List;
 import static com.fasterxml.jackson.annotation.JsonProperty.Access.READ_ONLY;
 
 public class UpdateActor<T extends Model> extends Actor<T, UpdateListener<T>> {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(UpdateActor.class);
 
     public UpdateActor(Class<? extends T> model, UpdateListener<T> listener, ObjectMapper mapper, MongoRepository<T, String> repository) {
         super(model, listener, mapper, repository);
@@ -37,8 +46,10 @@ public class UpdateActor<T extends Model> extends Actor<T, UpdateListener<T>> {
         final T model = repository.findOne(request.getUrldata());
         final T updatingData = readModelFromBody(modelClass, request.getBody());
 
-        if(!listener.allowUpdate(request, model))
+        if(!listener.allowUpdate(request, model)) {
+            LOGGER.trace("Not allowed to update " +modelClass.getSimpleName(), request);
             throw new UnauthorizedException();
+        }
 
         return ResponseEntity.ok(
                 updateModel(model, updatingData)
@@ -46,18 +57,23 @@ public class UpdateActor<T extends Model> extends Actor<T, UpdateListener<T>> {
     }
 
     private T updateModel(T model, T updatingData){
-        getAllFieldsIncludingSuperclass(updatingData.getClass())
-                .stream()
-                .filter(this::hasWritableJsonProperty)
-                .filter(field -> this.isNotNullOnObject(field, updatingData))
-                .forEach((Field field) -> copyField(field, updatingData, model));
+        applyUpdates(model, updatingData);
 
         T model2 = listener.beforeUpdateValidation(model);
         model2.validate();
 
         model2 = listener.beforeUpdateStore(model2);
         repository.save(model2);
+        LOGGER.trace("Update stored to repository " +modelClass.getSimpleName(), model2);
         return model2;
+    }
+
+    private void applyUpdates(Object model, Object updatingData) {
+        getAllFieldsIncludingSuperclass(updatingData.getClass())
+                .stream()
+                .filter(this::hasWritableJsonProperty)
+                .filter(field -> this.isNotNullOnObject(field, updatingData))
+                .forEach((Field field) -> copyField(field, updatingData, model));
     }
 
     private List<Field> getAllFieldsIncludingSuperclass(Class claz){
@@ -80,8 +96,8 @@ public class UpdateActor<T extends Model> extends Actor<T, UpdateListener<T>> {
             Object o = field.get(object);
             return o != null && !isEmptyArray(o);
         } catch (IllegalAccessException e) {
-            e.printStackTrace();
-            return false;
+            LOGGER.error("No access to field while updating object", e, field, object);
+            throw new InternalServerErrorException();
         }
     }
 
@@ -91,9 +107,16 @@ public class UpdateActor<T extends Model> extends Actor<T, UpdateListener<T>> {
 
     private void copyField(Field field, Object source, Object target){
         try {
+            if(field.isAnnotationPresent(RecursiveUpdate.class))
+                applyUpdates(field.get(source), field.get(target));
             field.set(target, field.get(source));
         } catch (IllegalAccessException e) {
-            e.printStackTrace();
+            LOGGER.error("No access to field while setting data", e, field, source, target);
+            throw new InternalServerErrorException();
         }
     }
+
+    @Target(ElementType.FIELD)
+    @Retention(RetentionPolicy.RUNTIME)
+    public @interface RecursiveUpdate {}
 }
