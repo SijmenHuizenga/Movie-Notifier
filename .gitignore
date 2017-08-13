@@ -61,3 +61,4 @@ buildNumber.properties
 
 *.iml
 .idea/
+local.properties
