@@ -1,4 +1,6 @@
 # Movie Notifier
+[![Travis](https://img.shields.io/travis/sijmenhuizenga/Movie-Notifier.svg)]()
+
 
 Movie Notifier monitors local cinema's and notifies users when new shows are available. Users can register and configure their notification settings. Registered users can create watchers with a number of filters to be notified of new showings in their aria. Using this application gives users the opportunity to always have the best seats for every show!
 
