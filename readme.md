@@ -1,14 +1,32 @@
 # Movie Notifier
+[![GitHub tag](https://img.shields.io/github/release/sijmenhuizenga/Movie-Notifier.svg)](https://github.com/SijmenHuizenga/Movie-Notifier/releases)
+[![License](https://img.shields.io/github/license/mashape/apistatus.svg)](https://github.com/SijmenHuizenga/Movie-Notifier/blob/develop/license.txt)
+[![Travis](https://travis-ci.org/SijmenHuizenga/Movie-Notifier.svg?branch=develop)](https://travis-ci.org/SijmenHuizenga/Movie-Notifier)
+[![Docker](https://img.shields.io/badge/docker%20image-available-brightgreen.svg)](https://hub.docker.com/r/sijmenhuizenga/movienotifier/)
+[![Codebeat](https://codebeat.co/badges/02e75a98-a0e0-4afe-aada-30b8a28beb12)](https://codebeat.co/projects/github-com-sijmenhuizenga-movie-notifier-develop)
+[![SonarCloud Lines of Code](https://sonarcloud.io/api/badges/measure?key=it.sijmen:movie-notifier:develop&metric=ncloc)](https://sonarcloud.io/dashboard?id=it.sijmen%3Amovie-notifier%3Adevelop)
+[![SonarCloud Coverage](https://sonarcloud.io/api/badges/measure?key=it.sijmen:movie-notifier:develop&metric=coverage)](https://sonarcloud.io/dashboard?id=it.sijmen%3Amovie-notifier%3Adevelop)
+[![SonarCloud Code Smells](https://sonarcloud.io/api/badges/measure?key=it.sijmen:movie-notifier:develop&metric=code_smells)](https://sonarcloud.io/dashboard?id=it.sijmen%3Amovie-notifier%3Adevelop)
+
 
 Movie Notifier monitors local cinema's and notifies users when new shows are available. Users can register and configure their notification settings. Registered users can create watchers with a number of filters to be notified of new showings in their aria. Using this application gives users the opportunity to always have the best seats for every show!
 
 This repository contains the backend system of the Movie Notifier system. This backend is accessible via a HTTP API. The full specification of this API can be found in the `swagger.yaml` file in the root of this repository.
+A frontend android app implementation can be found in [this repository](https://github.com/jpelgrom/Movie-Notifier-Android)
 
-## Architectural Overview
-The architecture of this system is shown below:
-![Architecture Diagram](https://www.lucidchart.com/publicSegments/view/d70e9819-bff2-4185-be26-d8353d0c80f6/image.png)
+## Running this app with Docker
+A mongodb container is required. The mongodb container can be started with the following command:
+`` docker run --name movie-notifier-db
+-p 27017:27017
+-v /path/to/persistent/storage:/data/db
+-e MONGO_INITDB_ROOT_USERNAME=[INSERT dB USER HERE]
+-e MONGO_INITDB_ROOT_PASSWORD=[INSERT dB PASS HERE]
+-d mongo `` 
 
-This repository contains the backend. The backend is used by the Android app using a HTTP API. Later a Web App can be added using the same HTTP API the Android app uses. The backend stores all data in a [mongo](https://www.mongodb.com) database. The backend talks to API's of local cinema's to retrieve live movie showings information.
+The built docker image is available at [docker hub](https://hub.docker.com/r/sijmenhuizenga/movienotifier/). To run it you must first have a valid configuration file. An example properties configuration file can found in the file `movie-notifier.properties`. Copy this file to your machine and fill in all required properties. 
 
-## Configuration 
-spring.data.mongodb.uri=mongodb://user:secret@mongo1.example.com:12345,mongo2.example.com:23456/test
+Than run the following comand to get the docker container up and running:
+
+``docker run --name movie-notifier \
+-p 80:80 \
+-v movie-notifier.properties:movie-notifier.properties``

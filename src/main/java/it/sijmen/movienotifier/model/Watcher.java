@@ -72,6 +72,7 @@ public class Watcher extends Model{
 
     /**
      * The latest moment of a showing to watch for.
+     * This is the unix timestamp in millis!
      */
     @NotNull
     @Temporal(TemporalType.DATE)
@@ -81,6 +82,7 @@ public class Watcher extends Model{
 
     /**
      * The props of this watcher.
+     * This is the unix timestamp in millis!
      */
     @JsonProperty
     @Valid
