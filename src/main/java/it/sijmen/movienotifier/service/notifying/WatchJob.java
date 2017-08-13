@@ -17,14 +17,14 @@ public class WatchJob {
         this.cinemaService = cinemaService;
     }
 
-    @Scheduled(cron = "0 */10 22-23 * * *")
-    @Scheduled(cron = "0 */10 0-6 * * *")
+    @Scheduled(cron = "${random.int[0,59]} */${random.int[10,15]}  22-23 * * *")
+    @Scheduled(cron = "${random.int[0,59]} */${random.int[10,15]}  0-6 * * *")
     public void executeByNight(){
         LOGGER.info("Executing night job");
         cinemaService.checkCinemasForChangesAndNotifyWatchers();
     }
 
-    @Scheduled(cron = "0 */3 8-21 * * *")
+    @Scheduled(cron = "${random.int[0,59]} */${random.int[2,6]} 8-21 * * *")
     public void executeByDay(){
         LOGGER.info("Executing day job");
         cinemaService.checkCinemasForChangesAndNotifyWatchers();

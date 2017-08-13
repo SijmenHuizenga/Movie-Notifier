@@ -28,8 +28,8 @@ public class RollbarAppender extends UnsynchronizedAppenderBase<ILoggingEvent> {
         }
         if(this.apiKey.equals("disable"))
             return;
-        rollbar = new Rollbar(apiKey, environment);
-        rollbar.framework("Spring Boot");
+        rollbar = new Rollbar(apiKey, environment)
+                .framework("Spring Boot");
     }
 
     @Override
@@ -55,7 +55,7 @@ public class RollbarAppender extends UnsynchronizedAppenderBase<ILoggingEvent> {
         if(argumentArray == null)
             return out;
         for (int i = 0; i < argumentArray.length; i++)
-            out.put(""+i, argumentArray[i]);
+            out.put("arg_"+i, argumentArray[i]);
         return out;
     }
 

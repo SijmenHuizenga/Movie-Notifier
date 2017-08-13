@@ -222,4 +222,19 @@ public class PatheShowing {
     public void setStatus(int status) {
         this.status = status;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        PatheShowing that = (PatheShowing) o;
+
+        return getId() == that.getId();
+    }
+
+    @Override
+    public int hashCode() {
+        return (int) (getId() ^ (getId() >>> 32));
+    }
 }

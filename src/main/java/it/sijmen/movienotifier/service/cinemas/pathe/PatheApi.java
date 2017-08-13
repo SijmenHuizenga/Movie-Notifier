@@ -18,6 +18,7 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -77,8 +78,15 @@ public class PatheApi extends Cinema {
         try {
             oldData = repository.getFirstByMovieid(movieId);
             newData = this.getShowingsPerCinema(movieId);
+            if(newData == null)
+                throw new IOException("New data is null!");
         } catch (Exception e) {
             LOGGER.error("Could not load old or new data for movieId " + movieId, e);
+            return;
+        }
+        if(oldData == null){
+            repository.save(newData);
+            LOGGER.trace("First time retreving data for movie " + movieId + " and storing in repo");
             return;
         }
         if(oldData.equals(newData)) {
@@ -87,12 +95,13 @@ public class PatheApi extends Cinema {
         }
         repository.save(newData);
         LOGGER.trace("Stored new data for movie " + movieId);
-
-        watchers.forEach(w -> this.sendUpdates(w, newData));
+        ArrayList<PatheShowing> showings = newData.getShowings();
+        showings.removeAll(oldData.getShowings());
+        watchers.forEach(w -> this.sendUpdates(w, showings));
     }
 
-    private void sendUpdates(Watcher watcher, PatheMoviesResponse showings) {
-        for(PatheShowing showing : showings.getShowings())
+    private void sendUpdates(Watcher watcher, List<PatheShowing> showings) {
+        for(PatheShowing showing : showings)
             if(accepts(watcher, showing)) {
                 LOGGER.trace("Watcher accepts Showing so now notifying user", watcher, showing);
                 notificationService.notify(watcher.getUser(), makeMessage(watcher, showing));
