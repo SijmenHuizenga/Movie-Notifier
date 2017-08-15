@@ -35,15 +35,15 @@ public class LoginController {
 
         User user = userRepository.findFirstByName(loginDetails.getName());
         if(user == null) {
-            LOGGER.trace("User Login failed: unknown name", loginDetails);
+            LOGGER.trace("User Login failed: unknown name {}", loginDetails);
             throw new UnauthorizedException();
         }
 
         if(!PasswordAuthentication.authenticate(loginDetails.getPassword(), user.getPassword())) {
-            LOGGER.trace("User Login failed: incorrect password", loginDetails);
+            LOGGER.trace("User Login failed: incorrect password {}", loginDetails);
             throw new UnauthorizedException();
         }
-        LOGGER.trace("User Login successfull", loginDetails);
+        LOGGER.trace("User Login successfull {}", loginDetails);
         return user;
     }
 

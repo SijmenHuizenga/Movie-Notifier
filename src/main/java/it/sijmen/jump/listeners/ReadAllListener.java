@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface ReadAllListener<T> extends ActorListener<T> {
 
-    default void checkReadAllRequest(JumpRequest request) {};
+    default void checkReadAllRequest(JumpRequest request) {}
 
     default boolean allowReadAll(JumpRequest request, List<T> result) {return true; }
 }

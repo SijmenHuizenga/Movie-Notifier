@@ -18,13 +18,12 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Singleton
 @Service
-public class PatheApi extends Cinema {
+public class PatheApi implements Cinema {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(PatheApi.class);
 
@@ -57,6 +56,8 @@ public class PatheApi extends Cinema {
         if(stringHttpResponse.getStatus() != 200)
             throw new IOException("Status returned " + stringHttpResponse.getStatus() + " after request " + uri);
         PatheMoviesResponse patheMoviesResponse = mapper.readValue(stringHttpResponse.getBody(), PatheMoviesResponse.class);
+        if(patheMoviesResponse == null)
+            throw new IOException("Unexpected api result");
         patheMoviesResponse.setMovieid(movieId);
         return patheMoviesResponse;
     }
@@ -78,24 +79,22 @@ public class PatheApi extends Cinema {
         try {
             oldData = repository.getFirstByMovieid(movieId);
             newData = this.getShowingsPerCinema(movieId);
-            if(newData == null)
-                throw new IOException("New data is null!");
         } catch (Exception e) {
-            LOGGER.error("Could not load old or new data for movieId " + movieId, e);
+            LOGGER.error("Could not load old or new data for movieId {}", movieId, e);
             return;
         }
         if(oldData == null){
             repository.save(newData);
-            LOGGER.trace("First time retreving data for movie " + movieId + " and storing in repo");
+            LOGGER.trace("First time retreving data for movie {} and storing in repo", movieId);
             return;
         }
         if(oldData.equals(newData)) {
-            LOGGER.trace("Old and new data for movie " + movieId + " are equal");
+            LOGGER.trace("Old and new data for movie {} are equal", movieId);
             return;
         }
         repository.save(newData);
-        LOGGER.trace("Stored new data for movie " + movieId);
-        ArrayList<PatheShowing> showings = newData.getShowings();
+        LOGGER.trace("Stored new data for movie {}", movieId);
+        List<PatheShowing> showings = newData.getShowings();
         showings.removeAll(oldData.getShowings());
         watchers.forEach(w -> this.sendUpdates(w, showings));
     }
@@ -103,7 +102,7 @@ public class PatheApi extends Cinema {
     private void sendUpdates(Watcher watcher, List<PatheShowing> showings) {
         for(PatheShowing showing : showings)
             if(accepts(watcher, showing)) {
-                LOGGER.trace("Watcher accepts Showing so now notifying user", watcher, showing);
+                LOGGER.trace("Watcher accepts Showing so now notifying user");
                 notificationService.notify(watcher.getUser(), makeMessage(watcher, showing));
             }
     }

@@ -1,7 +1,6 @@
 package it.sijmen.movienotifier.api.controllers;
 
 import it.sijmen.jump.JumpRequest;
-import it.sijmen.movienotifier.api.advice.ApiExceptionHandler;
 import it.sijmen.movienotifier.model.User;
 import it.sijmen.movienotifier.model.exceptions.BadRequestException;
 import it.sijmen.movienotifier.model.exceptions.UnauthorizedException;
@@ -40,7 +39,7 @@ abstract class ApiController {
     protected User getExecutingUser(@NotNull String apiKey) {
         User executingUser = userRepository.findFirstByApikey(apiKey);
         if(executingUser == null) {
-            LOGGER.trace("Could not find user with apikey " + apiKey);
+            LOGGER.trace("Could not find user with apikey {}", apiKey);
             throw new UnauthorizedException();
         }
         return executingUser;

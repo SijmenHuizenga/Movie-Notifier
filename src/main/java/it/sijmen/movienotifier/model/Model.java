@@ -9,17 +9,17 @@ import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
 import java.util.Set;
 
-public abstract class Model {
+public interface Model {
 
     /**
      * Validates the user. When something is wrong a error message is returned.
      * Else null.
      */
-    public void validate() throws IllegalArgumentException {
+    default void validate() {
         ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
         Validator validator = factory.getValidator();
         Set<ConstraintViolation<Model>> result = validator.validate(this);
-        if(result.size() != 0)
+        if(!result.isEmpty())
             throw new BadRequestException(new ExceptionStringifier().makeNiceArray(result));
     }
 

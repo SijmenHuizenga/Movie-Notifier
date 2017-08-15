@@ -33,4 +33,14 @@ public class JumpRequest {
     public String getBody() {
         return body;
     }
+
+    @Override
+    public String toString() {
+        return "JumpRequest{" +
+                "method=" + method +
+                ", headers=" + headers +
+                ", urldata='" + urldata + '\'' +
+                ", body='" + body + '\'' +
+                '}';
+    }
 }

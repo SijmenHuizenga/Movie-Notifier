@@ -1,12 +1,10 @@
 package it.sijmen.movienotifier.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import it.sijmen.movienotifier.model.exceptions.BadRequestException;
-import it.sijmen.movienotifier.repositories.UserRepository;
 import it.sijmen.movienotifier.model.validation.notification.ValidNotification;
-import it.sijmen.movienotifier.util.ApiKeyHelper;
+import it.sijmen.movienotifier.repositories.UserRepository;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.data.annotation.Id;
@@ -15,7 +13,6 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
 import javax.persistence.Entity;
-import javax.validation.Valid;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.util.ArrayList;
@@ -24,7 +21,7 @@ import java.util.List;
 
 @Document
 @Entity
-public class User extends Model {
+public class User implements Model {
 
     @Id
     @JsonProperty(value = "uuid", access = JsonProperty.Access.READ_ONLY)
@@ -109,7 +106,7 @@ public class User extends Model {
             errors.add("The given username is already in use.");
         if(userRepository.getAllByEmail(getEmail()).stream().filter(o -> !o.getId().equals(this.getId())).count() > 0)
             errors.add("The given email is already in use.");
-        if(errors.size() > 0)
+        if(!errors.isEmpty())
             throw new BadRequestException(errors);
     }
 

@@ -16,7 +16,7 @@ import java.io.IOException;
 
 @Singleton
 @Component
-public class MailNotifier extends Notifier {
+public class MailNotifier implements Notifier {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MailNotifier.class);
 
@@ -47,7 +47,7 @@ public class MailNotifier extends Notifier {
         if(!response.isOk())
             throw new IOException("Mailgun returned not ok. Code: " + response.responseCode()
                     + ". Message: " + response.responseMessage());
-        LOGGER.trace("Sent mail message through mailgun to " + recipient.getEmail(), message);
+        LOGGER.trace("Sent mail message through mailgun to {}. Message: {}", recipient.getEmail(), message);
     }
 
     private String getTitle(String message) {

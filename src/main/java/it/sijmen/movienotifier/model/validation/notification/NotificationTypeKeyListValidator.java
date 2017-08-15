@@ -8,7 +8,7 @@ public class NotificationTypeKeyListValidator implements ConstraintValidator<Val
 
     @Override
     public void initialize(ValidNotification constraintAnnotation) {
-
+        //nothing to do here
     }
 
     @Override

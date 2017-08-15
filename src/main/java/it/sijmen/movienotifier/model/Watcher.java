@@ -17,11 +17,10 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Null;
 
 @Document
 @Entity
-public class Watcher extends Model{
+public class Watcher implements Model {
 
     /**
      * The unique identifier that identifies this watcher.
@@ -90,7 +89,8 @@ public class Watcher extends Model{
     @UpdateActor.RecursiveUpdate
     private WatcherDetails props;
 
-    public Watcher(String id, String user, String name, int movieid, String cinemaid, long startAfter, long startBefore, WatcherDetails props) {
+    public Watcher(String id, String user, String name, int movieid, String cinemaid, long startAfter, long startBefore,
+                   @Nullable WatcherDetails props) {
         this.id = id;
         this.user = user;
         this.name = name;
@@ -159,11 +159,12 @@ public class Watcher extends Model{
         this.startBefore = startBefore;
     }
 
+    @Nullable
     public WatcherDetails getProps() {
         return props;
     }
 
-    public void setProps(WatcherDetails props) {
+    public void setProps(@Nullable WatcherDetails props) {
         this.props = props;
     }
 

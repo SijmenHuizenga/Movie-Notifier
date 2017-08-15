@@ -2,7 +2,7 @@ package it.sijmen.movienotifier.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class WatcherDetails {
+public class WatcherDetails implements Model {
 
     /**
      * whether or not the showing is in the original language

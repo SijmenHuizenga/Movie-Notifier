@@ -22,7 +22,7 @@ import java.util.Map;
 
 @Singleton
 @Service
-public class SMSNotifier extends Notifier {
+public class SMSNotifier implements Notifier {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SMSNotifier.class);
 
@@ -58,7 +58,7 @@ public class SMSNotifier extends Notifier {
         }catch (Exception e){
             throw new IOException("Could not send sms message. Error " + e.getMessage(), e);
         }
-        LOGGER.trace("Sent sms notification trough AWS SNS to " + recipient.getPhonenumber(), message);
+        LOGGER.trace("Sent sms notification trough AWS SNS to {}. Message: {}" + recipient.getPhonenumber(), message);
     }
 
     @Override

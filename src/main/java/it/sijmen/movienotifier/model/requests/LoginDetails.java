@@ -9,7 +9,7 @@ import org.springframework.data.mongodb.core.mapping.Field;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
-public class LoginDetails extends Model {
+public class LoginDetails implements Model {
 
     /**
      * The user-friendly name of this recipient. The name must be between 4 and 16 charcters and can only contain letters (a-z) and numbers (0-9), but no capital letters (A-Z). The first 4 characters must always be letters
@@ -46,5 +46,12 @@ public class LoginDetails extends Model {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    @Override
+    public String toString() {
+        return "LoginDetails{" +
+                "name='" + name + '\'' +
+                '}';
     }
 }

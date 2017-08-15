@@ -25,11 +25,13 @@ public final class PasswordAuthentication {
 
     private static final int SIZE = 128;
 
-    private static final Pattern layout = Pattern.compile("(\\d\\d?)\\$(.{43})");
+    private static final Pattern LAYOUT = Pattern.compile("(\\d\\d?)\\$(.{43})");
 
-    private static final SecureRandom random = new SecureRandom();
+    private static final SecureRandom RANDOM = new SecureRandom();
 
-    private static final int cost = 16;
+    private static final int COST = 16;
+
+    private PasswordAuthentication(){}
 
     private static int iterations(int cost) {
         if ((cost & ~0x1E) != 0)
@@ -44,13 +46,13 @@ public final class PasswordAuthentication {
      */
     private static String hash(char[] password) {
         byte[] salt = new byte[SIZE / 8];
-        random.nextBytes(salt);
-        byte[] dk = pbkdf2(password, salt, 1 << cost);
+        RANDOM.nextBytes(salt);
+        byte[] dk = pbkdf2(password, salt, 1 << COST);
         byte[] hash = new byte[salt.length + dk.length];
         System.arraycopy(salt, 0, hash, 0, salt.length);
         System.arraycopy(dk, 0, hash, salt.length, dk.length);
         Base64.Encoder enc = Base64.getUrlEncoder().withoutPadding();
-        return cost + "$" + enc.encodeToString(hash);
+        return COST + "$" + enc.encodeToString(hash);
     }
 
     /**
@@ -59,7 +61,7 @@ public final class PasswordAuthentication {
      * @return true if the password and hashed match
      */
     private static boolean authenticate(char[] password, String hashed) {
-        Matcher m = layout.matcher(hashed);
+        Matcher m = LAYOUT.matcher(hashed);
         if (!m.matches())
             throw new IllegalArgumentException("Invalid hashed format");
         int iterations = iterations(Integer.parseInt(m.group(1)));
@@ -106,7 +108,7 @@ public final class PasswordAuthentication {
     }
 
     public static boolean isHashed(String password) {
-        Matcher m = layout.matcher(password);
+        Matcher m = LAYOUT.matcher(password);
         return m.matches();
     }
 }

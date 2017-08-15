@@ -9,7 +9,6 @@ import com.restfb.types.send.PhoneMessageRecipient;
 import com.restfb.types.send.SendResponse;
 import it.sijmen.movienotifier.model.Notifier;
 import it.sijmen.movienotifier.model.User;
-import it.sijmen.movienotifier.service.notification.NotificationService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -21,7 +20,7 @@ import java.io.IOException;
 
 @Singleton
 @Component
-public class FBMessengerNotifier extends Notifier {
+public class FBMessengerNotifier implements Notifier {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(FBMessengerNotifier.class);
 
@@ -46,7 +45,7 @@ public class FBMessengerNotifier extends Notifier {
 
         if(!resp.isSuccessful())
             throw new IOException("Facebook Messenger responded with error. Result: " + resp.getResult());
-        LOGGER.info("Sent FB Messenger notification to " + phoneReceiver, simpleTextMessage);
+        LOGGER.info("Sent FB Messenger notification to {}. Message: {}", phoneReceiver, simpleTextMessage);
     }
 
     @Override

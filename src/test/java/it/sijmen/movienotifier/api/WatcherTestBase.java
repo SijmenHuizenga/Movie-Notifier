@@ -6,8 +6,8 @@ import org.joda.time.DateTime;
 import org.junit.After;
 import org.mockito.Mockito;
 
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.mockito.Mockito.when;
 

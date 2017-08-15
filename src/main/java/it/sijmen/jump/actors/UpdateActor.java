@@ -20,7 +20,6 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -47,7 +46,7 @@ public class UpdateActor<T extends Model> extends Actor<T, UpdateListener<T>> {
         final T updatingData = readModelFromBody(modelClass, request.getBody());
 
         if(!listener.allowUpdate(request, model)) {
-            LOGGER.trace("Not allowed to update " +modelClass.getSimpleName(), request);
+            LOGGER.trace("Not allowed to update {}. Request: {}", modelClass.getSimpleName(), request);
             throw new UnauthorizedException();
         }
 
@@ -64,7 +63,7 @@ public class UpdateActor<T extends Model> extends Actor<T, UpdateListener<T>> {
 
         model2 = listener.beforeUpdateStore(model2);
         repository.save(model2);
-        LOGGER.trace("Update stored to repository " +modelClass.getSimpleName(), model2);
+        LOGGER.trace("Update {} stored to repository. New model: {}", modelClass.getSimpleName(), model2);
         return model2;
     }
 
@@ -96,7 +95,7 @@ public class UpdateActor<T extends Model> extends Actor<T, UpdateListener<T>> {
             Object o = field.get(object);
             return o != null && !isEmptyArray(o);
         } catch (IllegalAccessException e) {
-            LOGGER.error("No access to field while updating object", e, field, object);
+            LOGGER.error("No access to field {} while checking {}", field, object, e);
             throw new InternalServerErrorException();
         }
     }
@@ -111,7 +110,7 @@ public class UpdateActor<T extends Model> extends Actor<T, UpdateListener<T>> {
                 applyUpdates(field.get(source), field.get(target));
             field.set(target, field.get(source));
         } catch (IllegalAccessException e) {
-            LOGGER.error("No access to field while setting data", e, field, source, target);
+            LOGGER.error("No access to field {} while copying data from {} to {}", field, source, target, e);
             throw new InternalServerErrorException();
         }
     }

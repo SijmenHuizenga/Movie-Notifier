@@ -46,7 +46,8 @@ public class UserLoginTest extends UserTestBase {
                         "    \"password\": \"123456\"\n" +
                         "}"
         ))
-                .andExpect(status().isUnauthorized()).andExpect(content().string(""));
+                .andExpect(status().isUnauthorized())
+                .andExpect(jsonPath("$.message").value("Unauthorized Request"));
     }
 
     @Test
@@ -59,7 +60,7 @@ public class UserLoginTest extends UserTestBase {
                         "    \"password\": \"123789\"\n" +
                         "}"
         ))
-            .andExpect(status().isUnauthorized()).andExpect(content().string(""));
+            .andExpect(status().isUnauthorized()).andExpect(jsonPath("$.message").value("Unauthorized Request"));
     }
 
     @Test

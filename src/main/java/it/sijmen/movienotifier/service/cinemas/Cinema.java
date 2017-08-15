@@ -4,10 +4,10 @@ import it.sijmen.movienotifier.model.Watcher;
 
 import java.util.List;
 
-public abstract class Cinema {
+public interface Cinema {
 
-    public abstract String getCinemaIdPrefix();
+    String getCinemaIdPrefix();
 
-    public abstract void checkWatcher(List<Watcher> watcher);
+    void checkWatcher(List<Watcher> watcher);
 
 }

@@ -7,8 +7,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @RunWith(SpringRunner.class)
 @WebMvcTest(JumpConfiguration.class)
@@ -37,7 +36,8 @@ public class UserReadTest extends UserTestBase {
         removeFromMockedDb(testuser2);
 
         this.mvc.perform(get("/user/"+testuser2.getId()).accept(MediaType.APPLICATION_JSON).header("APIKEY", testuser.getApikey()))
-        .andExpect(status().isUnauthorized()).andExpect(content().string(""));
+        .andExpect(status().isUnauthorized())
+                .andExpect(jsonPath("$.message").value("Unauthorized Request"));
     }
 
     @Test
@@ -46,7 +46,8 @@ public class UserReadTest extends UserTestBase {
         addToMockedDb(testuser2);
 
         this.mvc.perform(get("/user/"+testuser2.getApikey()).accept(MediaType.APPLICATION_JSON).header("APIKEY", testuser.getApikey()))
-                .andExpect(status().isUnauthorized()).andExpect(content().string(""));
+                .andExpect(status().isUnauthorized())
+                .andExpect(jsonPath("$.message").value("Unauthorized Request"));
     }
 
 }
