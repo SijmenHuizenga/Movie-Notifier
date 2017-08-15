@@ -3,7 +3,6 @@ package it.sijmen.jump.actors;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import it.sijmen.jump.JumpRequest;
 import it.sijmen.jump.listeners.CreateListener;
-import it.sijmen.movienotifier.api.controllers.UserController;
 import it.sijmen.movienotifier.model.Model;
 import it.sijmen.movienotifier.model.exceptions.UnauthorizedException;
 import org.slf4j.Logger;
@@ -33,7 +32,7 @@ public class CreateActor<T extends Model> extends Actor<T, CreateListener<T>> {
         T model = readModelFromBody(this.modelClass, request.getBody());
 
         if(!listener.allowCreate(request, model)) {
-            LOGGER.warn("Not allowed to create " + modelClass.getSimpleName(), request);
+            LOGGER.warn("Not allowed to create %s with request %s", modelClass.getSimpleName(), request);
             throw new UnauthorizedException();
         }
 
@@ -43,7 +42,7 @@ public class CreateActor<T extends Model> extends Actor<T, CreateListener<T>> {
         model = listener.beforeCreateStore(model);
         repository.save(model);
 
-        LOGGER.trace("Model stored in repository " + modelClass.getSimpleName(), model);
+        LOGGER.trace("Model stored in repository %s. Model: %s", modelClass.getSimpleName(), model);
 
         return ResponseEntity.ok(model);
     }

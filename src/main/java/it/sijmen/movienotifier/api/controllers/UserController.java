@@ -9,8 +9,6 @@ import it.sijmen.movienotifier.model.exceptions.BadRequestException;
 import it.sijmen.movienotifier.repositories.UserRepository;
 import it.sijmen.movienotifier.util.ApiKeyHelper;
 import it.sijmen.movienotifier.util.PasswordAuthentication;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -100,8 +98,8 @@ public class UserController extends ApiController implements JumpListenerAdapter
 
     @Override
     public User beforeUpdateStore(User updatingUser) {
-        List<String> errors;
-        if((errors = allowNotifications(updatingUser.getEnabledNotifications())).size() != 0)
+        List<String> errors = allowNotifications(updatingUser.getEnabledNotifications());
+        if(errors.size() != 0)
             throw new BadRequestException(errors);
 
         updatingUser.validateUniqueness(userRepository);

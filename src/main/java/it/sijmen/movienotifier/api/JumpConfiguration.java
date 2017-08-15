@@ -7,7 +7,10 @@ import it.sijmen.movienotifier.model.Watcher;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.inject.Inject;
 import java.util.Map;
@@ -25,20 +28,20 @@ public class JumpConfiguration {
     }
 
     @RequestMapping(value = {"/user/{urldata:.*}", "/user"})
-    public HttpEntity<?> genericUserMethod(HttpMethod requestMethod,
+    public HttpEntity genericUserMethod(HttpMethod requestMethod,
                                            @RequestHeader(required = false) Map<String, String> requestHeaders,
                                            @PathVariable(required = false) String urldata,
-                                           @RequestBody(required = false) String body) throws Exception{
+                                           @RequestBody(required = false) String body) {
         return userJump.handle(new JumpRequest(
                 requestMethod, requestHeaders, urldata, body
         ));
     }
 
     @RequestMapping(value = {"/watchers/{urldata:.*}", "/watchers"})
-    public HttpEntity<?> genericWatchersMethod(HttpMethod requestMethod,
+    public HttpEntity genericWatchersMethod(HttpMethod requestMethod,
                                            @RequestHeader(required = false) Map<String, String> requestHeaders,
                                            @PathVariable(required = false) String urldata,
-                                           @RequestBody(required = false) String body) throws Exception{
+                                           @RequestBody(required = false) String body) {
         return watcherJump.handle(new JumpRequest(
                 requestMethod, requestHeaders, urldata, body
         ));

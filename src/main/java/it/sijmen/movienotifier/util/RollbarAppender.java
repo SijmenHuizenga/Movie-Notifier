@@ -36,17 +36,26 @@ public class RollbarAppender extends UnsynchronizedAppenderBase<ILoggingEvent> {
     protected void append(ILoggingEvent eventObject) {
         if(rollbar == null)
             return;
+        if(eventObject.getMessage().startsWith("ROLLBAR:"))
+            return;
         try{
-            switch (eventObject.getLevel().levelInt){
-                case Level.ERROR_INT:
-                    rollbar.error(eventObject.getMessage(), makeArgsMap(eventObject.getArgumentArray()));
-                    break;
-                case Level.WARN_INT:
-                    rollbar.warning(eventObject.getMessage(), makeArgsMap(eventObject.getArgumentArray()));
-                    break;
-            }
+            sendRollbarMessage(eventObject.getLevel(), eventObject.getMessage(), makeArgsMap(eventObject.getArgumentArray()));
         }catch (Exception e){
+            addError("ROLLBAR: cannot store rollbar error");
             e.printStackTrace();
+        }
+    }
+
+    private void sendRollbarMessage(Level level, String message, HashMap<String, Object> msgMap) {
+        switch (level.levelInt){
+            case Level.ERROR_INT:
+                rollbar.error(message, msgMap);
+                break;
+            case Level.WARN_INT:
+                rollbar.warning(message, msgMap);
+                break;
+            default:
+                break;
         }
     }
 

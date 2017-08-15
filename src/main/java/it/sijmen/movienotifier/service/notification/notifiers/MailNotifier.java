@@ -47,7 +47,7 @@ public class MailNotifier extends Notifier {
         if(!response.isOk())
             throw new IOException("Mailgun returned not ok. Code: " + response.responseCode()
                     + ". Message: " + response.responseMessage());
-        LOGGER.trace("Sent mail message through mailgun to " + recipient.getEmail(), message);
+        LOGGER.trace("Sent mail message through mailgun to %s. Message: %s", recipient.getEmail(), message);
     }
 
     private String getTitle(String message) {

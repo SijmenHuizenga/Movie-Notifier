@@ -2,7 +2,6 @@ package it.sijmen.movienotifier.service.cinemas;
 
 import it.sijmen.movienotifier.model.Watcher;
 import it.sijmen.movienotifier.repositories.WatcherRepository;
-import it.sijmen.movienotifier.service.notification.NotificationService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -38,7 +37,7 @@ public class CinemaService {
                 return;
             }
         }
-        LOGGER.warn("Could not watch cinema " + cinemaId + " since there is no cinema configuration available for this id.", watchers);
+        LOGGER.warn("Could not watch cinema %s since there is no cinema configuration available for this id.", cinemaId);
     }
 
 }

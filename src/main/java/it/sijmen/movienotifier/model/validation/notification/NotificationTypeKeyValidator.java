@@ -8,7 +8,7 @@ import javax.validation.ConstraintValidatorContext;
 
 public class NotificationTypeKeyValidator implements ConstraintValidator<ValidNotification, String> {
 
-    public static boolean isValidKey(@NotNull String key){
+    static boolean isValidKey(@NotNull String key){
         for(String valid : NotificationConfiguration.allNotificationTypes())
             if(valid.equals(key))
                 return true;

@@ -32,11 +32,11 @@ public class ReadSomeActor<T extends Model> extends Actor<T, ReadSomeListener<T>
         listener.checkReadSomeRequest(request);
         List<T> result = listener.getReadSomeResult(request);
         if(result == null) {
-            LOGGER.warn("No result from readSome thus unauthorized", request);
+            LOGGER.warn("No result from readSome thus unauthorized. Request: %s", request);
             throw new UnauthorizedException();
         }
 
-        LOGGER.trace("Read some " + modelClass.getSimpleName(), request);
+        LOGGER.trace("Read some %s. Request: %s", modelClass.getSimpleName(), request);
         return ResponseEntity.ok(result);
     }
 }

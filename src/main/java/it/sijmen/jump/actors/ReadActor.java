@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import it.sijmen.jump.JumpRequest;
 import it.sijmen.jump.listeners.ReadListener;
 import it.sijmen.movienotifier.model.Model;
-import it.sijmen.movienotifier.model.exceptions.BadRequestException;
 import it.sijmen.movienotifier.model.exceptions.UnauthorizedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,10 +29,10 @@ public class ReadActor<T extends Model> extends Actor<T, ReadListener<T>> {
         listener.checkReadRequest(request);
         T result = repository.findOne(request.getUrldata());
         if(result == null || !listener.allowRead(request, result)) {
-            LOGGER.warn("Not authorized to read " + modelClass.getSimpleName(), request);
+            LOGGER.warn("Not authorized to read %s. Request: %s", modelClass.getSimpleName(), request);
             throw new UnauthorizedException();
         }
-        LOGGER.trace("Read " + modelClass.getSimpleName(), result);
+        LOGGER.trace("Read %s with request %s", modelClass.getSimpleName(), request);
         return ResponseEntity.ok(result);
     }
 }

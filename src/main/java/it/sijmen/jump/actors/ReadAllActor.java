@@ -31,10 +31,10 @@ public class ReadAllActor<T extends Model> extends Actor<T, ReadAllListener<T>> 
         listener.checkReadAllRequest(request);
         List<T> result = repository.findAll();
         if(!listener.allowReadAll(request, result)) {
-            LOGGER.warn("Not authorized to read all " + modelClass.getSimpleName(), request);
+            LOGGER.warn("Not authorized to read all %s. Request: %s", modelClass.getSimpleName(), request);
             throw new UnauthorizedException();
         }
-        LOGGER.trace("Read all " + modelClass.getSimpleName(), request);
+        LOGGER.trace("Read all %s. Request: %s", modelClass.getSimpleName(), request);
         return ResponseEntity.ok(result);
     }
 }

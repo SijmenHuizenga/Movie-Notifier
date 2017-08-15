@@ -7,7 +7,7 @@ public class NotificationTypeKeyArrayValidator implements ConstraintValidator<Va
 
     @Override
     public void initialize(ValidNotification constraintAnnotation) {
-
+        //nothing to do here
     }
 
     @Override

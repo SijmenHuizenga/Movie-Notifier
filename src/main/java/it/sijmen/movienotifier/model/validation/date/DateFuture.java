@@ -1,9 +1,5 @@
 package it.sijmen.movienotifier.model.validation.date;
 
-import it.sijmen.movienotifier.model.validation.notification.NotificationTypeKeyArrayValidator;
-import it.sijmen.movienotifier.model.validation.notification.NotificationTypeKeyListValidator;
-import it.sijmen.movienotifier.model.validation.notification.NotificationTypeKeyValidator;
-
 import javax.validation.Constraint;
 import javax.validation.Payload;
 import java.lang.annotation.Documented;

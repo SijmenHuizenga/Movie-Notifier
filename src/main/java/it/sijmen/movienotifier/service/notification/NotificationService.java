@@ -40,7 +40,7 @@ public class NotificationService {
     public void notify(String userId, String message) {
         User user = userRepository.findOne(userId);
         if(user.getEnabledNotifications() == null || user.getEnabledNotifications().isEmpty()){
-            LOGGER.error("Could not notify user because no notification types are enabled.", user, message);
+            LOGGER.error("Could not notify user %s because no notification types are enabled. message: %s", user.getId(), message);
             return;
         }
         user.getEnabledNotifications().forEach(
@@ -53,7 +53,7 @@ public class NotificationService {
         try {
             notifier.notify(user, message);
         } catch (IOException e) {
-            LOGGER.error("Notification failed", e, user, message);
+            LOGGER.error("Notification failed to user %s with message %s", user.getId(), message, e);
         }
     }
 }

@@ -1,11 +1,11 @@
 package it.sijmen.movienotifier.api.controllers;
 
 import it.sijmen.jump.JumpRequest;
-import it.sijmen.movienotifier.api.advice.ApiExceptionHandler;
 import it.sijmen.movienotifier.model.User;
 import it.sijmen.movienotifier.model.exceptions.BadRequestException;
 import it.sijmen.movienotifier.model.exceptions.UnauthorizedException;
 import it.sijmen.movienotifier.repositories.UserRepository;
+import org.assertj.core.util.Preconditions;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,7 +40,7 @@ abstract class ApiController {
     protected User getExecutingUser(@NotNull String apiKey) {
         User executingUser = userRepository.findFirstByApikey(apiKey);
         if(executingUser == null) {
-            LOGGER.trace("Could not find user with apikey " + apiKey);
+            LOGGER.trace("Could not find user with apikey %s", apiKey);
             throw new UnauthorizedException();
         }
         return executingUser;

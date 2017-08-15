@@ -58,7 +58,7 @@ public class SMSNotifier extends Notifier {
         }catch (Exception e){
             throw new IOException("Could not send sms message. Error " + e.getMessage(), e);
         }
-        LOGGER.trace("Sent sms notification trough AWS SNS to " + recipient.getPhonenumber(), message);
+        LOGGER.trace("Sent sms notification trough AWS SNS to %s. Message: $s" + recipient.getPhonenumber(), message);
     }
 
     @Override
