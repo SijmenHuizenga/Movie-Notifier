@@ -6,25 +6,13 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.NONE, getterVisibility = JsonAutoDetect.Visibility.NONE, setterVisibility = JsonAutoDetect.Visibility.NONE)
 public class ApiException extends RuntimeException {
 
-    @JsonProperty
-    private String message;
-
     public ApiException(String message) {
-        this.message = message;
+        super(message);
     }
 
-    public String getMessage() {
-        return message;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
-    }
-
+    @JsonProperty
     @Override
-    public String toString() {
-        return "ApiException{" +
-                "message='" + message + '\'' +
-                '}';
+    public String getMessage() {
+        return super.getMessage();
     }
 }

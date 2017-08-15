@@ -21,7 +21,7 @@ import java.util.List;
 
 @Document
 @Entity
-public class User extends Model {
+public class User implements Model {
 
     @Id
     @JsonProperty(value = "uuid", access = JsonProperty.Access.READ_ONLY)
@@ -106,7 +106,7 @@ public class User extends Model {
             errors.add("The given username is already in use.");
         if(userRepository.getAllByEmail(getEmail()).stream().filter(o -> !o.getId().equals(this.getId())).count() > 0)
             errors.add("The given email is already in use.");
-        if(errors.size() > 0)
+        if(!errors.isEmpty())
             throw new BadRequestException(errors);
     }
 

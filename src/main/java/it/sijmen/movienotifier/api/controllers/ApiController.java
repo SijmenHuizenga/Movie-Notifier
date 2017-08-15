@@ -5,7 +5,6 @@ import it.sijmen.movienotifier.model.User;
 import it.sijmen.movienotifier.model.exceptions.BadRequestException;
 import it.sijmen.movienotifier.model.exceptions.UnauthorizedException;
 import it.sijmen.movienotifier.repositories.UserRepository;
-import org.assertj.core.util.Preconditions;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

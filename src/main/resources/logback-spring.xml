@@ -10,8 +10,6 @@
         <environment>${rollbarEnv}</environment>
     </appender>
 
-    <logger name="it.sijmen" level="trace" />
-
     <root level="INFO">
         <appender-ref ref="CONSOLE" />
         <appender-ref ref="ROLLBAR" />

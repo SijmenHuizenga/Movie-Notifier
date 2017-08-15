@@ -99,7 +99,7 @@ public class UserController extends ApiController implements JumpListenerAdapter
     @Override
     public User beforeUpdateStore(User updatingUser) {
         List<String> errors = allowNotifications(updatingUser.getEnabledNotifications());
-        if(errors.size() != 0)
+        if(!errors.isEmpty())
             throw new BadRequestException(errors);
 
         updatingUser.validateUniqueness(userRepository);

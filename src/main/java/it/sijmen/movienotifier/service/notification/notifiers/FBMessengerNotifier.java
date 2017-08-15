@@ -20,7 +20,7 @@ import java.io.IOException;
 
 @Singleton
 @Component
-public class FBMessengerNotifier extends Notifier {
+public class FBMessengerNotifier implements Notifier {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(FBMessengerNotifier.class);
 

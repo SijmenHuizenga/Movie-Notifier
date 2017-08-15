@@ -31,6 +31,8 @@ public final class PasswordAuthentication {
 
     private static final int COST = 16;
 
+    private PasswordAuthentication(){}
+
     private static int iterations(int cost) {
         if ((cost & ~0x1E) != 0)
             throw new IllegalArgumentException("cost: " + cost);

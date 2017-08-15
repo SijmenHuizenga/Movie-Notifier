@@ -16,7 +16,9 @@ public class NotificationTypeKeyValidator implements ConstraintValidator<ValidNo
     }
 
     @Override
-    public void initialize(ValidNotification constraintAnnotation) {}
+    public void initialize(ValidNotification constraintAnnotation) {
+        //nothing to initialize
+    }
 
     @Override
     public boolean isValid(String value, ConstraintValidatorContext context) {

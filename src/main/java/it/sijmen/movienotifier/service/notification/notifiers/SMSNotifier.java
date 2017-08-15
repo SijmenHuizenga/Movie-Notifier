@@ -22,7 +22,7 @@ import java.util.Map;
 
 @Singleton
 @Service
-public class SMSNotifier extends Notifier {
+public class SMSNotifier implements Notifier {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SMSNotifier.class);
 

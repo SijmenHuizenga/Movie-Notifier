@@ -82,27 +82,27 @@ Note: when using this configuration the `spring.data.mongodb.uri` in the `movie-
 ## Docker Compose + SSL
 To run this application with an ssl certificate the `docker-compose.yml` in the above example should be extended. The below configuration creates a nginx reverse proxy as well as a letsencrypt generation companion. 
 ```yaml
-version: '3'
+version: '2'
 services:
   nginx-proxy:
     image: jwilder/nginx-proxy
     labels:
         com.github.jrcs.letsencrypt_nginx_proxy_companion.nginx_proxy: "true"
     container_name: nginx
-    restart: unless-stopped
+    restart: on-failure
     ports:
       - "443:443"
+      - "80:80"
     volumes:
-      - [replace with path to ngingx certs store]/certs:/etc/nginx/certs:ro
+      - /etc/nginx/certs:ro
       - /etc/nginx/vhost.d
       - /usr/share/nginx/html
       - /var/run/docker.sock:/tmp/docker.sock:ro
   nginx-letsencrypt:
     image: jrcs/letsencrypt-nginx-proxy-companion
     container_name: nginx-letsencrypt
-    restart: unless-stopped
+    restart: on-failure
     volumes:
-      - [replace with path to ngingx certs store]/certs:/etc/nginx/certs:rw
       - /var/run/docker.sock:/var/run/docker.sock:ro
     volumes_from:
       - nginx-proxy
@@ -110,14 +110,10 @@ services:
     image: mongo
     volumes:
       - [replace with path to persistant db store location]:/data/db
-    deploy:
-      restart_policy:
-        condition: on-failure
+    restart: on-failure
   movie-notifier:
     image: sijmenhuizenga/movienotifier:3.0-SNAPSHOT
-    deploy:
-      restart_policy:
-        condition: on-failure
+    restart: on-failure
     volumes:
       - [replace with path to movie-notifier.properties]:/movie-notifier.properties
     environment:

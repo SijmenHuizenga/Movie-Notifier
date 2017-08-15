@@ -18,13 +18,12 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Singleton
 @Service
-public class PatheApi extends Cinema {
+public class PatheApi implements Cinema {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(PatheApi.class);
 
@@ -95,7 +94,7 @@ public class PatheApi extends Cinema {
         }
         repository.save(newData);
         LOGGER.trace("Stored new data for movie %s", movieId);
-        ArrayList<PatheShowing> showings = newData.getShowings();
+        List<PatheShowing> showings = newData.getShowings();
         showings.removeAll(oldData.getShowings());
         watchers.forEach(w -> this.sendUpdates(w, showings));
     }

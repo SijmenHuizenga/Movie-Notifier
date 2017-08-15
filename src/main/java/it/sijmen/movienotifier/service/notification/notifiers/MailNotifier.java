@@ -16,7 +16,7 @@ import java.io.IOException;
 
 @Singleton
 @Component
-public class MailNotifier extends Notifier {
+public class MailNotifier implements Notifier {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MailNotifier.class);
 

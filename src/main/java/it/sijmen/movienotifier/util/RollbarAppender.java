@@ -42,7 +42,6 @@ public class RollbarAppender extends UnsynchronizedAppenderBase<ILoggingEvent> {
             sendRollbarMessage(eventObject.getLevel(), eventObject.getMessage(), makeArgsMap(eventObject.getArgumentArray()));
         }catch (Exception e){
             addError("ROLLBAR: cannot store rollbar error");
-            e.printStackTrace();
         }
     }
 

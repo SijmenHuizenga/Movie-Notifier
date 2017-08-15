@@ -36,9 +36,7 @@ public class NotificationTypeController {
     @RequestMapping(value = "/{notificationtypekey}", method = RequestMethod.GET)
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public Notifier getSingle(
-            @PathVariable("notificationtypekey") String notificationtypekey
-    ) {
+    public Notifier getSingle(@PathVariable("notificationtypekey") String notificationtypekey) {
         if(notificationtypekey == null || notificationtypekey.isEmpty()) {
             LOGGER.trace("Could not retreve notificationtype %s", notificationtypekey);
             throw new BadRequestException("notificationtypekey must be provided.");

@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.util.ArrayList;
+import java.util.List;
 
 @Document
 public class PatheMoviesResponse {
@@ -13,35 +13,35 @@ public class PatheMoviesResponse {
     private int movieid;
 
     @JsonProperty("schedules")
-    private ArrayList<PatheShowing> showings;
+    private List<PatheShowing> showings;
 
     @JsonProperty
-    private ArrayList<PatheCinema> cinemas;
+    private List<PatheCinema> cinemas;
 
     @JsonProperty
-    private ArrayList<PatheCity> cities;
+    private List<PatheCity> cities;
 
-    public ArrayList<PatheShowing> getShowings() {
+    public List<PatheShowing> getShowings() {
         return showings;
     }
 
-    public void setShowings(ArrayList<PatheShowing> showings) {
+    public void setShowings(List<PatheShowing> showings) {
         this.showings = showings;
     }
 
-    public ArrayList<PatheCinema> getCinemas() {
+    public List<PatheCinema> getCinemas() {
         return cinemas;
     }
 
-    public void setCinemas(ArrayList<PatheCinema> cinemas) {
+    public void setCinemas(List<PatheCinema> cinemas) {
         this.cinemas = cinemas;
     }
 
-    public ArrayList<PatheCity> getCities() {
+    public List<PatheCity> getCities() {
         return cities;
     }
 
-    public void setCities(ArrayList<PatheCity> cities) {
+    public void setCities(List<PatheCity> cities) {
         this.cities = cities;
     }
 
