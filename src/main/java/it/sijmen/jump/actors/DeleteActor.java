@@ -29,15 +29,15 @@ public class DeleteActor<T extends Model> extends Actor<T, DeleteListener<T>> {
         listener.checkDeleteRequest(request);
         T toDelete = repository.findOne(request.getUrldata());
         if(toDelete == null) {
-            LOGGER.warn("ToDelete %s not found with request %s", modelClass.getSimpleName(), request);
+            LOGGER.warn("ToDelete {} not found with request {}", modelClass.getSimpleName(), request);
             throw new UnauthorizedException();
         }
         if(!listener.allowDelete(request, toDelete)) {
-            LOGGER.warn("Not authorized to delete %s with request %s", modelClass.getSimpleName(), request);
+            LOGGER.warn("Not authorized to delete {} with request {}", modelClass.getSimpleName(), request);
             throw new UnauthorizedException();
         }
         repository.delete(toDelete);
-        LOGGER.trace("%s deleted: %s", modelClass.getSimpleName(), toDelete);
+        LOGGER.trace("{} deleted: {}", modelClass.getSimpleName(), toDelete);
 
         return ResponseEntity.ok().build();
     }

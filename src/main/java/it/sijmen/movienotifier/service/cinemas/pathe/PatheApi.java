@@ -80,20 +80,20 @@ public class PatheApi implements Cinema {
             oldData = repository.getFirstByMovieid(movieId);
             newData = this.getShowingsPerCinema(movieId);
         } catch (Exception e) {
-            LOGGER.error("Could not load old or new data for movieId %s", movieId, e);
+            LOGGER.error("Could not load old or new data for movieId {}", movieId, e);
             return;
         }
         if(oldData == null){
             repository.save(newData);
-            LOGGER.trace("First time retreving data for movie %s and storing in repo", movieId);
+            LOGGER.trace("First time retreving data for movie {} and storing in repo", movieId);
             return;
         }
         if(oldData.equals(newData)) {
-            LOGGER.trace("Old and new data for movie %s are equal", movieId);
+            LOGGER.trace("Old and new data for movie {} are equal", movieId);
             return;
         }
         repository.save(newData);
-        LOGGER.trace("Stored new data for movie %s", movieId);
+        LOGGER.trace("Stored new data for movie {}", movieId);
         List<PatheShowing> showings = newData.getShowings();
         showings.removeAll(oldData.getShowings());
         watchers.forEach(w -> this.sendUpdates(w, showings));

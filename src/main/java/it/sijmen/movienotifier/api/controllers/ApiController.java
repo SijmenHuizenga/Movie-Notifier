@@ -39,7 +39,7 @@ abstract class ApiController {
     protected User getExecutingUser(@NotNull String apiKey) {
         User executingUser = userRepository.findFirstByApikey(apiKey);
         if(executingUser == null) {
-            LOGGER.trace("Could not find user with apikey %s", apiKey);
+            LOGGER.trace("Could not find user with apikey {}", apiKey);
             throw new UnauthorizedException();
         }
         return executingUser;

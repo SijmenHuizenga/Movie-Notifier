@@ -37,7 +37,7 @@ public class CinemaService {
                 return;
             }
         }
-        LOGGER.warn("Could not watch cinema %s since there is no cinema configuration available for this id.", cinemaId);
+        LOGGER.warn("Could not watch cinema {} since there is no cinema configuration available for this id.", cinemaId);
     }
 
 }

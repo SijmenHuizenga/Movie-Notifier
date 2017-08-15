@@ -29,10 +29,10 @@ public class ReadActor<T extends Model> extends Actor<T, ReadListener<T>> {
         listener.checkReadRequest(request);
         T result = repository.findOne(request.getUrldata());
         if(result == null || !listener.allowRead(request, result)) {
-            LOGGER.warn("Not authorized to read %s. Request: %s", modelClass.getSimpleName(), request);
+            LOGGER.warn("Not authorized to read {}. Request: {}", modelClass.getSimpleName(), request);
             throw new UnauthorizedException();
         }
-        LOGGER.trace("Read %s with request %s", modelClass.getSimpleName(), request);
+        LOGGER.trace("Read {} with request {}", modelClass.getSimpleName(), request);
         return ResponseEntity.ok(result);
     }
 }
