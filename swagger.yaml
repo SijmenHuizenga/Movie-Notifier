@@ -470,11 +470,11 @@ definitions:
       startAfter:
         type: string
         format: long
-        description: The earliest moment of a showing to watch for. UTC
+        description: The earliest moment of a showing to watch for. UNIX time: ms since January 1, 1970
       startBefore:
         type: string
         format: long
-        description: The latest moment of a showing to watch for. UTC
+        description: The latest moment of a showing to watch for. UNIX time: ms since January 1, 1970
       props:
         type: object
         description: These are the filter properties of this watcher. You will only get notificaitons about showings of this movie if the showing complies to all these properties. If a property is not defined or null than the property will be treated as 'no preference'.

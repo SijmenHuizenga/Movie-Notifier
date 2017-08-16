@@ -34,7 +34,6 @@ public class Watcher implements Model {
      */
     @NotBlank
     @Field
-    @Indexed(unique = true)
     @JsonProperty
     private String user;
 

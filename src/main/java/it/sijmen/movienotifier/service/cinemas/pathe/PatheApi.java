@@ -18,6 +18,7 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -53,6 +54,7 @@ public class PatheApi implements Cinema {
         } catch (UnirestException e) {
             throw new IOException("Could not load request.", e);
         }
+        System.out.println(stringHttpResponse.getBody());
         if(stringHttpResponse.getStatus() != 200)
             throw new IOException("Status returned " + stringHttpResponse.getStatus() + " after request " + uri);
         PatheMoviesResponse patheMoviesResponse = mapper.readValue(stringHttpResponse.getBody(), PatheMoviesResponse.class);
@@ -111,8 +113,8 @@ public class PatheApi implements Cinema {
         int realWatcherCinemaId = Integer.parseInt(watcher.getCinemaid().substring(getCinemaIdPrefix().length()));
         WatcherDetails d = watcher.getProps();
         return showing.getMovieId() == watcher.getMovieid() &&
-                showing.getStart().getTimeInMillis() < watcher.getStartBefore() &&
-                showing.getStart().getTimeInMillis() > watcher.getStartAfter() &&
+                showing.getStart() < watcher.getStartBefore() &&
+                showing.getStart() > watcher.getStartAfter() &&
                 showing.getCinemaId() == realWatcherCinemaId &&
                 eq(d.isD3(), showing.getIs3d()) &&
                 eq(d.isImax(), showing.getImax()) &&
@@ -141,9 +143,9 @@ public class PatheApi implements Cinema {
             builder.append(" LASER");
 
         builder.append(System.lineSeparator());
-        if(showing.getStart() != null)
-            builder.append(format1.format(showing.getStart().getTime())).append(" - ")
-                    .append(format2.format(showing.getEnd().getTime()))
+        if(showing.getStart() != -1L)
+            builder.append(format1.format(new Date(showing.getStart()))).append(" - ")
+                    .append(format2.format(new Date(showing.getEnd())))
                     .append(System.lineSeparator());
         builder.append("https://www.pathe.nl/tickets/start/")
                 .append(showing.getId());

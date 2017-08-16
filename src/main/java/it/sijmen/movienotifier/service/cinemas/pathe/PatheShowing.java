@@ -1,18 +1,15 @@
 package it.sijmen.movienotifier.service.cinemas.pathe;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import it.sijmen.movienotifier.model.serialization.UnixTimestampDeserializer;
+import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.util.Calendar;
-
-import static java.util.Calendar.HOUR_OF_DAY;
-
+@Document
 public class PatheShowing {
 
     @JsonProperty
     private int cinemaId;
-
-    @JsonProperty
-    private Calendar end;
 
     @JsonProperty
     private int is3d;
@@ -59,20 +56,24 @@ public class PatheShowing {
     @JsonProperty
     private long specialId;
 
+    @JsonDeserialize(using=UnixTimestampDeserializer.class)
     @JsonProperty
-    private Calendar start;
+    private long start;
+
+    @JsonDeserialize(using=UnixTimestampDeserializer.class)
+    @JsonProperty
+    private long end;
 
     @JsonProperty
     private int status;
 
-    public Calendar getEnd() {
-        return this.end == null ? getFakeEnd() : this.end;
+    public long getEnd() {
+        return this.end == -1 ? getFakeEnd() : this.end;
     }
 
-    private Calendar getFakeEnd() {
-        Calendar c = (Calendar) getStart().clone();
-        c.add(HOUR_OF_DAY, 3);
-        return c;
+    private long getFakeEnd() {
+        //3 hours in millis
+        return this.start + 10_800_000;
     }
 
     public int getCinemaId() {
@@ -83,7 +84,7 @@ public class PatheShowing {
         this.cinemaId = cinemaId;
     }
 
-    public void setEnd(Calendar end) {
+    public void setEnd(long end) {
         this.end = end;
     }
 
@@ -207,11 +208,11 @@ public class PatheShowing {
         this.specialId = specialId;
     }
 
-    public Calendar getStart() {
-        return start;
+    public long getStart() {
+        return this.start;
     }
 
-    public void setStart(Calendar start) {
+    public void setStart(long start) {
         this.start = start;
     }
 

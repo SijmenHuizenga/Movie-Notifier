@@ -65,10 +65,8 @@ services:
     image: mongo
     volumes:
       - [replace with path to persistant db store location]:/data/db
-    restart: on-failure
   movie-notifier:
     image: sijmenhuizenga/movienotifier:3.0-SNAPSHOT
-    restart: on-failure
     volumes:
       - [replace with path to movie-notifier.properties]:/movie-notifier.properties
     depends_on:
@@ -89,7 +87,6 @@ services:
     labels:
         com.github.jrcs.letsencrypt_nginx_proxy_companion.nginx_proxy: "true"
     container_name: nginx
-    restart: on-failure
     ports:
       - "443:443"
       - "80:80"
@@ -101,7 +98,6 @@ services:
   nginx-letsencrypt:
     image: jrcs/letsencrypt-nginx-proxy-companion
     container_name: nginx-letsencrypt
-    restart: on-failure
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
     volumes_from:
@@ -110,10 +106,8 @@ services:
     image: mongo
     volumes:
       - [replace with path to persistant db store location]:/data/db
-    restart: on-failure
   movie-notifier:
     image: sijmenhuizenga/movienotifier:3.0-SNAPSHOT
-    restart: on-failure
     volumes:
       - [replace with path to movie-notifier.properties]:/movie-notifier.properties
     environment:
