@@ -1,6 +1,6 @@
 # Movie Notifier
 [![GitHub tag](https://img.shields.io/github/release/sijmenhuizenga/Movie-Notifier.svg)](https://github.com/SijmenHuizenga/Movie-Notifier/releases)
-[![License](https://img.shields.io/github/license/mashape/apistatus.svg)](https://github.com/SijmenHuizenga/Movie-Notifier/blob/develop/license.txt)
+[![License](https://img.shields.io/github/license/sijmenhuizenga/movie-notifier.svg)](https://github.com/SijmenHuizenga/Movie-Notifier/blob/develop/license.txt)
 [![Travis](https://travis-ci.org/SijmenHuizenga/Movie-Notifier.svg?branch=develop)](https://travis-ci.org/SijmenHuizenga/Movie-Notifier)
 [![Docker](https://img.shields.io/badge/docker%20image-available-brightgreen.svg)](https://hub.docker.com/r/sijmenhuizenga/movienotifier/)
 [![Codebeat](https://codebeat.co/badges/02e75a98-a0e0-4afe-aada-30b8a28beb12)](https://codebeat.co/projects/github-com-sijmenhuizenga-movie-notifier-develop)
