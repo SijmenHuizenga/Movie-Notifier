@@ -405,7 +405,7 @@ definitions:
     properties:
       uuid:
         type: string
-        description: A Universally Unique IDentifier.
+        description: A identifier that identifies this user
       name:
         title: Username
         type: string
@@ -454,7 +454,7 @@ definitions:
     properties:
       uuid:
         type: string
-        description: The unique identifier that identifies this watcher. Format is a Universally Unique IDentifier as described in RFC 4122.
+        description: The unique identifier that identifies this watcher.
       user:
         type: string
         description: The unique identifier of the user that owns this watcher.
