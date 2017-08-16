@@ -54,7 +54,6 @@ public class PatheApi implements Cinema {
         } catch (UnirestException e) {
             throw new IOException("Could not load request.", e);
         }
-        System.out.println(stringHttpResponse.getBody());
         if(stringHttpResponse.getStatus() != 200)
             throw new IOException("Status returned " + stringHttpResponse.getStatus() + " after request " + uri);
         PatheMoviesResponse patheMoviesResponse = mapper.readValue(stringHttpResponse.getBody(), PatheMoviesResponse.class);
@@ -116,14 +115,16 @@ public class PatheApi implements Cinema {
                 showing.getStart() < watcher.getStartBefore() &&
                 showing.getStart() > watcher.getStartAfter() &&
                 showing.getCinemaId() == realWatcherCinemaId &&
-                eq(d.isD3(), showing.getIs3d()) &&
-                eq(d.isImax(), showing.getImax()) &&
-                eq(d.isOv(), showing.getOv()) &&
-                eq(d.isNl(), showing.getNl()) &&
-                eq(d.isHfr(), showing.getHfr()) &&
-                eq(d.isDolbyatmos(), showing.getIsAtmos()) &&
-                eq(d.isK4(), showing.getIs4k()) &&
-                eq(d.isLaser(), showing.getIsLaser());
+                (d == null || (
+                        eq(d.isD3(), showing.getIs3d()) &&
+                        eq(d.isImax(), showing.getImax()) &&
+                        eq(d.isOv(), showing.getOv()) &&
+                        eq(d.isNl(), showing.getNl()) &&
+                        eq(d.isHfr(), showing.getHfr()) &&
+                        eq(d.isDolbyatmos(), showing.getIsAtmos()) &&
+                        eq(d.isK4(), showing.getIs4k()) &&
+                        eq(d.isLaser(), showing.getIsLaser())
+                ));
     }
 
     private boolean eq(Boolean expected, int actual) {
