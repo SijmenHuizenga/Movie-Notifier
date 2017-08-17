@@ -54,12 +54,12 @@ Users can register watchers. A watcher looks like this:
         "startbefore": 1507392000000,
         "ov": "yes",
         "nl": "no",
-        "imax": "optional",
+        "imax": "no-preference",
         "hfr": "no",
         "laser": "yes",
         "dbox": "no",
         "dolbycinema": "no",
-        "dolbyatmos": "optional",
+        "dolbyatmos": "no-preference",
         "3d": "no-preference",
         "4k": "no-preference"
     }
@@ -73,7 +73,7 @@ The movie that is watched by this watcher is specified as a numerical id in the 
 
 All fields witin the `filters` property are used to filter out new movie showings from getting notifications to the user. `cinemaid` specifies the cinema the showing is shown at. For all filters a preference must be specified.
 
-This `cinemaid` filter consists of two parts: the cinema chain id and the cinema number. At this moment only Pathe Cinema is supported (id `PATHE`), but later Vue, Kinepolis and others might be added. The cinema chain id and the cinema number are concatinated together as the string representation as `cinemaid`. At this moment there is no check weather or not the cinema is valid! This filter is required as you can only watch showings for a specific movie in a specific cinema.
+This `cinemaid` filter consists of two parts: the cinema chain id and the cinema number. At this moment only Pathe Cinema is supported (id `PATHE`), but later Vue, Kinepolis and others might be added. Cinemec is part of Pathe.:) The cinema chain id and the cinema number are concatinated together as the string representation as `cinemaid`. At this moment there is no check weather or not the cinema is valid! This filter is required as you can only watch showings for a specific movie in a specific cinema.
 
 The following other parameters are supported:
 * `startafter` Showings that start later than this timestamp 
@@ -92,7 +92,7 @@ The following other parameters are supported:
 All boolean true/false filters can have three options:
 * `yes` filter out all showings without this feature
 * `no` filter out all showings with this feature
-* `required` do not filter showings on this feature.
+* `no-preference` do not filter showings on this feature.
 
 To support watcher sharing it is possible to retreve watchers details by id without being the owner. 
 
@@ -101,12 +101,12 @@ Some extra rules about the watcher data that apply to all watchers from all user
 * Every field within a watcher is required. 
 * Users can only create watchers with their own `userid`.
 * All fields can be updated by the owner (user with the same `userid`) except the watcher `id`. But since the `userid` can only be the one of the user that is executing the request this field cannot be changed.
-* All users can retreve a watcher with any valid apikey and the id of the watcher to support watcher sharing. 
+* All users can retreve a watcher with any valid apikey and the id. 
 * The field `userid` will be ommitted when a user retreves a watcher by its id with an apikey that does not match the userid of the watcher because of privacy.
-* The `begin` can have the value `-1` to specify that the watcher should run now until the `end` timestamp.
 * The `end` timestamp must be later than the `begin` timestamp
+* A user can have no more than 10 watchers that have overlapping `begin` to `end` periods to make sure there are never too many watchers watching at the same time.  
 * The time between `begin` and `end` must be shorter than one month to make sure watchers do not run too long.
-* The time between `startbefore` and `startafter` must be 2 days or shorter to prevent an endless stream of notifications.
+* The time between `startbefore` and `startafter` must be 2 weeks or shorter to prevent an endless stream of notifications.
 
 
 ## Technical api details
