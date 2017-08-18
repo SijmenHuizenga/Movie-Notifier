@@ -38,6 +38,8 @@ There are some extra rules for userdata that apply to all users:
 * `notifications` can be an empty array but this results in receiving no notifications.
 * Items in the `notifications` array must be one of the following: `FBM` (facebook messenger), `MIL` (email) or `SMS`. Not all users are allowed to enable all types of notifications. The user will be informed of these restrictions when they try to enable one of the restricted notifications. Currently there is no way to get these restrictions upfront.
 
+Notifications through facebook messenger use the user phone number. If the user has not connected it's phone number to a facebook messenger account the notification will not arrive. 
+
 ### Watchers
 Users can register watchers. A watcher looks like this:
 ```json
