@@ -27,7 +27,7 @@ public class ReadActor<T extends Model> extends Actor<T, ReadListener<T>> {
     @Override
     public ResponseEntity handle(JumpRequest request) {
         listener.checkReadRequest(request);
-        T result = repository.findOne(request.getUrldata());
+        T result = listener.getById(repository, request.getUrldata());
         if(result == null || !listener.allowRead(request, result)) {
             LOGGER.warn("Not authorized to read {}. Request: {}", modelClass.getSimpleName(), request);
             throw new UnauthorizedException();

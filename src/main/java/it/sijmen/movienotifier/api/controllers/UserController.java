@@ -11,12 +11,14 @@ import it.sijmen.movienotifier.util.ApiKeyHelper;
 import it.sijmen.movienotifier.util.PasswordAuthentication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.mongodb.repository.MongoRepository;
 
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Configuration
@@ -48,6 +50,7 @@ public class UserController extends ApiController implements JumpListenerAdapter
     public User beforeCreateStore(User newUser) {
         newUser.validateUniqueness(userRepository);
         newUser.setPassword(PasswordAuthentication.hash(newUser.getPassword()));
+        newUser.setId(UUID.randomUUID().toString());
         return newUser;
     }
 
@@ -104,6 +107,11 @@ public class UserController extends ApiController implements JumpListenerAdapter
 
         updatingUser.validateUniqueness(userRepository);
         return updatingUser;
+    }
+
+    @Override
+    public User getById(MongoRepository<User, String> repository, String id) {
+        return ((UserRepository) repository).getFirstByUuid(id);
     }
 
     private List<String> allowNotifications(List<String> notificationKeys) {

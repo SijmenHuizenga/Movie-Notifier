@@ -37,7 +37,7 @@ public class UserCreateTest extends UserTestBase {
           .andExpect(jsonPath("$.name").value(testuser.getName()))
           .andExpect(jsonPath("$.email").value(testuser.getEmail()))
           .andExpect(jsonPath("$.phonenumber").value(testuser.getPhonenumber()))
-          .andExpect(jsonPath("$.uuid").value(testuser.getId()))
+          .andExpect(jsonPath("$.id").value(testuser.getId()))
           .andExpect(jsonPath("$.apikey").value(IsNull.notNullValue()))
           .andExpect(jsonPath("$.notifications").value(new JSONArray().appendElement("FBM")))
           .andExpect(jsonPath("$.password").doesNotExist());

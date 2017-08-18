@@ -44,7 +44,7 @@ public class WatcherCreateTest extends WatcherTestBase {
         this.mvc.perform(put("/watchers/").accept(MediaType.APPLICATION_JSON)
                 .header("APIKEY", testuser.getApikey()).content(buildJsonCreation(testwatcher)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.uuid").value(testwatcher.getId()))
+                .andExpect(jsonPath("$.id").value(testwatcher.getId()))
                 .andExpect(jsonPath("$.user").value(testwatcher.getUser()))
                 .andExpect(jsonPath("$.name").value(testwatcher.getName()))
                 .andExpect(jsonPath("$.movieid").value(testwatcher.getMovieid()))

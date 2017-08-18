@@ -23,9 +23,16 @@ import java.util.List;
 @Entity
 public class User implements Model {
 
+    /**
+     * The mongodb database id. This field is not exposed and is only used as a mongodb technical thingy
+     */
     @Id
-    @JsonProperty(value = "uuid", access = JsonProperty.Access.READ_ONLY)
     private String id;
+
+    @Field
+    @Indexed(unique = true)
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    private String uuid;
 
     /**
      * The user-friendly name of this recipient. The name must be between 4 and 16 charcters and can only contain letters (a-z) and numbers (0-9), but no capital letters (A-Z). The first 4 characters must always be letters
@@ -90,7 +97,7 @@ public class User implements Model {
 
     public User(String id, String name, String email, String phonenumber, String password, String apikey,
                 Date created, List<String> enabledNotifications) {
-        this.id = id;
+        this.uuid = id;
         this.name = name;
         this.email = email;
         this.phonenumber = phonenumber;
@@ -111,7 +118,7 @@ public class User implements Model {
     }
 
     public String getId() {
-        return id;
+        return uuid;
     }
 
     public String getName() {
@@ -167,7 +174,7 @@ public class User implements Model {
     }
 
     public void setId(String id) {
-        this.id = id;
+        this.uuid = id;
     }
 }
 

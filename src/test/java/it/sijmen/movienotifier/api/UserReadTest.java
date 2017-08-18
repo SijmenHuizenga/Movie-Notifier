@@ -20,7 +20,7 @@ public class UserReadTest extends UserTestBase {
         this.mvc.perform(get("/user/"+testuser.getId()).accept(MediaType.APPLICATION_JSON).header("APIKEY", testuser.getApikey()))
                 .andExpect(status().isOk()).andExpect(content().json(
                         "{\n" +
-                        "    \"uuid\": \""+testuser.getId()+"\",\n" +
+                        "    \"id\": \""+testuser.getId()+"\",\n" +
                         "    \"name\": \""+testuser.getName()+"\",\n" +
                         "    \"email\": \""+testuser.getEmail()+"\",\n" +
                         "    \"phonenumber\": \""+testuser.getPhonenumber()+"\",\n" +

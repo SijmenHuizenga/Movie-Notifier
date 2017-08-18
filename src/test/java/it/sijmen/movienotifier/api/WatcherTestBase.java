@@ -29,10 +29,10 @@ abstract class WatcherTestBase extends UserTestBase {
         Mockito.reset(watcherRepo);
     }
 
-    String buildJson(String uuid, String user, String name, int movieid, String cinemaid, long startAfter, long startBefore, String watcherDetails){
+    String buildJson(String id, String user, String name, int movieid, String cinemaid, long startAfter, long startBefore, String watcherDetails){
         List<String> items = new ArrayList<>();
-        if(uuid != null)
-            items.add("\"uuid\": \""+uuid+"\"");
+        if(id != null)
+            items.add("\"id\": \""+id+"\"");
         if(user != null)
             items.add("\"user\": \""+user+"\"");
         if(name != null)

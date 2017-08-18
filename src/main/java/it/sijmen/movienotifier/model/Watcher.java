@@ -23,17 +23,23 @@ import javax.validation.constraints.NotNull;
 public class Watcher implements Model {
 
     /**
-     * The unique identifier that identifies this watcher.
+     * The mongodb database id. This field is not exposed and is only used as a mongodb technical thingy
      */
     @Id
-    @JsonProperty(value = "uuid", access = JsonProperty.Access.READ_ONLY)
     private String id;
+
+    /**
+     * The unique identifier that identifies this watcher. This is the id used by the api!
+     */
+    @Field
+    @Indexed(unique = true)
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    private String uuid;
 
     /**
      * The unique identifier of the user that owns this watcher.
      */
     @NotBlank
-    @Field
     @JsonProperty
     private String user;
 
@@ -90,7 +96,7 @@ public class Watcher implements Model {
 
     public Watcher(String id, String user, String name, int movieid, String cinemaid, long startAfter, long startBefore,
                    @Nullable WatcherDetails props) {
-        this.id = id;
+        this.uuid = uuid;
         this.user = user;
         this.name = name;
         this.movieid = movieid;
@@ -103,11 +109,11 @@ public class Watcher implements Model {
     public Watcher() {}
 
     public String getId() {
-        return id;
+        return uuid;
     }
 
     public void setId(String id) {
-        this.id = id;
+        this.uuid = uuid;
     }
 
     public String getUser() {
@@ -170,7 +176,7 @@ public class Watcher implements Model {
     @Override
     public String toString() {
         return "Watcher{" +
-                "id='" + id + '\'' +
+                "id='" + uuid + '\'' +
                 ", user='" + user + '\'' +
                 ", name='" + name + '\'' +
                 ", movieid=" + movieid +
