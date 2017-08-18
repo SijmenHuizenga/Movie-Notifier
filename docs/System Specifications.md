@@ -18,7 +18,7 @@ A user represents a cinema enthousiast that uses the system. A user looks like t
 ```json
 {
     "id": "5995f25708813b0001f99393",
-    "name": "cinemaenthousiast",
+    "name": "cinemaenthousia",
     "email": "enthousiast@example.com",
     "phonenumber": "+31698765432",
     "password": "abcd1234",
