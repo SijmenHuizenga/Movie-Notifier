@@ -3,6 +3,7 @@ package it.sijmen.movienotifier.model;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.hibernate.validator.constraints.NotBlank;
 
+import javax.validation.constraints.AssertTrue;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
@@ -98,6 +99,16 @@ public class WatcherFilters implements Model {
         this.dbox = filters.dbox;
         this.dolbycinema = filters.dolbycinema;
         this.dolbyatmos = filters.dolbyatmos;
+    }
+
+    @AssertTrue(message="The startafter must be before than the startbefore")
+    private boolean isStartafter() {
+        return this.startafter < this.startbefore;
+    }
+
+    @AssertTrue(message="between startbefore and startafter must be 2 weeks or less.")
+    private boolean isTime() {
+        return Math.abs(this.startbefore - this.startafter) <= 1209600000; // 2 weeks
     }
 
     public FilterOption isOv() {

@@ -12,6 +12,7 @@ import org.springframework.data.mongodb.core.mapping.Field;
 
 import javax.persistence.Entity;
 import javax.validation.Valid;
+import javax.validation.constraints.AssertTrue;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -57,9 +58,6 @@ public class Watcher implements Model {
     @JsonProperty
     private long end;
 
-    /**
-     * The filters of this watcher.
-     */
     @JsonProperty
     @Valid
     @NotNull
@@ -87,6 +85,16 @@ public class Watcher implements Model {
     }
 
     public Watcher() {}
+
+    @AssertTrue(message="must be later than begin")
+    private boolean isEnd() {
+        return this.end > this.begin;
+    }
+
+    @AssertTrue(message="between begin and end must be smaller than 1 month")
+    private boolean isTime() {
+        return Math.abs(this.end - this.begin) < 2629746000L; // 1 month
+    }
 
     public String getId() {
         return uuid;

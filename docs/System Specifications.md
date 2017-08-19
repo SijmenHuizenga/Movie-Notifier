@@ -31,13 +31,13 @@ A user represents a cinema enthousiast that uses the system. A user looks like t
 The fields `name`, `email`, `phonenumber` and `password` are provided by the user at registration. Later the user can update these fields. The user is uniquely identified by its `id` that is generated when the user is registered. The `apikey` is used to authenticate the user in all requets that need to be authenticated. 
 
 There are some extra rules for userdata that apply to all users:
-* `name`, `email`, `phonenumber`, `password` and `notifications` are required and thus cannot be null.
-* `name` must be between 4 and 16 charcters and only contains letters (a-z) and numbers (0-9), but no capital letters (A-Z). The first 4 characters must always be letters.
-* `email` must contain a valid email address
-* `phonenumber` must be a valid Global Number as described in RFC 3966 section 5.1.4. So always in the format of `+[countrycode][phonenumber]`.
-* `notifications` can be an empty array but this results in receiving no notifications.
-* `password` must at least be 8 characters long and may only contain the letters (`a-z`), capital letters (`A-Z`), numbers (`0-9`) and the following special characters: `!@#$%^&*()_-+={}[]:;?><.,`
-* Items in the `notifications` array must be one of the following: `FBM` (facebook messenger), `MIL` (email) or `SMS`. Not all users are allowed to enable all types of notifications. The user will be informed of these restrictions when they try to enable one of the restricted notifications. Currently there is no way to get these restrictions upfront.
+- [x] `name`, `email`, `phonenumber`, `password` and `notifications` are required and thus cannot be null.
+- [x] `name` must be between 4 and 16 charcters and only contains letters (a-z) and numbers (0-9), but no capital letters (A-Z). The first 4 characters must always be letters.
+- [x] `email` must contain a valid email address
+- [x] `phonenumber` must be a valid Global Number as described in RFC 3966 section 5.1.4. So always in the format of `+[countrycode][phonenumber]`.
+- [x] `notifications` can be an empty array but this results in receiving no notifications.
+- [x] `password` must at least be 8 characters long and may only contain the letters (`a-z`), capital letters (`A-Z`), numbers (`0-9`) and the following special characters: `!@#$%^&*()_-+={}[]:;?><.,`
+- [x] Items in the `notifications` array must be one of the following: `FBM` (facebook messenger), `MIL` (email) or `SMS`. Not all users are allowed to enable all types of notifications. The user will be informed of these restrictions when they try to enable one of the restricted notifications. Currently there is no way to get these restrictions upfront.
 
 Notifications through facebook messenger use the user phone number. If the user has not connected it's phone number to a facebook messenger account the notification will not arrive. 
 
@@ -100,17 +100,18 @@ All boolean true/false filters can have three options:
 To support watcher sharing it is possible to retreve watchers details by id without being the owner. 
 
 Some extra rules about the watcher data that apply to all watchers from all users:
-* Watchers can only be created by authenticated users.
-* Every field within a watcher is required. 
-* The `name` of the watcher must be between 3 and 50 characters.
-* Users can only create watchers with their own `userid`.
-* All fields can be updated by the owner (user with the same `userid`) except the watcher `id`. But since the `userid` can only be the one of the user that is executing the request this field cannot be changed.
-* All users can retreve a watcher with any valid apikey and the id. 
-* The field `userid` will be ommitted when a user retreves a watcher by its id with an apikey that does not match the userid of the watcher because of privacy.
-* The `end` timestamp must be later than the `begin` timestamp
-* A user can have no more than 10 watchers that have overlapping `begin` to `end` periods to make sure there are never too many watchers watching at the same time.  
-* The time between `begin` and `end` must be shorter than one month to make sure watchers do not run too long.
-* The time between `startbefore` and `startafter` must be 2 weeks or shorter to prevent an endless stream of notifications.
+- [x] Watchers can only be created by authenticated users.
+- [x] Every field within a watcher is required. 
+- [x] The `name` of the watcher must be between 3 and 50 characters.
+- [x] Users can only create watchers with their own `userid`.
+- [x] All fields can be updated by the owner (user with the same `userid`) except the watcher `id`. But since the `userid` can only be the one of the user that is executing the request this field cannot be changed.
+- [x] All users can retreve a watcher with any valid apikey and the id. 
+- [x] The field `userid` will be ommitted when a user retreves a watcher by its id with an apikey that does not match the userid of the watcher because of privacy.
+- [x] The `end` timestamp must be later than the `begin` timestamp
+- [x] The `filters.startafter` timestamp must be before than the `filters.startbefore` timestamp
+- [ ] A user can have no more than 10 watchers that have overlapping `begin` to `end` periods to make sure there are never too many watchers watching at the same time.  
+- [x] The time between `begin` and `end` must be shorter than one month to make sure watchers do not run too long.
+- [x] The time between `filters.startbefore` and `filters.startafter` must be 2 weeks or shorter to prevent an endless stream of notifications.
 
 
 ## Technical api details

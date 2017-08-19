@@ -60,6 +60,36 @@ public class WatcherCreateTest extends WatcherTestBase {
     }
 
     @Test
+    public void testCreateBeginBiggerThanEnd() throws Exception {
+        addToMockedDb(testuser);
+        Watcher watcher = new Watcher(testwatcher);
+        watcher.setBegin(50);
+        watcher.setEnd(30);
+        this.mvc.perform(put("/watchers/").accept(MediaType.APPLICATION_JSON)
+                .header("APIKEY", testuser.getApikey()).content(buildJsonCreation(watcher)))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.errors").value(Matchers.containsInAnyOrder(
+                        "end must be later than begin"
+                )));
+        verifyZeroInteractions(watcherRepo);
+    }
+
+    @Test
+    public void testCreateBeginTooFarFromEnd() throws Exception {
+        addToMockedDb(testuser);
+        Watcher watcher = new Watcher(testwatcher);
+        watcher.setBegin(10);
+        watcher.setEnd(10L+2629746000L);//10 seconds + 1 month
+        this.mvc.perform(put("/watchers/").accept(MediaType.APPLICATION_JSON)
+                .header("APIKEY", testuser.getApikey()).content(buildJsonCreation(watcher)))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.errors").value(Matchers.containsInAnyOrder(
+                        "time between begin and end must be smaller than 1 month"
+                )));
+        verifyZeroInteractions(watcherRepo);
+    }
+
+    @Test
     public void testCreateNoParams() throws Exception {
         addToMockedDb(testuser);
         this.mvc.perform(put("/watchers/").accept(MediaType.APPLICATION_JSON)
