@@ -83,7 +83,7 @@ abstract class WatcherTestBase extends UserTestBase {
     }
 
     void addToMockedDb(Watcher watcher){
-        when(watcherRepo.findOne(watcher.getId())).thenReturn(watcher);
+        when(watcherRepo.getFirstByUuid(watcher.getId())).thenReturn(watcher);
     }
 
 

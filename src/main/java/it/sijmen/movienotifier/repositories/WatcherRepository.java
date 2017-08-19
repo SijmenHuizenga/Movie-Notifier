@@ -9,7 +9,7 @@ import java.util.List;
 @Singleton
 public interface WatcherRepository extends MongoRepository<Watcher, String> {
 
-    public Watcher getFirstById(String id);
+    public Watcher getFirstByUuid(String id);
     public List<Watcher> getAllByUser(String user);
 
 }

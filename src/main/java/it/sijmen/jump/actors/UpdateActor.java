@@ -42,7 +42,7 @@ public class UpdateActor<T extends Model> extends Actor<T, UpdateListener<T>> {
     public ResponseEntity handle(JumpRequest request) {
         listener.checkUpdateRequest(request);
 
-        final T model = repository.findOne(request.getUrldata());
+        final T model = listener.getById(repository, request.getUrldata());
         final T updatingData = readModelFromBody(modelClass, request.getBody());
 
         if(!listener.allowUpdate(request, model)) {

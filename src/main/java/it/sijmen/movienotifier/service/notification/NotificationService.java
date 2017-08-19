@@ -38,7 +38,7 @@ public class NotificationService {
     }
 
     public void notify(String userId, String message) {
-        User user = userRepository.findOne(userId);
+        User user = userRepository.getFirstByUuid(userId);
         if(user.getEnabledNotifications() == null || user.getEnabledNotifications().isEmpty()){
             LOGGER.error("Could not notify user {} because no notification types are enabled. message: {}", user.getId(), message);
             return;

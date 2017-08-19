@@ -94,6 +94,6 @@ public class WatcherController extends ApiController implements JumpListenerAdap
 
     @Override
     public Watcher getById(MongoRepository<Watcher, String> repository, String id) {
-        return ((WatcherRepository) repository).getFirstById(id);
+        return ((WatcherRepository) repository).getFirstByUuid(id);
     }
 }
