@@ -33,6 +33,8 @@ public class ReadActor<T extends Model> extends Actor<T, ReadListener<T>> {
             throw new UnauthorizedException();
         }
         LOGGER.trace("Read {} with request {}", modelClass.getSimpleName(), request);
-        return ResponseEntity.ok(result);
+        return ResponseEntity.ok(
+                listener.beforeReadResult(request, result)
+        );
     }
 }

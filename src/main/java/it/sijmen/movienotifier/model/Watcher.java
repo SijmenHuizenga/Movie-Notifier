@@ -76,6 +76,16 @@ public class Watcher implements Model {
         this.filters = filters;
     }
 
+    public Watcher(Watcher watcher){
+        this.uuid = watcher.uuid;
+        this.userid = watcher.userid;
+        this.name = watcher.name;
+        this.movieid = watcher.movieid;
+        this.begin = watcher.begin;
+        this.end = watcher.end;
+        this.filters = new WatcherFilters(watcher.filters);
+    }
+
     public Watcher() {}
 
     public String getId() {

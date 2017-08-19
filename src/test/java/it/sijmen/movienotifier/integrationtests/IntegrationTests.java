@@ -15,18 +15,23 @@ class IntegrationTests {
                 .setAccept(ContentType.JSON)
                 .build();
 
-        UserIT user = new UserIT();
+        UserIT user1 = new UserIT();
 
-        user.create();
-        user.read();
-        user.login();
-        user.update();
-        user.read();
-        user.login();
+        user1.create();
+        user1.read();
+        user1.login();
+        user1.update();
+        user1.read();
+        user1.login();
 
-        WatcherIT watcher1 = new WatcherIT(user);
-        WatcherIT watcher2 = new WatcherIT(user);
-        WatcherIT watcher3 = new WatcherIT(user);
+        UserIT user2 = new UserIT();
+        user2.create();
+        user2.login();
+
+
+        WatcherIT watcher1 = new WatcherIT(user1);
+        WatcherIT watcher2 = new WatcherIT(user2);
+        WatcherIT watcher3 = new WatcherIT(user1);
 
         watcher1.create();
         watcher2.create();
@@ -34,11 +39,9 @@ class IntegrationTests {
 
         watcher1.read();
         watcher2.read();
-        watcher3.read();
 
         watcher1.update();
         watcher2.update();
-        watcher3.update();
 
         watcher1.read();
         watcher2.read();
@@ -48,7 +51,7 @@ class IntegrationTests {
         watcher2.delete();
         watcher3.delete();
 
-        user.delete();
+        user1.delete();
     }
 
 }

@@ -65,9 +65,13 @@ class WatcherIT {
     }
 
     void read(){
+        read(id());
+    }
+
+    void read(String id){
         checkWatcherResponse(
                 given().header(HEADKEY, user.apikey())
-                .when().get("/watchers/"+id()).then()
+                .when().get("/watchers/"+id).then()
         );
 
         LOGGER.info("Read watcher");

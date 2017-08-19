@@ -84,6 +84,22 @@ public class WatcherFilters implements Model {
     public WatcherFilters() {
     }
 
+    public WatcherFilters(WatcherFilters filters) {
+        this.cinemaid = filters.cinemaid;
+        this.startafter = filters.startafter;
+        this.startbefore = filters.startbefore;
+        this.ov = filters.ov;
+        this.nl = filters.nl;
+        this.imax = filters.imax;
+        this.d3 = filters.d3;
+        this.hfr = filters.hfr;
+        this.k4 = filters.k4;
+        this.laser = filters.laser;
+        this.dbox = filters.dbox;
+        this.dolbycinema = filters.dolbycinema;
+        this.dolbyatmos = filters.dolbyatmos;
+    }
+
     public FilterOption isOv() {
         return ov;
     }

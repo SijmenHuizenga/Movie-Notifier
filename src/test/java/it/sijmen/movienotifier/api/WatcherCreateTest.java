@@ -26,28 +26,28 @@ public class WatcherCreateTest extends WatcherTestBase {
         return buildJson(null, userid, watcher.getName(), watcher.getMovieid(),
                 watcher.getBegin(), watcher.getEnd(), buildJson(watcher.getFilters()));
     }
-//todo
-//    @Test
-//    public void testCreateSuccess() throws Exception {
-//        addToMockedDb(testuser);
-//
-//        when(watcherRepo.save((Watcher) any())).then(a -> {
-//            Watcher arg = (Watcher) a.getArguments()[0];
-//            arg.setId(testwatcher.getId());
-//            return arg;
-//        });
-//
-//        this.mvc.perform(put("/watchers/").accept(MediaType.APPLICATION_JSON)
-//                .header("APIKEY", testuser.getApikey()).content(buildJsonCreation(testwatcher)))
-//                .andExpect(status().isOk())
-//                .andExpect(jsonPath("$.id").value(testwatcher.getId()))
-//                .andExpect(jsonPath("$.userid").value(testwatcher.getUserid()))
-//                .andExpect(jsonPath("$.name").value(testwatcher.getName()))
-//                .andExpect(jsonPath("$.movieid").value(testwatcher.getMovieid()))
-//                .andExpect(jsonPath("$.end").value(testwatcher.getEnd()))
-//                .andExpect(jsonPath("$.begin").value(testwatcher.getBegin()));
-//        verify(watcherRepo, times(1)).save((Watcher) any());
-//    }
+
+    @Test
+    public void testCreateSuccess() throws Exception {
+        addToMockedDb(testuser);
+
+        when(watcherRepo.save((Watcher) any())).then(a -> {
+            Watcher arg = (Watcher) a.getArguments()[0];
+            arg.setId(testwatcher.getId());
+            return arg;
+        });
+
+        this.mvc.perform(put("/watchers/").accept(MediaType.APPLICATION_JSON)
+                .header("APIKEY", testuser.getApikey()).content(buildJsonCreation(testwatcher)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(testwatcher.getId()))
+                .andExpect(jsonPath("$.userid").value(testwatcher.getUserid()))
+                .andExpect(jsonPath("$.name").value(testwatcher.getName()))
+                .andExpect(jsonPath("$.movieid").value(testwatcher.getMovieid()))
+                .andExpect(jsonPath("$.end").value(testwatcher.getEnd()))
+                .andExpect(jsonPath("$.begin").value(testwatcher.getBegin()));
+        verify(watcherRepo, times(1)).save((Watcher) any());
+    }
 
     @Test
     public void testCreateInvalidJson() throws Exception {
@@ -58,20 +58,20 @@ public class WatcherCreateTest extends WatcherTestBase {
                 .andExpect(jsonPath("$.message").value(Matchers.startsWith("JSON not valid")));
         verifyZeroInteractions(watcherRepo);
     }
-//todo
-//    @Test
-//    public void testCreateNoParams() throws Exception {
-//        addToMockedDb(testuser);
-//        this.mvc.perform(put("/watchers/").accept(MediaType.APPLICATION_JSON)
-//                .header("APIKEY", testuser.getApikey()).content("{\"userid\": \""+testuser.getId()+"\"}"))
-//                .andExpect(status().isBadRequest())
-//                .andExpect(jsonPath("$.errors").value(Matchers.containsInAnyOrder(
-//                        "name may not be empty",
-//                        "cinemaid may not be empty",
-//                        "movieid must be between 1 and 9223372036854775807"
-//                )));
-//        verifyZeroInteractions(watcherRepo);
-//    }
+
+    @Test
+    public void testCreateNoParams() throws Exception {
+        addToMockedDb(testuser);
+        this.mvc.perform(put("/watchers/").accept(MediaType.APPLICATION_JSON)
+                .header("APIKEY", testuser.getApikey()).content("{\"userid\": \""+testuser.getId()+"\"}"))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.errors").value(Matchers.containsInAnyOrder(
+                        "name may not be empty",
+                        "movieid must be greater than or equal to 1",
+                        "filters may not be null"
+                )));
+        verifyZeroInteractions(watcherRepo);
+    }
 
     @Test
     public void testCreateNotYourApikey() throws Exception {

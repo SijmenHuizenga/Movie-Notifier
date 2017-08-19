@@ -35,7 +35,7 @@ abstract class WatcherTestBase extends UserTestBase {
         Mockito.reset(watcherRepo);
     }
 
-    String buildJson(String id, String user, String name, int movieid, long begin, long end, String watcherDetails){
+    String buildJson(String id, String user, String name, int movieid, long begin, long end, String filters){
         List<String> items = new ArrayList<>();
         if(id != null)
             items.add("\"id\": \""+id+"\"");
@@ -49,47 +49,46 @@ abstract class WatcherTestBase extends UserTestBase {
             items.add("\"begin\": \""+begin+"\"");
         if(end != -1)
             items.add("\"end\": \""+end+"\"");
-        if(watcherDetails != null)
-            items.add("\"props\": "+watcherDetails+"");
+        if(filters != null)
+            items.add("\"filters\": "+filters+"");
 
         return "{\n" + String.join(",\n", items) +"}";
     }
 
     String buildJson(WatcherFilters d) {
         return buildJson(d.isOv(), d.isNl(), d.isImax(), d.isD3(), d.isHfr(), d.isK4(), d.isLaser(), d.isDbox(),
-                d.isDolbycinema(), d.isDolbyatmos(), "N1");
+                d.isDolbycinema(), d.isDolbyatmos(), d.getCinemaid());
     }
-    String buildJson(FilterOption ov, FilterOption nl, FilterOption imax, FilterOption d3, FilterOption hfr, FilterOption k4, FilterOption laser,
+    private String buildJson(FilterOption ov, FilterOption nl, FilterOption imax, FilterOption d3, FilterOption hfr, FilterOption k4, FilterOption laser,
                      FilterOption dbox, FilterOption dolbycinema, FilterOption dolbyatmos, String cinemaid){
         List<String> items = new ArrayList<>();
         if(cinemaid != null)
             items.add("\"cinemaid\": \""+cinemaid+"\"");
-        if(ov != NOPREFERENCE)
+        if(ov != null)
             items.add("\"ov\": \""+ov+"\"");
-        if(nl != NOPREFERENCE)
+        if(nl != null)
             items.add("\"nl\": \""+nl+"\"");
-        if(imax != NOPREFERENCE)
             items.add("\"imax\": \""+imax+"\"");
-        if(d3 != NOPREFERENCE)
-            items.add("\"33\": \""+d3+"\"");
-        if(hfr != NOPREFERENCE)
+        if(d3 != null)
+            items.add("\"3d\": \""+d3+"\"");
+        if(hfr != null)
             items.add("\"hfr\": \""+hfr+"\"");
-        if(k4 != NOPREFERENCE)
+        if(k4 != null)
             items.add("\"4k\": \""+k4+"\"");
-        if(laser != NOPREFERENCE)
+        if(laser != null)
             items.add("\"laser\": \""+laser+"\"");
-        if(dbox != NOPREFERENCE)
+        if(dbox != null)
             items.add("\"dbox\": \""+dbox+"\"");
-        if(dolbycinema != NOPREFERENCE)
+        if(dolbycinema != null)
             items.add("\"dolbycinema\": \""+dolbycinema+"\"");
-        if(dolbyatmos != NOPREFERENCE)
+        if(dolbyatmos != null)
             items.add("\"dolbyatmos\": \""+dolbyatmos+"\"");
 
         return "{\n" + String.join(",\n", items) +"}";
     }
 
     void addToMockedDb(Watcher watcher){
-        when(watcherRepo.getFirstByUuid(watcher.getId())).thenReturn(watcher);
+        when(watcherRepo.getFirstByUuid(watcher.getId())).thenReturn(new Watcher(watcher));
     }
 
 

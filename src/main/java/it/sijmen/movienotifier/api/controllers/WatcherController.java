@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import it.sijmen.jump.Jump;
 import it.sijmen.jump.JumpRequest;
 import it.sijmen.jump.listeners.JumpListenerAdapter;
+import it.sijmen.movienotifier.model.User;
 import it.sijmen.movienotifier.model.Watcher;
 import it.sijmen.movienotifier.repositories.UserRepository;
 import it.sijmen.movienotifier.repositories.WatcherRepository;
@@ -79,7 +80,15 @@ public class WatcherController extends ApiController implements JumpListenerAdap
 
     @Override
     public boolean allowRead(JumpRequest request, Watcher searchUser) {
-        return getExecutingUser(getApiKey(request)).getId().equals(searchUser.getUserid());
+        return getExecutingUser(getApiKey(request)) != null;
+    }
+
+    @Override
+    public Watcher beforeReadResult(JumpRequest request, Watcher result) {
+        User executingUser = getExecutingUser(getApiKey(request));
+        if(!executingUser.getId().equals(result.getUserid()))
+            result.setId(null);
+        return result;
     }
 
     @Override
