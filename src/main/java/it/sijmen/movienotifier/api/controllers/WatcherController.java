@@ -43,7 +43,7 @@ public class WatcherController extends ApiController implements JumpListenerAdap
 
     @Override
     public boolean allowCreate(JumpRequest request, Watcher watcher) {
-        return getExecutingUser(getApiKey(request)).getId().equals(watcher.getUser());
+        return getExecutingUser(getApiKey(request)).getId().equals(watcher.getUserid());
     }
 
     @Override
@@ -59,12 +59,12 @@ public class WatcherController extends ApiController implements JumpListenerAdap
 
     @Override
     public boolean allowUpdate(JumpRequest request, Watcher originalModel) {
-        return getExecutingUser(getApiKey(request)).getId().equals(originalModel.getUser());
+        return getExecutingUser(getApiKey(request)).getId().equals(originalModel.getUserid());
     }
 
     @Override
     public boolean allowDelete(JumpRequest request, Watcher toDelete) {
-        return getExecutingUser(getApiKey(request)).getId().equals(toDelete.getUser());
+        return getExecutingUser(getApiKey(request)).getId().equals(toDelete.getUserid());
     }
 
     @Override
@@ -79,7 +79,7 @@ public class WatcherController extends ApiController implements JumpListenerAdap
 
     @Override
     public boolean allowRead(JumpRequest request, Watcher searchUser) {
-        return getExecutingUser(getApiKey(request)).getId().equals(searchUser.getUser());
+        return getExecutingUser(getApiKey(request)).getId().equals(searchUser.getUserid());
     }
 
     @Override
@@ -89,7 +89,7 @@ public class WatcherController extends ApiController implements JumpListenerAdap
 
     @Override
     public List<Watcher> getReadSomeResult(JumpRequest request) {
-        return watcherRepo.getAllByUser(getExecutingUser(getApiKey(request)).getId());
+        return watcherRepo.getAllByUserid(getExecutingUser(getApiKey(request)).getId());
     }
 
     @Override

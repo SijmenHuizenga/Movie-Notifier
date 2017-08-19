@@ -23,6 +23,31 @@ class IntegrationTests {
         user.update();
         user.read();
         user.login();
+
+        WatcherIT watcher1 = new WatcherIT(user);
+        WatcherIT watcher2 = new WatcherIT(user);
+        WatcherIT watcher3 = new WatcherIT(user);
+
+        watcher1.create();
+        watcher2.create();
+        watcher3.create();
+
+        watcher1.read();
+        watcher2.read();
+        watcher3.read();
+
+        watcher1.update();
+        watcher2.update();
+        watcher3.update();
+
+        watcher1.read();
+        watcher2.read();
+        watcher3.read();
+
+        watcher1.delete();
+        watcher2.delete();
+        watcher3.delete();
+
         user.delete();
     }
 

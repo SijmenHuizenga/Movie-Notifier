@@ -3,3 +3,4 @@ Special Todo Items
 * use spring authentication mechanism for apikey verification
 * bundle notifications
 * investigate memory issue (monitoring of memory externally?)
+* social login

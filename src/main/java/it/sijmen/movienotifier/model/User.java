@@ -19,6 +19,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * All fields are documented in the Swagger Api Specification in the `/docs` directory.
+ */
 @Document
 @Entity
 public class User implements Model {
@@ -31,12 +34,9 @@ public class User implements Model {
 
     @Field
     @Indexed(unique = true)
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    @JsonProperty(value="id", access = JsonProperty.Access.READ_ONLY)
     private String uuid;
 
-    /**
-     * The user-friendly name of this recipient. The name must be between 4 and 16 charcters and can only contain letters (a-z) and numbers (0-9), but no capital letters (A-Z). The first 4 characters must always be letters
-     */
     @NotBlank
     @Size(min=4, max = 16)
     @Pattern(regexp="^([a-z]{4}[a-z0-9]{0,12})$", message = "may only contain letters (a-z) and numbers (0-9), but no capital letters (A-Z). The first 4 characters must always be letters")
@@ -45,9 +45,7 @@ public class User implements Model {
     @JsonProperty
     private String name;
 
-    /**
-     * A valid email adres.
-     */
+
     @NotBlank
     @Email
     @Field
@@ -55,28 +53,19 @@ public class User implements Model {
     @JsonProperty
     private String email;
 
-    /**
-     * A valid, Global Number as described in RFC 3966 section 5.1.4 (always in the format of +[countrycode][phonenumber])
-     */
     @NotBlank
     @Field
     @Pattern(regexp = "^\\+([0-9]{2}[0-9]{9})$", message = "must be in the format +[countrycode][phonenumber]")
     @JsonProperty
     private String phonenumber;
 
-    /**
-     *  The password of the user. The password must at least be 6 characters long and may only contain the letters (a-z), capital letters (A-Z), numbers (0-9) and the following special characters between (and thus except) the quotation marks "!@#$%^&*()_-+={}[]:;?><.,"
-     */
     @NotBlank
-    @Size(min=6, max = 128)
+    @Size(min=8, max = 128)
     @Pattern(regexp = "^([a-zA-z0-9!@#$%^&*()_\\-+={}\\[\\]:;?><.,]+)$", message = "may only contain the letters (a-z), capital letters (A-Z), numbers (0-9) and the following special characters between (and thus except) the quotation marks \"!@#$%^&*()_-+={}[]:;?><.,\"")
     @Field
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 
-    /**
-     * A 64 character string that authenticates the user in api requests
-     */
     @Size(max = 64, min = 64, message = "size must be 64")
     @Field
     @Indexed(unique=true)

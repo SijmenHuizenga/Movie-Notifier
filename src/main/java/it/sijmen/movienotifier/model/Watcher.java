@@ -2,8 +2,6 @@ package it.sijmen.movienotifier.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import it.sijmen.jump.actors.UpdateActor;
-import it.sijmen.movienotifier.model.validation.date.DateFuture;
-import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.Range;
 import org.jetbrains.annotations.Nullable;
@@ -13,97 +11,69 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
 import javax.persistence.Entity;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import javax.validation.Valid;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
+/**
+ * All fields are documented in the Swagger Api Specification in the `/docs` directory.
+ */
 @Document
 @Entity
 public class Watcher implements Model {
 
     /**
-     * The mongodb database id. This field is not exposed and is only used as a mongodb technical thingy
+     * The mongodb database id. This field is not exposed and is only used as a mongodb technical thingy.
      */
     @Id
     private String id;
 
-    /**
-     * The unique identifier that identifies this watcher. This is the id used by the api!
-     */
     @Field
     @Indexed(unique = true)
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    @JsonProperty(value = "id", access = JsonProperty.Access.READ_ONLY)
     private String uuid;
 
-    /**
-     * The unique identifier of the user that owns this watcher.
-     */
     @NotBlank
     @JsonProperty
-    private String user;
+    private String userid;
 
-    /**
-     * The displayname of this watcher.
-     */
     @NotBlank
-    @Length(min = 3, max = 50)
+    @Size(min = 3, max = 50)
     @JsonProperty
     private String name;
 
-    /**
-     * The unique identifier of the movie to watch for.
-     */
-    @Range(min=1)
+    @Min(1)
     @JsonProperty
     private int movieid;
 
-    /**
-     * The unique identifier of the movie to watch for. If empty than every cinema is acceptable.
-     */
-    @NotBlank
-    @JsonProperty
-    private String cinemaid;
-
-    /**
-     * The earliest moment of a showing to watch for.
-     */
     @NotNull
-    @Temporal(TemporalType.DATE)
-    @DateFuture
+    @Min(0)
     @JsonProperty
-    private long startAfter;
+    private long begin;
 
-    /**
-     * The latest moment of a showing to watch for.
-     * This is the unix timestamp in millis!
-     */
     @NotNull
-    @Temporal(TemporalType.DATE)
-    @DateFuture
+    @Min(0)
     @JsonProperty
-    private long startBefore;
+    private long end;
 
     /**
-     * The props of this watcher.
-     * This is the unix timestamp in millis!
+     * The filters of this watcher.
      */
     @JsonProperty
     @Valid
-    @Nullable
+    @NotNull
     @UpdateActor.RecursiveUpdate
-    private WatcherDetails props;
+    private WatcherFilters filters;
 
-    public Watcher(String id, String user, String name, int movieid, String cinemaid, long startAfter, long startBefore,
-                   @Nullable WatcherDetails props) {
-        this.uuid = uuid;
-        this.user = user;
+    public Watcher(String id, String userid, String name, int movieid, long begin, long end, WatcherFilters filters) {
+        this.uuid = id;
+        this.userid = userid;
         this.name = name;
         this.movieid = movieid;
-        this.cinemaid = cinemaid;
-        this.startAfter = startAfter;
-        this.startBefore = startBefore;
-        this.props = props;
+        this.begin = begin;
+        this.end = end;
+        this.filters = filters;
     }
 
     public Watcher() {}
@@ -113,15 +83,15 @@ public class Watcher implements Model {
     }
 
     public void setId(String id) {
-        this.uuid = uuid;
+        this.uuid = id;
     }
 
-    public String getUser() {
-        return user;
+    public String getUserid() {
+        return userid;
     }
 
-    public void setUser(String user) {
-        this.user = user;
+    public void setUserid(String userid) {
+        this.userid = userid;
     }
 
     public String getName() {
@@ -140,50 +110,41 @@ public class Watcher implements Model {
         this.movieid = movieid;
     }
 
-    public String getCinemaid() {
-        return cinemaid;
+    public long getEnd() {
+        return end;
     }
 
-    public void setCinemaid(String cinemaid) {
-        this.cinemaid = cinemaid;
+    public void setEnd(long end) {
+        this.end = end;
     }
 
-    public long getStartAfter() {
-        return startAfter;
+    public long getBegin() {
+        return begin;
     }
 
-    public void setStartAfter(long startAfter) {
-        this.startAfter = startAfter;
+    public void setBegin(long begin) {
+        this.begin = begin;
     }
 
-    public long getStartBefore() {
-        return startBefore;
+    public WatcherFilters getFilters() {
+        return filters;
     }
 
-    public void setStartBefore(long startBefore) {
-        this.startBefore = startBefore;
-    }
-
-    @Nullable
-    public WatcherDetails getProps() {
-        return props;
-    }
-
-    public void setProps(@Nullable WatcherDetails props) {
-        this.props = props;
+    public void setFilters(@Nullable WatcherFilters filters) {
+        this.filters = filters;
     }
 
     @Override
     public String toString() {
         return "Watcher{" +
-                "id='" + uuid + '\'' +
-                ", user='" + user + '\'' +
+                "id='" + id + '\'' +
+                ", uuid='" + uuid + '\'' +
+                ", userid='" + userid + '\'' +
                 ", name='" + name + '\'' +
                 ", movieid=" + movieid +
-                ", cinemaid='" + cinemaid + '\'' +
-                ", startAfter=" + startAfter +
-                ", startBefore=" + startBefore +
-                ", props=" + props +
+                ", begin=" + begin +
+                ", end=" + end +
+                ", filters=" + filters +
                 '}';
     }
 }

@@ -1,7 +1,8 @@
 package it.sijmen.movienotifier.api;
 
+import it.sijmen.movienotifier.model.FilterOption;
 import it.sijmen.movienotifier.model.Watcher;
-import it.sijmen.movienotifier.model.WatcherDetails;
+import it.sijmen.movienotifier.model.WatcherFilters;
 import org.joda.time.DateTime;
 import org.junit.After;
 import org.mockito.Mockito;
@@ -9,6 +10,9 @@ import org.mockito.Mockito;
 import java.util.ArrayList;
 import java.util.List;
 
+import static it.sijmen.movienotifier.model.FilterOption.NO;
+import static it.sijmen.movienotifier.model.FilterOption.NOPREFERENCE;
+import static it.sijmen.movienotifier.model.FilterOption.YES;
 import static org.mockito.Mockito.when;
 
 abstract class WatcherTestBase extends UserTestBase {
@@ -17,10 +21,12 @@ abstract class WatcherTestBase extends UserTestBase {
 
     public WatcherTestBase() {
         super();
-        testwatcher = new Watcher("WATCHERID", testuser.getId(), "First Watcher", 1, "A1",
+        testwatcher = new Watcher("WATCHERID", testuser.getId(), "First Watcher", 1,
                 new DateTime(2027, 8, 1, 20, 30, 15).getMillis(),
                 new DateTime(2027, 8, 7, 20, 30, 15).getMillis(),
-                new WatcherDetails(true, false, true, null, false, false, false, null, false, null));
+                new WatcherFilters("A1", new DateTime(2028, 8, 1, 20, 30, 15).getMillis(),
+                                         new DateTime(2028, 8, 1, 20, 30, 15).getMillis(),
+                NO, YES, NOPREFERENCE, NO, NO, NO, NOPREFERENCE, NO, NOPREFERENCE, YES));
     }
 
     @After
@@ -29,54 +35,54 @@ abstract class WatcherTestBase extends UserTestBase {
         Mockito.reset(watcherRepo);
     }
 
-    String buildJson(String id, String user, String name, int movieid, String cinemaid, long startAfter, long startBefore, String watcherDetails){
+    String buildJson(String id, String user, String name, int movieid, long begin, long end, String watcherDetails){
         List<String> items = new ArrayList<>();
         if(id != null)
             items.add("\"id\": \""+id+"\"");
         if(user != null)
-            items.add("\"user\": \""+user+"\"");
+            items.add("\"userid\": \""+user+"\"");
         if(name != null)
             items.add("\"name\": \""+name+"\"");
         if(movieid != -1)
             items.add("\"movieid\": \""+movieid+"\"");
-        if(cinemaid != null)
-            items.add("\"cinemaid\": \""+cinemaid+"\"");
-        if(startAfter != -1)
-            items.add("\"startAfter\": \""+startAfter+"\"");
-        if(startBefore != -1)
-            items.add("\"startBefore\": \""+startBefore+"\"");
+        if(begin != -1)
+            items.add("\"begin\": \""+begin+"\"");
+        if(end != -1)
+            items.add("\"end\": \""+end+"\"");
         if(watcherDetails != null)
             items.add("\"props\": "+watcherDetails+"");
 
         return "{\n" + String.join(",\n", items) +"}";
     }
 
-    String buildJson(WatcherDetails d) {
+    String buildJson(WatcherFilters d) {
         return buildJson(d.isOv(), d.isNl(), d.isImax(), d.isD3(), d.isHfr(), d.isK4(), d.isLaser(), d.isDbox(),
-                d.isDolbycinema(), d.isDolbyatmos());
+                d.isDolbycinema(), d.isDolbyatmos(), "N1");
     }
-    String buildJson(Boolean ov, Boolean nl, Boolean imax, Boolean d3, Boolean hfr, Boolean k4, Boolean laser,
-                     Boolean dbox, Boolean dolbycinema, Boolean dolbyatmos){
+    String buildJson(FilterOption ov, FilterOption nl, FilterOption imax, FilterOption d3, FilterOption hfr, FilterOption k4, FilterOption laser,
+                     FilterOption dbox, FilterOption dolbycinema, FilterOption dolbyatmos, String cinemaid){
         List<String> items = new ArrayList<>();
-        if(ov != null)
+        if(cinemaid != null)
+            items.add("\"cinemaid\": \""+cinemaid+"\"");
+        if(ov != NOPREFERENCE)
             items.add("\"ov\": \""+ov+"\"");
-        if(nl != null)
+        if(nl != NOPREFERENCE)
             items.add("\"nl\": \""+nl+"\"");
-        if(imax != null)
+        if(imax != NOPREFERENCE)
             items.add("\"imax\": \""+imax+"\"");
-        if(d3 != null)
+        if(d3 != NOPREFERENCE)
             items.add("\"33\": \""+d3+"\"");
-        if(hfr != null)
+        if(hfr != NOPREFERENCE)
             items.add("\"hfr\": \""+hfr+"\"");
-        if(k4 != null)
+        if(k4 != NOPREFERENCE)
             items.add("\"4k\": \""+k4+"\"");
-        if(laser != null)
+        if(laser != NOPREFERENCE)
             items.add("\"laser\": \""+laser+"\"");
-        if(dbox != null)
+        if(dbox != NOPREFERENCE)
             items.add("\"dbox\": \""+dbox+"\"");
-        if(dolbycinema != null)
+        if(dolbycinema != NOPREFERENCE)
             items.add("\"dolbycinema\": \""+dolbycinema+"\"");
-        if(dolbyatmos != null)
+        if(dolbyatmos != NOPREFERENCE)
             items.add("\"dolbyatmos\": \""+dolbyatmos+"\"");
 
         return "{\n" + String.join(",\n", items) +"}";

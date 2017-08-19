@@ -4,8 +4,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
+import it.sijmen.movienotifier.model.FilterOption;
 import it.sijmen.movienotifier.model.Watcher;
-import it.sijmen.movienotifier.model.WatcherDetails;
+import it.sijmen.movienotifier.model.WatcherFilters;
 import it.sijmen.movienotifier.repositories.PatheCacheRepository;
 import it.sijmen.movienotifier.service.cinemas.Cinema;
 import it.sijmen.movienotifier.service.notification.NotificationService;
@@ -21,6 +22,10 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static it.sijmen.movienotifier.model.FilterOption.NO;
+import static it.sijmen.movienotifier.model.FilterOption.NOPREFERENCE;
+import static it.sijmen.movienotifier.model.FilterOption.YES;
 
 @Singleton
 @Service
@@ -104,16 +109,16 @@ public class PatheApi implements Cinema {
         for(PatheShowing showing : showings)
             if(accepts(watcher, showing)) {
                 LOGGER.trace("Watcher accepts Showing so now notifying user");
-                notificationService.notify(watcher.getUser(), makeMessage(watcher, showing));
+                notificationService.notify(watcher.getUserid(), makeMessage(watcher, showing));
             }
     }
 
     private boolean accepts(Watcher watcher, PatheShowing showing){
-        int realWatcherCinemaId = Integer.parseInt(watcher.getCinemaid().substring(getCinemaIdPrefix().length()));
-        WatcherDetails d = watcher.getProps();
+        int realWatcherCinemaId = Integer.parseInt(watcher.getFilters().getCinemaid().substring(getCinemaIdPrefix().length()));
+        WatcherFilters d = watcher.getFilters();
         return showing.getMovieId() == watcher.getMovieid() &&
-                showing.getStart() < watcher.getStartBefore() &&
-                showing.getStart() > watcher.getStartAfter() &&
+                showing.getStart() < watcher.getBegin() &&
+                showing.getStart() > watcher.getEnd() &&
                 showing.getCinemaId() == realWatcherCinemaId &&
                 (d == null || (
                         eq(d.isD3(), showing.getIs3d()) &&
@@ -127,8 +132,8 @@ public class PatheApi implements Cinema {
                 ));
     }
 
-    private boolean eq(Boolean expected, int actual) {
-        return expected == null || expected == (actual == 1);
+    private boolean eq(FilterOption expected, int actual) {
+        return expected == NOPREFERENCE || (expected == YES && (actual == 1)) || (expected == NO && (actual == 0));
     }
 
     private String makeMessage(Watcher watcher, PatheShowing showing){

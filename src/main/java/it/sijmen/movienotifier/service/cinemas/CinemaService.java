@@ -25,8 +25,8 @@ public class CinemaService {
 
     public void checkCinemasForChangesAndNotifyWatchers(){
         List<Watcher> all = repository.findAll();
-        all.removeIf(w -> w.getStartBefore() < System.currentTimeMillis());
-        all.stream().collect(Collectors.groupingBy(Watcher::getCinemaid))
+        all.removeIf(w -> w.getBegin() < System.currentTimeMillis());
+        all.stream().collect(Collectors.groupingBy(w -> w.getFilters().getCinemaid()))
                 .forEach(this::checkUpdates);
     }
 

@@ -10,6 +10,6 @@ import java.util.List;
 public interface WatcherRepository extends MongoRepository<Watcher, String> {
 
     public Watcher getFirstByUuid(String id);
-    public List<Watcher> getAllByUser(String user);
+    public List<Watcher> getAllByUserid(String user);
 
 }

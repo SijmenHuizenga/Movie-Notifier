@@ -36,6 +36,7 @@ There are some extra rules for userdata that apply to all users:
 * `email` must contain a valid email address
 * `phonenumber` must be a valid Global Number as described in RFC 3966 section 5.1.4. So always in the format of `+[countrycode][phonenumber]`.
 * `notifications` can be an empty array but this results in receiving no notifications.
+* `password` must at least be 8 characters long and may only contain the letters (`a-z`), capital letters (`A-Z`), numbers (`0-9`) and the following special characters: `!@#$%^&*()_-+={}[]:;?><.,`
 * Items in the `notifications` array must be one of the following: `FBM` (facebook messenger), `MIL` (email) or `SMS`. Not all users are allowed to enable all types of notifications. The user will be informed of these restrictions when they try to enable one of the restricted notifications. Currently there is no way to get these restrictions upfront.
 
 Notifications through facebook messenger use the user phone number. If the user has not connected it's phone number to a facebook messenger account the notification will not arrive. 
@@ -101,6 +102,7 @@ To support watcher sharing it is possible to retreve watchers details by id with
 Some extra rules about the watcher data that apply to all watchers from all users:
 * Watchers can only be created by authenticated users.
 * Every field within a watcher is required. 
+* The `name` of the watcher must be between 3 and 50 characters.
 * Users can only create watchers with their own `userid`.
 * All fields can be updated by the owner (user with the same `userid`) except the watcher `id`. But since the `userid` can only be the one of the user that is executing the request this field cannot be changed.
 * All users can retreve a watcher with any valid apikey and the id. 

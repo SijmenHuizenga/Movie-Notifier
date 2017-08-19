@@ -354,7 +354,8 @@ definitions:
       password:
         title: Password
         type: string
-        description: The password of the user. The password must at least be 6 characters long and may only contain the letters (a-z), capital letters (A-Z), numbers (0-9) and the following special characters between (and thus except) the quotation marks "!@#$%^&*()_-+={}[]:;?><.,". When creating this field is required. When updating it is optional. This field will never be returned when requesting user details.
+        minLength: 8
+        description: The password of the user. The password must at least be 8 characters long and may only contain the letters (a-z), capital letters (A-Z), numbers (0-9) and the following special characters between (and thus except) the quotation marks "!@#$%^&*()_-+={}[]:;?><.,". When creating this field is required. When updating it is optional. This field will never be returned when requesting user details.
       email:
         title: Email
         type: string
@@ -400,7 +401,9 @@ definitions:
         example: "5995f25708813b0001f99393"
       name:
         type: string
-        description: The displayname of this watcher.
+        minLength: 3
+        maxLength: 50
+        description: The displayname of this watcher. Length of the name must be between 3 and 50 characters.
         example: "IT Premiere watcher"
       movieid:
         type: integer
@@ -412,12 +415,14 @@ definitions:
         example: "PATHE12"
       begin:
         title: Start watching from
+        description: The timestamp this watcher should be activated
         type: number
         format: timestamp
         example: 1507392000000
         minimum: 0
       end:
         title: Stop watching at
+        description: The timestamp this watcher should be stopped
         type: number
         format: timestamp
         example: 1507392000000
