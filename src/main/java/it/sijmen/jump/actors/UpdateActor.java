@@ -60,19 +60,13 @@ public class UpdateActor<T extends Model> extends Actor<T, UpdateListener<T>> {
     }
 
     private T updateModel(T model, T updatingData){
-        System.out.println("===================");
-        System.out.println(model);
-        System.out.println(updatingData);
         applyUpdates(model, updatingData);
-        System.out.println(model);
 
         model = listener.beforeUpdateValidation(model);
         model.validate();
-        System.out.println(model);
 
         model = listener.beforeUpdateStore(model);
         repository.save(model);
-        System.out.println(model);
         LOGGER.trace("Update {} stored to repository. New model: {}", modelClass.getSimpleName(), model);
         return model;
     }
@@ -120,7 +114,6 @@ public class UpdateActor<T extends Model> extends Actor<T, UpdateListener<T>> {
                 applyUpdates(field.get(target), field.get(source));
                 return;
             }
-            System.out.println(target);
             field.set(target, field.get(source));
         } catch (IllegalAccessException e) {
             LOGGER.error("No access to field {} while copying data from {} to {}", field, source, target, e);
