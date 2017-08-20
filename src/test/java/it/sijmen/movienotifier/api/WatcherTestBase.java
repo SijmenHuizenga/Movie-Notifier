@@ -25,8 +25,9 @@ abstract class WatcherTestBase extends UserTestBase {
                 new DateTime(2027, 8, 1, 20, 30, 15).getMillis(),
                 new DateTime(2027, 8, 7, 20, 30, 15).getMillis(),
                 new WatcherFilters("A1", new DateTime(2028, 8, 1, 20, 30, 15).getMillis(),
-                                         new DateTime(2028, 8, 1, 20, 30, 15).getMillis(),
+                                         new DateTime(2028, 8, 6, 20, 30, 15).getMillis(),
                 NO, YES, NOPREFERENCE, NO, NO, NO, NOPREFERENCE, NO, NOPREFERENCE, YES));
+        System.out.println(testwatcher);
     }
 
     @After
@@ -57,10 +58,10 @@ abstract class WatcherTestBase extends UserTestBase {
 
     String buildJson(WatcherFilters d) {
         return buildJson(d.isOv(), d.isNl(), d.isImax(), d.isD3(), d.isHfr(), d.isK4(), d.isLaser(), d.isDbox(),
-                d.isDolbycinema(), d.isDolbyatmos(), d.getCinemaid());
+                d.isDolbycinema(), d.isDolbyatmos(), d.getCinemaid(), d.getStartafter(), d.getStartbefore());
     }
     private String buildJson(FilterOption ov, FilterOption nl, FilterOption imax, FilterOption d3, FilterOption hfr, FilterOption k4, FilterOption laser,
-                     FilterOption dbox, FilterOption dolbycinema, FilterOption dolbyatmos, String cinemaid){
+                     FilterOption dbox, FilterOption dolbycinema, FilterOption dolbyatmos, String cinemaid, long startafter, long startbefore){
         List<String> items = new ArrayList<>();
         if(cinemaid != null)
             items.add("\"cinemaid\": \""+cinemaid+"\"");
@@ -68,6 +69,7 @@ abstract class WatcherTestBase extends UserTestBase {
             items.add("\"ov\": \""+ov+"\"");
         if(nl != null)
             items.add("\"nl\": \""+nl+"\"");
+        if(imax != null)
             items.add("\"imax\": \""+imax+"\"");
         if(d3 != null)
             items.add("\"3d\": \""+d3+"\"");
@@ -83,6 +85,10 @@ abstract class WatcherTestBase extends UserTestBase {
             items.add("\"dolbycinema\": \""+dolbycinema+"\"");
         if(dolbyatmos != null)
             items.add("\"dolbyatmos\": \""+dolbyatmos+"\"");
+        if(startafter != -1)
+            items.add("\"startafter\": \""+startafter+"\"");
+        if(startbefore != -1)
+            items.add("\"startbefore\": \""+startbefore+"\"");
 
         return "{\n" + String.join(",\n", items) +"}";
     }

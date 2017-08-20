@@ -98,7 +98,8 @@ public class WatcherCreateTest extends WatcherTestBase {
                 .andExpect(jsonPath("$.errors").value(Matchers.containsInAnyOrder(
                         "name may not be empty",
                         "movieid must be greater than or equal to 1",
-                        "filters may not be null"
+                        "filters may not be null",
+                        "end must be later than begin"
                 )));
         verifyZeroInteractions(watcherRepo);
     }

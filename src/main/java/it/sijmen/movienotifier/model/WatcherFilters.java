@@ -101,7 +101,7 @@ public class WatcherFilters implements Model {
         this.dolbyatmos = filters.dolbyatmos;
     }
 
-    @AssertTrue(message="The startafter must be before than the startbefore")
+    @AssertTrue(message="must be before than the startbefore")
     private boolean isStartafter() {
         return this.startafter < this.startbefore;
     }
