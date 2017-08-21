@@ -117,8 +117,8 @@ public class PatheApi implements Cinema {
         int realWatcherCinemaId = Integer.parseInt(watcher.getFilters().getCinemaid().substring(getCinemaIdPrefix().length()));
         WatcherFilters d = watcher.getFilters();
         return showing.getMovieId() == watcher.getMovieid() &&
-                showing.getStart() < d.getStartbefore() &&
-                showing.getStart() > d.getStartafter() &&
+                showing.getStart() <= d.getStartbefore() &&
+                showing.getStart() >= d.getStartafter() &&
                 showing.getCinemaId() == realWatcherCinemaId &&
                 eq(d.isD3(), showing.getIs3d()) &&
                 eq(d.isImax(), showing.getImax()) &&
