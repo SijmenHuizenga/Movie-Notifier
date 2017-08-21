@@ -117,19 +117,18 @@ public class PatheApi implements Cinema {
         int realWatcherCinemaId = Integer.parseInt(watcher.getFilters().getCinemaid().substring(getCinemaIdPrefix().length()));
         WatcherFilters d = watcher.getFilters();
         return showing.getMovieId() == watcher.getMovieid() &&
-                showing.getStart() < watcher.getBegin() &&
-                showing.getStart() > watcher.getEnd() &&
+                showing.getStart() < d.getStartafter() &&
+                showing.getStart() > d.getStartafter() &&
                 showing.getCinemaId() == realWatcherCinemaId &&
-                (d == null || (
-                        eq(d.isD3(), showing.getIs3d()) &&
-                        eq(d.isImax(), showing.getImax()) &&
-                        eq(d.isOv(), showing.getOv()) &&
-                        eq(d.isNl(), showing.getNl()) &&
-                        eq(d.isHfr(), showing.getHfr()) &&
-                        eq(d.isDolbyatmos(), showing.getIsAtmos()) &&
-                        eq(d.isK4(), showing.getIs4k()) &&
-                        eq(d.isLaser(), showing.getIsLaser())
-                ));
+                eq(d.isD3(), showing.getIs3d()) &&
+                eq(d.isImax(), showing.getImax()) &&
+                eq(d.isOv(), showing.getOv()) &&
+                eq(d.isNl(), showing.getNl()) &&
+                eq(d.isHfr(), showing.getHfr()) &&
+                eq(d.isDolbyatmos(), showing.getIsAtmos()) &&
+                eq(d.isK4(), showing.getIs4k()) &&
+                eq(d.isLaser(), showing.getIsLaser())
+                ;
     }
 
     private boolean eq(FilterOption expected, int actual) {
