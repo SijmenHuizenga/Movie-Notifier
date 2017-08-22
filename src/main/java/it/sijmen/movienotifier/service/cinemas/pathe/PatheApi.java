@@ -82,7 +82,7 @@ public class PatheApi implements Cinema {
         long now = System.currentTimeMillis();
 
         watcher.stream()
-                .filter(w -> w.getEnd() >= now && now <= w.getBegin())
+                .filter(w -> w.getBegin() <= now && now <= w.getEnd() )
                 .collect(Collectors.groupingBy(Watcher::getMovieid))
                 .forEach(this::checkForUpdates);
     }

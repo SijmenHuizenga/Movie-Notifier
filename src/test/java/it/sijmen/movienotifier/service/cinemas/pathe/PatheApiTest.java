@@ -105,7 +105,7 @@ public class PatheApiTest {
 
     public void testWatcher(boolean fired,
                             long showingstart, long showingend,
-                            long watcherstart, long watcherend,
+                            long watcherbegin, long watcherend,
                             long filterafter, long filterbefore) throws Exception {
         PatheApi api = spy(new PatheApi(new ObjectMapper(), "SOMEKEY", patheCacheRepository, notificationService));
         HttpResponse<String> mockResponse = mock(HttpResponse.class);
@@ -136,7 +136,7 @@ public class PatheApiTest {
         when(patheCacheRepository.getFirstByMovieid(MOVIEID)).thenReturn(new PatheMoviesResponse(MOVIEID));
 
         api.checkWatcher(Collections.singletonList(
-                new Watcher("SOMEID", "SOMEUSER", "SOMENAME", MOVIEID, watcherstart, watcherend,
+                new Watcher("SOMEID", "SOMEUSER", "SOMENAME", MOVIEID, watcherbegin, watcherend,
                     new WatcherFilters(
                         "PATHE"+ CINEMAID, filterafter, filterbefore, NOPREFERENCE, NOPREFERENCE, NOPREFERENCE,
                         NOPREFERENCE, NOPREFERENCE, NOPREFERENCE, NOPREFERENCE, NOPREFERENCE, NOPREFERENCE,NOPREFERENCE

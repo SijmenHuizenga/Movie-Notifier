@@ -27,7 +27,6 @@ abstract class WatcherTestBase extends UserTestBase {
                 new WatcherFilters("A1", new DateTime(2028, 8, 1, 20, 30, 15).getMillis(),
                                          new DateTime(2028, 8, 6, 20, 30, 15).getMillis(),
                 NO, YES, NOPREFERENCE, NO, NO, NO, NOPREFERENCE, NO, NOPREFERENCE, YES));
-        System.out.println(testwatcher);
     }
 
     @After
