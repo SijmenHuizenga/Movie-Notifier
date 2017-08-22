@@ -51,14 +51,8 @@ public class PatheApi implements Cinema {
 
     private PatheMoviesResponse getShowingsPerCinema(int movieId) throws IOException {
         String uri = "https://connect.pathe.nl/v1/movies/"+movieId+"/schedules";
-        HttpResponse<String> stringHttpResponse;
-        try {
-            stringHttpResponse = Unirest.get(uri)
-                    .header("X-Client-Token", patheApiKey)
-                    .asString();
-        } catch (UnirestException e) {
-            throw new IOException("Could not load request.", e);
-        }
+        HttpResponse<String> stringHttpResponse = makeGetRequest(uri);
+
         if(stringHttpResponse.getStatus() != 200)
             throw new IOException("Status returned " + stringHttpResponse.getStatus() + " after request " + uri);
         PatheMoviesResponse patheMoviesResponse = mapper.readValue(stringHttpResponse.getBody(), PatheMoviesResponse.class);
@@ -66,6 +60,16 @@ public class PatheApi implements Cinema {
             throw new IOException("Unexpected api result");
         patheMoviesResponse.setMovieid(movieId);
         return patheMoviesResponse;
+    }
+
+    public HttpResponse<String> makeGetRequest(String uri) throws IOException {
+        try{
+            return Unirest.get(uri)
+                    .header("X-Client-Token", patheApiKey)
+                    .asString();
+        } catch (UnirestException e) {
+            throw new IOException("Could not load request.", e);
+        }
     }
 
     @Override

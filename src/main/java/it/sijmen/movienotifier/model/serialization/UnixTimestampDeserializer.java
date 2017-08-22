@@ -12,7 +12,7 @@ import java.util.Date;
 
 public class UnixTimestampDeserializer extends JsonDeserializer<Long> {
 
-    private static final SimpleDateFormat PATHEFORMAT = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssXXX");
+    public static final SimpleDateFormat PATHEFORMAT = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssXXX");
 
     @Override
     public Long deserialize(JsonParser p, DeserializationContext ctxt) throws IOException {

@@ -24,9 +24,6 @@ public class PatheShowing {
     private int ov;
 
     @JsonProperty
-    private int vip;
-
-    @JsonProperty
     private int hfr;
 
     @JsonProperty
@@ -39,22 +36,10 @@ public class PatheShowing {
     private int isLaser;
 
     @JsonProperty
-    private int isPremium;
-
-    @JsonProperty
-    private int hallIsLarge;
-
-    @JsonProperty
-    private int hallIsRooftop;
-
-    @JsonProperty
     private long movieId;
 
     @JsonProperty
     private long id;
-
-    @JsonProperty
-    private long specialId;
 
     @JsonDeserialize(using=UnixTimestampDeserializer.class)
     @JsonProperty
@@ -63,9 +48,6 @@ public class PatheShowing {
     @JsonDeserialize(using=UnixTimestampDeserializer.class)
     @JsonProperty
     private long end;
-
-    @JsonProperty
-    private int status;
 
     public long getEnd() {
         return this.end == -1 ? getFakeEnd() : this.end;
@@ -120,14 +102,6 @@ public class PatheShowing {
         this.ov = ov;
     }
 
-    public int getVip() {
-        return vip;
-    }
-
-    public void setVip(int vip) {
-        this.vip = vip;
-    }
-
     public int getHfr() {
         return hfr;
     }
@@ -160,30 +134,6 @@ public class PatheShowing {
         this.isLaser = isLaser;
     }
 
-    public int getIsPremium() {
-        return isPremium;
-    }
-
-    public void setIsPremium(int isPremium) {
-        this.isPremium = isPremium;
-    }
-
-    public int getHallIsLarge() {
-        return hallIsLarge;
-    }
-
-    public void setHallIsLarge(int hallIsLarge) {
-        this.hallIsLarge = hallIsLarge;
-    }
-
-    public int getHallIsRooftop() {
-        return hallIsRooftop;
-    }
-
-    public void setHallIsRooftop(int hallIsRooftop) {
-        this.hallIsRooftop = hallIsRooftop;
-    }
-
     public long getMovieId() {
         return movieId;
     }
@@ -200,28 +150,12 @@ public class PatheShowing {
         this.id = id;
     }
 
-    public long getSpecialId() {
-        return specialId;
-    }
-
-    public void setSpecialId(long specialId) {
-        this.specialId = specialId;
-    }
-
     public long getStart() {
         return this.start;
     }
 
     public void setStart(long start) {
         this.start = start;
-    }
-
-    public int getStatus() {
-        return status;
-    }
-
-    public void setStatus(int status) {
-        this.status = status;
     }
 
     @Override
