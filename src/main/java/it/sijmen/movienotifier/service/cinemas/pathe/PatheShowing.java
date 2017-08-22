@@ -1,17 +1,19 @@
 package it.sijmen.movienotifier.service.cinemas.pathe;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import it.sijmen.movienotifier.model.serialization.UnixTimestampDeserializer;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class PatheShowing {
 
     @JsonProperty
     private int cinemaId;
 
-    @JsonProperty
+    @JsonProperty("3d")
     private int is3d;
 
     @JsonProperty
@@ -26,7 +28,7 @@ public class PatheShowing {
     @JsonProperty
     private int hfr;
 
-    @JsonProperty
+    @JsonProperty("atmos")
     private int isAtmos;
 
     @JsonProperty

@@ -79,7 +79,11 @@ public class PatheApi implements Cinema {
 
     @Override
     public void checkWatcher(List<Watcher> watcher) {
-        watcher.stream().collect(Collectors.groupingBy(Watcher::getMovieid))
+        long now = System.currentTimeMillis();
+
+        watcher.stream()
+                .filter(w -> w.getEnd() >= now && now <= w.getBegin())
+                .collect(Collectors.groupingBy(Watcher::getMovieid))
                 .forEach(this::checkForUpdates);
     }
 
@@ -120,19 +124,35 @@ public class PatheApi implements Cinema {
     private boolean accepts(Watcher watcher, PatheShowing showing){
         int realWatcherCinemaId = Integer.parseInt(watcher.getFilters().getCinemaid().substring(getCinemaIdPrefix().length()));
         WatcherFilters d = watcher.getFilters();
-        return showing.getMovieId() == watcher.getMovieid() &&
-                showing.getStart() <= d.getStartbefore() &&
-                showing.getStart() >= d.getStartafter() &&
-                showing.getCinemaId() == realWatcherCinemaId &&
-                eq(d.isD3(), showing.getIs3d()) &&
+        if(showing.getCinemaId() != realWatcherCinemaId){
+            LOGGER.debug("Cinema id does not equal");
+            return false;
+        }
+        if(!(showing.getStart() <= d.getStartbefore())){
+            LOGGER.debug("End does not do good");
+            return false;
+        }
+        if(!(showing.getStart() >= d.getStartafter())){
+            LOGGER.debug("Start does not do good");
+            return false;
+        }
+        if(showing.getMovieId() != watcher.getMovieid()){
+            LOGGER.debug("Movie id is not equal!");
+            return false;
+        }
+
+        if(!(eq(d.isD3(), showing.getIs3d()) &&
                 eq(d.isImax(), showing.getImax()) &&
                 eq(d.isOv(), showing.getOv()) &&
                 eq(d.isNl(), showing.getNl()) &&
                 eq(d.isHfr(), showing.getHfr()) &&
                 eq(d.isDolbyatmos(), showing.getIsAtmos()) &&
                 eq(d.isK4(), showing.getIs4k()) &&
-                eq(d.isLaser(), showing.getIsLaser())
-                ;
+                eq(d.isLaser(), showing.getIsLaser()))){
+            LOGGER.debug("The boolean filters failed");
+            return false;
+        }
+        return true;
     }
 
     private boolean eq(FilterOption expected, int actual) {
