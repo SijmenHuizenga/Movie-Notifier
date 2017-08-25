@@ -13,30 +13,6 @@ public class PatheShowing {
     @JsonProperty
     private int cinemaId;
 
-    @JsonProperty("3d")
-    private int is3d;
-
-    @JsonProperty
-    private int nl;
-
-    @JsonProperty
-    private int imax;
-
-    @JsonProperty
-    private int ov;
-
-    @JsonProperty
-    private int hfr;
-
-    @JsonProperty("atmos")
-    private int isAtmos;
-
-    @JsonProperty
-    private int is4k;
-
-    @JsonProperty
-    private int isLaser;
-
     @JsonProperty
     private long movieId;
 
@@ -50,6 +26,30 @@ public class PatheShowing {
     @JsonDeserialize(using=UnixTimestampDeserializer.class)
     @JsonProperty
     private long end;
+
+    @JsonProperty("3d")
+    private Integer is3d;
+
+    @JsonProperty
+    private Integer nl;
+
+    @JsonProperty
+    private Integer imax;
+
+    @JsonProperty
+    private Integer ov;
+
+    @JsonProperty
+    private Integer hfr;
+
+    @JsonProperty
+    private Integer isAtmos;
+
+    @JsonProperty
+    private Integer is4k;
+
+    @JsonProperty
+    private Integer isLaser;
 
     public long getEnd() {
         return this.end == -1 ? getFakeEnd() : this.end;
@@ -72,67 +72,67 @@ public class PatheShowing {
         this.end = end;
     }
 
-    public int getIs3d() {
+    public Integer getIs3d() {
         return is3d;
     }
 
-    public void setIs3d(int is3d) {
+    public void setIs3d(Integer is3d) {
         this.is3d = is3d;
     }
 
-    public int getNl() {
+    public Integer getNl() {
         return nl;
     }
 
-    public void setNl(int nl) {
+    public void setNl(Integer nl) {
         this.nl = nl;
     }
 
-    public int getImax() {
+    public Integer getImax() {
         return imax;
     }
 
-    public void setImax(int imax) {
+    public void setImax(Integer imax) {
         this.imax = imax;
     }
 
-    public int getOv() {
+    public Integer getOv() {
         return ov;
     }
 
-    public void setOv(int ov) {
+    public void setOv(Integer ov) {
         this.ov = ov;
     }
 
-    public int getHfr() {
+    public Integer getHfr() {
         return hfr;
     }
 
-    public void setHfr(int hfr) {
+    public void setHfr(Integer hfr) {
         this.hfr = hfr;
     }
 
-    public int getIsAtmos() {
+    public Integer getIsAtmos() {
         return isAtmos;
     }
 
-    public void setIsAtmos(int isAtmos) {
+    public void setIsAtmos(Integer isAtmos) {
         this.isAtmos = isAtmos;
     }
 
-    public int getIs4k() {
+    public Integer getIs4k() {
         return is4k;
     }
 
-    public void setIs4k(int is4k) {
+    public void setIs4k(Integer is4k) {
         this.is4k = is4k;
     }
 
-    public int getIsLaser() {
+    public Integer getIsLaser() {
         return isLaser;
     }
 
-    public void setIsLaser(int isLaser) {
+    public void setIsLaser(Integer isLaser) {
         this.isLaser = isLaser;
     }
 

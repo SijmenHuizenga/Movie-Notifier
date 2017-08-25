@@ -19,8 +19,13 @@ import org.springframework.test.context.junit4.SpringRunner;
 import java.util.Collections;
 import java.util.Date;
 
+import static it.sijmen.movienotifier.model.FilterOption.NO;
 import static it.sijmen.movienotifier.model.FilterOption.NOPREFERENCE;
+import static it.sijmen.movienotifier.model.FilterOption.YES;
 import static it.sijmen.movienotifier.model.serialization.UnixTimestampDeserializer.PATHEFORMAT;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.*;
 
@@ -138,13 +143,28 @@ public class PatheApiTest {
         api.checkWatcher(Collections.singletonList(
                 new Watcher("SOMEID", "SOMEUSER", "SOMENAME", MOVIEID, watcherbegin, watcherend,
                     new WatcherFilters(
-                        "PATHE"+ CINEMAID, filterafter, filterbefore, NOPREFERENCE, NOPREFERENCE, NOPREFERENCE,
-                        NOPREFERENCE, NOPREFERENCE, NOPREFERENCE, NOPREFERENCE, NOPREFERENCE, NOPREFERENCE,NOPREFERENCE
+                        "PATHE"+ CINEMAID, filterafter, filterbefore, YES, NO, NO,
+                        NO, NO, NO, NO, NOPREFERENCE, NOPREFERENCE, YES
                     )
                 )
         ));
 
         verify(notificationService, times(fired ? 1 : 0)).notify(eq("SOMEUSER"), any());
+    }
+    @Test
+    public void testEq(){
+        PatheApi api = spy(new PatheApi(new ObjectMapper(), "SOMEKEY", patheCacheRepository, notificationService));
+        assertTrue(api.eq(YES, 1));
+        assertFalse(api.eq(YES, 0));
+        assertTrue(api.eq(YES, null));
+
+        assertFalse(api.eq(NO, 1));
+        assertTrue(api.eq(NO, 0));
+        assertTrue(api.eq(NO, null));
+
+        assertTrue(api.eq(NOPREFERENCE, 1));
+        assertTrue(api.eq(NOPREFERENCE, 0));
+        assertTrue(api.eq(NOPREFERENCE, null));
     }
 
 }

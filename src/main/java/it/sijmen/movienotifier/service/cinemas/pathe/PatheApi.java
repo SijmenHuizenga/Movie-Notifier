@@ -121,7 +121,7 @@ public class PatheApi implements Cinema {
             }
     }
 
-    private boolean accepts(Watcher watcher, PatheShowing showing){
+    public boolean accepts(Watcher watcher, PatheShowing showing){
         int realWatcherCinemaId = Integer.parseInt(watcher.getFilters().getCinemaid().substring(getCinemaIdPrefix().length()));
         WatcherFilters d = watcher.getFilters();
         if(showing.getCinemaId() != realWatcherCinemaId){
@@ -155,8 +155,11 @@ public class PatheApi implements Cinema {
         return true;
     }
 
-    private boolean eq(FilterOption expected, int actual) {
-        return expected == NOPREFERENCE || (expected == YES && (actual == 1)) || (expected == NO && (actual == 0));
+    public boolean eq(FilterOption expected, Integer actual) {
+        return expected == NOPREFERENCE
+                || actual == null
+                || (expected == YES && (actual == 1))
+                || (expected == NO && (actual == 0));
     }
 
     private String makeMessage(Watcher watcher, PatheShowing showing){
