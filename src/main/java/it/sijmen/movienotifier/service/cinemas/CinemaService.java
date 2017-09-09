@@ -25,10 +25,19 @@ public class CinemaService {
 
     public void checkCinemasForChangesAndNotifyWatchers(){
         List<Watcher> all = repository.findAll();
-        all.removeIf(w -> w.getBegin() < System.currentTimeMillis());
+        all.removeIf(w -> !runningNow(w.getBegin(), w.getEnd()));
         all.stream().collect(Collectors.groupingBy(w -> w.getFilters().getCinemaid()))
                 .forEach(this::checkUpdates);
     }
+
+    public static boolean runningNow(long begin, long end) {
+        return runningNow(System.currentTimeMillis(), begin, end);
+    }
+
+    public static boolean runningNow(long now, long begin, long end){
+        return begin <= now && now <= end;
+    }
+
 
     private void checkUpdates(String cinemaId, List<Watcher> watchers) {
         for(Cinema c : cinemas){

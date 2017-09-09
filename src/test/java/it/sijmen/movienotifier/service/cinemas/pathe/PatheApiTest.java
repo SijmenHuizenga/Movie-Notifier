@@ -94,20 +94,6 @@ public class PatheApiTest {
         );
     }
 
-    @Test
-    public void testWatcherNO2() throws Exception {
-        //should not be notified when the watcher is not watching
-        testWatcher(
-                false,
-                TODAY + DAY,            //movie starts tommorow
-                TODAY + DAY + 2*HOUR,   //movie ends two hour later
-                TODAY - 2*DAY,     //watcher started yesterday
-                TODAY - DAY,       //watcher ends today
-                TODAY,        //movie must start later than today
-                TODAY + DAY*6 //and start before the end of this week
-        );
-    }
-
     public void testWatcher(boolean fired,
                             long showingstart, long showingend,
                             long watcherbegin, long watcherend,

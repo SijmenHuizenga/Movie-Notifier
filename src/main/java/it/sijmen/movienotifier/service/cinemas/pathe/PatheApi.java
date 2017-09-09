@@ -79,10 +79,7 @@ public class PatheApi implements Cinema {
 
     @Override
     public void checkWatcher(List<Watcher> watcher) {
-        long now = System.currentTimeMillis();
-
         watcher.stream()
-                .filter(w -> w.getBegin() <= now && now <= w.getEnd() )
                 .collect(Collectors.groupingBy(Watcher::getMovieid))
                 .forEach(this::checkForUpdates);
     }

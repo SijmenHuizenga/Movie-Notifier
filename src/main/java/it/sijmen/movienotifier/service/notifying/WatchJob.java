@@ -17,6 +17,7 @@ public class WatchJob {
         this.cinemaService = cinemaService;
     }
 
+    //todo: this random thing doesnt work
     @Scheduled(cron = "${random.int[0,59]} */${random.int[10,15]}  22-23 * * *")
     @Scheduled(cron = "${random.int[0,59]} */${random.int[10,15]}  0-6 * * *")
     public void executeByNight(){
