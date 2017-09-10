@@ -97,15 +97,11 @@ public class UpdateActor<T extends Model> extends Actor<T, UpdateListener<T>> {
         try {
             field.setAccessible(true);
             Object o = field.get(object);
-            return o != null && !isEmptyArray(o);
+            return o != null;
         } catch (IllegalAccessException e) {
             LOGGER.error("No access to field {} while checking {}", field, object, e);
             throw new InternalServerErrorException();
         }
-    }
-
-    private boolean isEmptyArray(@NotNull Object object){
-        return object instanceof List && ((List) object).isEmpty();
     }
 
     private void copyField(Field field, Object source, Object target){
