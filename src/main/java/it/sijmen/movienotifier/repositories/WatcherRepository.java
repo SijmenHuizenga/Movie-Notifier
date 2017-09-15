@@ -11,5 +11,6 @@ public interface WatcherRepository extends MongoRepository<Watcher, String> {
 
     public Watcher getFirstByUuid(String id);
     public List<Watcher> getAllByUserid(String user);
+    public void deleteWatchersByUserid(String user);
 
 }

@@ -7,6 +7,7 @@ import it.sijmen.jump.listeners.JumpListenerAdapter;
 import it.sijmen.movienotifier.model.User;
 import it.sijmen.movienotifier.model.exceptions.BadRequestException;
 import it.sijmen.movienotifier.repositories.UserRepository;
+import it.sijmen.movienotifier.repositories.WatcherRepository;
 import it.sijmen.movienotifier.util.ApiKeyHelper;
 import it.sijmen.movienotifier.util.PasswordAuthentication;
 import org.springframework.context.annotation.Bean;
@@ -27,14 +28,18 @@ public class UserController extends ApiController implements JumpListenerAdapter
     private List<String> defaultNotifications;
     private ApiKeyHelper apiKeyHelper;
 
+    private WatcherRepository watcherRepository;
+
     @Inject
     public UserController(
             @Named("default-notifications") List<String> defaultNotifications,
             UserRepository userRepository,
-            ApiKeyHelper apiKeyHelper) {
+            ApiKeyHelper apiKeyHelper,
+            WatcherRepository watcherRepository) {
         super(userRepository);
         this.defaultNotifications = defaultNotifications;
         this.apiKeyHelper = apiKeyHelper;
+        this.watcherRepository = watcherRepository;
     }
 
     @Bean
@@ -75,6 +80,11 @@ public class UserController extends ApiController implements JumpListenerAdapter
     @Override
     public boolean allowDelete(JumpRequest request, User toDelete) {
         return getExecutingUser(getApiKey(request)).getId().equals(toDelete.getId());
+    }
+
+    @Override
+    public void postDelete(JumpRequest apiRequest, User deleted) {
+        watcherRepository.deleteWatchersByUserid(deleted.getId());
     }
 
     @Override

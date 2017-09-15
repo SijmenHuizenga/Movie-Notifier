@@ -37,6 +37,7 @@ public class DeleteActor<T extends Model> extends Actor<T, DeleteListener<T>> {
             throw new UnauthorizedException();
         }
         repository.delete(toDelete);
+        listener.postDelete(request, toDelete);
         LOGGER.trace("{} deleted: {}", modelClass.getSimpleName(), toDelete);
 
         return ResponseEntity.ok().build();
