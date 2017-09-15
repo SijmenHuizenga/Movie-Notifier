@@ -25,7 +25,7 @@ public class WatchJob {
         cinemaService.checkCinemasForChangesAndNotifyWatchers();
     }
 
-    @Scheduled(cron = "${random.int[0,59]} */${random.int[2,6]} 8-21 * * *")
+    @Scheduled(cron = "${random.int[0,59]} */${random.int[2,6]} 6-21 * * *")
     public void executeByDay(){
         LOGGER.info("Executing day job");
         cinemaService.checkCinemasForChangesAndNotifyWatchers();
