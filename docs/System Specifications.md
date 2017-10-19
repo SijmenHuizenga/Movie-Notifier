@@ -61,6 +61,7 @@ Users can register watchers. A watcher looks like this:
         "hfr": "no",
         "laser": "yes",
         "dbox": "no",
+        "4dx": "no",
         "dolbycinema": "no",
         "dolbyatmos": "no-preference",
         "3d": "no-preference",
@@ -87,6 +88,7 @@ The following other parameters are supported:
 * `hfr` Showing wiht High Frame Rate (48 fps)
 * `laser` Showing with Laser projector
 * `dbox` Showing with D-Box Experience
+* `4dx` Showing with 4DX Experience
 * `dolbycinema` Showing with Dolby Cinema audio and display 
 * `dolbyatmos` Showing with Dolby Atmos audio
 * `3d` Showign in 3D
