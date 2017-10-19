@@ -440,8 +440,8 @@ definitions:
           - hfr
           - 4k
           - laser
-          - 4dx
           - dbox
+          - 4dx
           - dolbycinema
           - dolbyatomos
         properties:
