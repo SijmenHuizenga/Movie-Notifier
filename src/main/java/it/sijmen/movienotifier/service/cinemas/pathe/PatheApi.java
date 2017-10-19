@@ -145,7 +145,8 @@ public class PatheApi implements Cinema {
                 eq(d.isHfr(), showing.getHfr()) &&
                 eq(d.isDolbyatmos(), showing.getIsAtmos()) &&
                 eq(d.isK4(), showing.getIs4k()) &&
-                eq(d.isLaser(), showing.getIsLaser()))){
+                eq(d.isLaser(), showing.getIsLaser())) &&
+                eqBool(d.isDx4(), showing.getIs4dx())){
             LOGGER.debug("The boolean filters failed");
             return false;
         }
@@ -159,6 +160,13 @@ public class PatheApi implements Cinema {
                 || (expected == NO && (actual == 0));
     }
 
+    public boolean eqBool(FilterOption expected, Boolean actual) {
+        return expected == NOPREFERENCE
+                || actual == null
+                || (expected == YES && actual)
+                || (expected == NO && !actual);
+    }
+
     private String makeMessage(Watcher watcher, PatheShowing showing){
         StringBuilder builder = new StringBuilder(watcher.getName());
 
@@ -170,6 +178,8 @@ public class PatheApi implements Cinema {
             builder.append(" 4K");
         if(showing.getIsLaser() == 1)
             builder.append(" LASER");
+        if(showing.getIs4dx())
+            builder.append(" 4DX");
 
         builder.append(System.lineSeparator());
         if(showing.getStart() != -1L)

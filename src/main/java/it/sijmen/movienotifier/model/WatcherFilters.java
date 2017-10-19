@@ -57,6 +57,10 @@ public class WatcherFilters implements Model {
     private FilterOption dbox;
 
     @NotNull
+    @JsonProperty("4dx")
+    private FilterOption dx4;
+
+    @NotNull
     @JsonProperty
     private FilterOption dolbycinema;
 
@@ -66,7 +70,7 @@ public class WatcherFilters implements Model {
 
     public WatcherFilters(String cinemaid, long startafter, long startbefore, FilterOption ov, FilterOption nl,
                           FilterOption imax, FilterOption d3, FilterOption hfr, FilterOption k4, FilterOption laser,
-                          FilterOption dbox, FilterOption dolbycinema, FilterOption dolbyatmos) {
+                          FilterOption dbox, FilterOption dx4, FilterOption dolbycinema, FilterOption dolbyatmos) {
         this.cinemaid = cinemaid;
         this.startafter = startafter;
         this.startbefore = startbefore;
@@ -78,6 +82,7 @@ public class WatcherFilters implements Model {
         this.k4 = k4;
         this.laser = laser;
         this.dbox = dbox;
+        this.dx4 = dx4;
         this.dolbycinema = dolbycinema;
         this.dolbyatmos = dolbyatmos;
     }
@@ -97,6 +102,7 @@ public class WatcherFilters implements Model {
         this.k4 = filters.k4;
         this.laser = filters.laser;
         this.dbox = filters.dbox;
+        this.dx4 = filters.dx4;
         this.dolbycinema = filters.dolbycinema;
         this.dolbyatmos = filters.dolbyatmos;
     }
@@ -175,6 +181,14 @@ public class WatcherFilters implements Model {
         this.dbox = dbox;
     }
 
+    public FilterOption isDx4() {
+        return dx4;
+    }
+
+    public void setDx4(FilterOption dx4) {
+        this.dx4 = dx4;
+    }
+
     public FilterOption isDolbycinema() {
         return dolbycinema;
     }
@@ -229,6 +243,7 @@ public class WatcherFilters implements Model {
                 ", k4=" + k4 +
                 ", laser=" + laser +
                 ", dbox=" + dbox +
+                ", dx4=" + dx4 +
                 ", dolbycinema=" + dolbycinema +
                 ", dolbyatmos=" + dolbyatmos +
                 '}';

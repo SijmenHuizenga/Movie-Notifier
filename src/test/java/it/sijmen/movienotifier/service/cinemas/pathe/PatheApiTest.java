@@ -118,6 +118,7 @@ public class PatheApiTest {
                 "            \"isAtmos\": 1," +
                 "            \"is4k\": 0," +
                 "            \"isLaser\": 0" +
+                "            \"is4dx\": false" +
                 "        }" +
                 "    ]" +
                 "}");
@@ -130,7 +131,7 @@ public class PatheApiTest {
                 new Watcher("SOMEID", "SOMEUSER", "SOMENAME", MOVIEID, watcherbegin, watcherend,
                     new WatcherFilters(
                         "PATHE"+ CINEMAID, filterafter, filterbefore, YES, NO, NO,
-                        NO, NO, NO, NO, NOPREFERENCE, NOPREFERENCE, YES
+                        NO, NO, NO, NO, NOPREFERENCE, NOPREFERENCE, NOPREFERENCE, YES
                     )
                 )
         ));
@@ -151,6 +152,18 @@ public class PatheApiTest {
         assertTrue(api.eq(NOPREFERENCE, 1));
         assertTrue(api.eq(NOPREFERENCE, 0));
         assertTrue(api.eq(NOPREFERENCE, null));
+
+        assertTrue(api.eqBool(YES, true));
+        assertFalse(api.eqBool(YES, false));
+        assertTrue(api.eqBool(YES, null));
+
+        assertFalse(api.eqBool(NO, true));
+        assertTrue(api.eqBool(NO, false));
+        assertTrue(api.eqBool(NO, null));
+
+        assertTrue(api.eqBool(NOPREFERENCE, true));
+        assertTrue(api.eqBool(NOPREFERENCE, false));
+        assertTrue(api.eqBool(NOPREFERENCE, null));
     }
 
 }
