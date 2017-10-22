@@ -117,7 +117,7 @@ public class PatheApiTest {
                 "            \"hfr\": 0," +
                 "            \"isAtmos\": 1," +
                 "            \"is4k\": 0," +
-                "            \"isLaser\": 0" +
+                "            \"isLaser\": 0," +
                 "            \"is4dx\": false" +
                 "        }" +
                 "    ]" +
