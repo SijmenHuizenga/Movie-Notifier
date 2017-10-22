@@ -5,6 +5,7 @@ import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import it.sijmen.movienotifier.model.FilterOption;
+import it.sijmen.movienotifier.model.PatheMovieCache;
 import it.sijmen.movienotifier.model.Watcher;
 import it.sijmen.movienotifier.model.WatcherFilters;
 import it.sijmen.movienotifier.repositories.PatheCacheRepository;
@@ -19,7 +20,9 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -79,13 +82,15 @@ public class PatheApi implements Cinema {
 
     @Override
     public void checkWatcher(List<Watcher> watcher) {
+        LOGGER.trace("Checking #{} watchers", watcher.size());
         watcher.stream()
                 .collect(Collectors.groupingBy(Watcher::getMovieid))
                 .forEach(this::checkForUpdates);
     }
 
     private void checkForUpdates(int movieId, List<Watcher> watchers) {
-        PatheMoviesResponse oldData;
+        LOGGER.trace("Checking #{} watchers with modieid {}", watchers.size(), movieId);
+        PatheMovieCache oldData;
         PatheMoviesResponse newData;
         try {
             oldData = repository.getFirstByMovieid(movieId);
@@ -95,19 +100,30 @@ public class PatheApi implements Cinema {
             return;
         }
         if(oldData == null){
-            repository.save(newData);
+            repository.save(makeCacheFromResponse(newData));
             LOGGER.trace("First time retreving data for movie {} and storing in repo", movieId);
             return;
         }
-        if(oldData.equals(newData)) {
+        if(newData.getShowingsids().isEmpty()){
+            LOGGER.trace("Received no showings for movieid {} so nothing to do for this movieid", movieId);
+            return;
+        }
+        if(oldData.getShowingids().containsAll(newData.getShowingsids())) {
             LOGGER.trace("Old and new data for movie {} are equal", movieId);
             return;
         }
-        repository.save(newData);
+        repository.save(makeCacheFromResponse(newData));
         LOGGER.trace("Stored new data for movie {}", movieId);
+
         List<PatheShowing> showings = newData.getShowings();
-        showings.removeAll(oldData.getShowings());
+        List<Long> oldshowings =  oldData.getShowingids();
+
+        showings.removeIf(s -> oldshowings.contains(s.getId()));
         watchers.forEach(w -> this.sendUpdates(w, showings));
+    }
+
+    private PatheMovieCache makeCacheFromResponse(PatheMoviesResponse newData){
+        return new PatheMovieCache(newData.getMovieid(), newData.getShowingsids());
     }
 
     private void sendUpdates(Watcher watcher, List<PatheShowing> showings) {

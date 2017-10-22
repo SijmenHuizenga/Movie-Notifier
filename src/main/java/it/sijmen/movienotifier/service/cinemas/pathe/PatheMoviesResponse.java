@@ -2,13 +2,10 @@ package it.sijmen.movienotifier.service.cinemas.pathe;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
-@Document
 public class PatheMoviesResponse {
 
     @Id
@@ -58,5 +55,12 @@ public class PatheMoviesResponse {
         int result = getMovieid();
         result = 31 * result + (getShowings() != null ? getShowings().hashCode() : 0);
         return result;
+    }
+
+    public List<Long> getShowingsids() {
+        ArrayList<Long> out = new ArrayList<>();
+        for(PatheShowing s : showings)
+            out.add(s.getId());
+        return out;
     }
 }

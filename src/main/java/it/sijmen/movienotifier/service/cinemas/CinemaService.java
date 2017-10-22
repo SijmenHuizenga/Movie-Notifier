@@ -4,6 +4,7 @@ import it.sijmen.movienotifier.model.Watcher;
 import it.sijmen.movienotifier.repositories.WatcherRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -24,29 +25,22 @@ public class CinemaService {
     }
 
     public void checkCinemasForChangesAndNotifyWatchers(){
-        List<Watcher> all = repository.findAll();
-        all.removeIf(w -> !runningNow(w.getBegin(), w.getEnd()));
-        all.stream().collect(Collectors.groupingBy(w -> w.getFilters().getCinemaid()))
+        long now = System.currentTimeMillis();
+        List<Watcher> all = repository.getAllByBeginIsLessThanAndEndIsGreaterThan(now, now);
+        LOGGER.trace("Checking #{} watchers.", all.size());
+        all.stream().collect(Collectors.groupingBy(Watcher::getCinemaPrefix))
                 .forEach(this::checkUpdates);
     }
 
-    public static boolean runningNow(long begin, long end) {
-        return runningNow(System.currentTimeMillis(), begin, end);
-    }
-
-    public static boolean runningNow(long now, long begin, long end){
-        return begin <= now && now <= end;
-    }
-
-
-    private void checkUpdates(String cinemaId, List<Watcher> watchers) {
+    private void checkUpdates(String cinemaprefix, List<Watcher> watchers) {
+        LOGGER.trace("Checking #{} watchers with cinemaprefix {}", watchers.size(), cinemaprefix);
         for(Cinema c : cinemas){
-            if(cinemaId.startsWith(c.getCinemaIdPrefix())){
+            if(cinemaprefix.equals(c.getCinemaIdPrefix())){
                 c.checkWatcher(watchers);
                 return;
             }
         }
-        LOGGER.warn("Could not watch cinema {} since there is no cinema configuration available for this id.", cinemaId);
+        LOGGER.warn("Could not watch cinema {} since there is no cinema configuration available for this id.", cinemaprefix);
     }
 
 }

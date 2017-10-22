@@ -104,6 +104,10 @@ public class Watcher implements Model {
         this.uuid = id;
     }
 
+    public String getCinemaPrefix() {
+        return this.filters.getCinemaid().replaceAll("[0-9]", "");
+    }
+
     public String getUserid() {
         return userid;
     }

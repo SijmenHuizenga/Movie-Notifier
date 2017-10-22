@@ -3,6 +3,7 @@ package it.sijmen.movienotifier.service.cinemas.pathe;
 import com.mashape.unirest.http.HttpResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import it.sijmen.movienotifier.api.JumpConfiguration;
+import it.sijmen.movienotifier.model.PatheMovieCache;
 import it.sijmen.movienotifier.model.Watcher;
 import it.sijmen.movienotifier.model.WatcherFilters;
 import it.sijmen.movienotifier.repositories.PatheCacheRepository;
@@ -125,7 +126,7 @@ public class PatheApiTest {
 
         Mockito.doReturn(mockResponse).when(api).makeGetRequest(anyString());
 
-        when(patheCacheRepository.getFirstByMovieid(MOVIEID)).thenReturn(new PatheMoviesResponse(MOVIEID));
+        when(patheCacheRepository.getFirstByMovieid(MOVIEID)).thenReturn(new PatheMovieCache(MOVIEID));
 
         api.checkWatcher(Collections.singletonList(
                 new Watcher("SOMEID", "SOMEUSER", "SOMENAME", MOVIEID, watcherbegin, watcherend,

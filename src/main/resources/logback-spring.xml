@@ -15,4 +15,6 @@
         <appender-ref ref="ROLLBAR" />
     </root>
 
+    <logger name="it.sijmen" level="TRACE" />
+
 </configuration>
