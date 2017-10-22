@@ -26,7 +26,7 @@ abstract class WatcherTestBase extends UserTestBase {
                 new DateTime(2027, 8, 7, 20, 30, 15).getMillis(),
                 new WatcherFilters("A1", new DateTime(2028, 8, 1, 20, 30, 15).getMillis(),
                                          new DateTime(2028, 8, 6, 20, 30, 15).getMillis(),
-                NO, YES, NOPREFERENCE, NO, NO, NO, NOPREFERENCE, NO, NOPREFERENCE, YES));
+                NO, YES, NOPREFERENCE, NO, NO, NO, NOPREFERENCE, NO, NO, NOPREFERENCE, YES));
     }
 
     @After
@@ -57,10 +57,10 @@ abstract class WatcherTestBase extends UserTestBase {
 
     String buildJson(WatcherFilters d) {
         return buildJson(d.isOv(), d.isNl(), d.isImax(), d.isD3(), d.isHfr(), d.isK4(), d.isLaser(), d.isDbox(),
-                d.isDolbycinema(), d.isDolbyatmos(), d.getCinemaid(), d.getStartafter(), d.getStartbefore());
+                d.isDx4(), d.isDolbycinema(), d.isDolbyatmos(), d.getCinemaid(), d.getStartafter(), d.getStartbefore());
     }
     private String buildJson(FilterOption ov, FilterOption nl, FilterOption imax, FilterOption d3, FilterOption hfr, FilterOption k4, FilterOption laser,
-                     FilterOption dbox, FilterOption dolbycinema, FilterOption dolbyatmos, String cinemaid, long startafter, long startbefore){
+                     FilterOption dbox, FilterOption dx4, FilterOption dolbycinema, FilterOption dolbyatmos, String cinemaid, long startafter, long startbefore){
         List<String> items = new ArrayList<>();
         if(cinemaid != null)
             items.add("\"cinemaid\": \""+cinemaid+"\"");
@@ -80,6 +80,8 @@ abstract class WatcherTestBase extends UserTestBase {
             items.add("\"laser\": \""+laser+"\"");
         if(dbox != null)
             items.add("\"dbox\": \""+dbox+"\"");
+        if(dx4 != null)
+            items.add("\"4dx\": \""+dx4+"\"");
         if(dolbycinema != null)
             items.add("\"dolbycinema\": \""+dolbycinema+"\"");
         if(dolbyatmos != null)

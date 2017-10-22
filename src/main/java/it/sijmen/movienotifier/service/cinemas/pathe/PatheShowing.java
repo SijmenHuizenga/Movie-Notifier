@@ -51,6 +51,9 @@ public class PatheShowing {
     @JsonProperty
     private Integer isLaser;
 
+    @JsonProperty
+    private Boolean is4dx;
+
     public long getEnd() {
         return this.end == -1 ? getFakeEnd() : this.end;
     }
@@ -134,6 +137,14 @@ public class PatheShowing {
 
     public void setIsLaser(Integer isLaser) {
         this.isLaser = isLaser;
+    }
+
+    public Boolean getIs4dx() {
+        return is4dx;
+    }
+
+    public void setIs4dx(Boolean is4dx) {
+        this.is4dx = is4dx;
     }
 
     public long getMovieId() {
