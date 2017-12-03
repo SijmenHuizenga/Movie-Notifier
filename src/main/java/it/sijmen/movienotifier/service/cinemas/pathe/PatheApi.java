@@ -4,8 +4,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
+import it.sijmen.movienotifier.model.FilterOption;
+import it.sijmen.movienotifier.model.PatheMovieCache;
 import it.sijmen.movienotifier.model.Watcher;
-import it.sijmen.movienotifier.model.WatcherDetails;
+import it.sijmen.movienotifier.model.WatcherFilters;
 import it.sijmen.movienotifier.repositories.PatheCacheRepository;
 import it.sijmen.movienotifier.service.cinemas.Cinema;
 import it.sijmen.movienotifier.service.notification.NotificationService;
@@ -18,8 +20,15 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static it.sijmen.movienotifier.model.FilterOption.NO;
+import static it.sijmen.movienotifier.model.FilterOption.NOPREFERENCE;
+import static it.sijmen.movienotifier.model.FilterOption.YES;
 
 @Singleton
 @Service
@@ -45,14 +54,8 @@ public class PatheApi implements Cinema {
 
     private PatheMoviesResponse getShowingsPerCinema(int movieId) throws IOException {
         String uri = "https://connect.pathe.nl/v1/movies/"+movieId+"/schedules";
-        HttpResponse<String> stringHttpResponse;
-        try {
-            stringHttpResponse = Unirest.get(uri)
-                    .header("X-Client-Token", patheApiKey)
-                    .asString();
-        } catch (UnirestException e) {
-            throw new IOException("Could not load request.", e);
-        }
+        HttpResponse<String> stringHttpResponse = makeGetRequest(uri);
+
         if(stringHttpResponse.getStatus() != 200)
             throw new IOException("Status returned " + stringHttpResponse.getStatus() + " after request " + uri);
         PatheMoviesResponse patheMoviesResponse = mapper.readValue(stringHttpResponse.getBody(), PatheMoviesResponse.class);
@@ -62,6 +65,16 @@ public class PatheApi implements Cinema {
         return patheMoviesResponse;
     }
 
+    public HttpResponse<String> makeGetRequest(String uri) throws IOException {
+        try{
+            return Unirest.get(uri)
+                    .header("X-Client-Token", patheApiKey)
+                    .asString();
+        } catch (UnirestException e) {
+            throw new IOException("Could not load request.", e);
+        }
+    }
+
     @Override
     public String getCinemaIdPrefix() {
         return "PATHE";
@@ -69,12 +82,15 @@ public class PatheApi implements Cinema {
 
     @Override
     public void checkWatcher(List<Watcher> watcher) {
-        watcher.stream().collect(Collectors.groupingBy(Watcher::getMovieid))
+        LOGGER.trace("Checking #{} watchers", watcher.size());
+        watcher.stream()
+                .collect(Collectors.groupingBy(Watcher::getMovieid))
                 .forEach(this::checkForUpdates);
     }
 
     private void checkForUpdates(int movieId, List<Watcher> watchers) {
-        PatheMoviesResponse oldData;
+        LOGGER.trace("Checking #{} watchers with modieid {}", watchers.size(), movieId);
+        PatheMovieCache oldData;
         PatheMoviesResponse newData;
         try {
             oldData = repository.getFirstByMovieid(movieId);
@@ -84,48 +100,88 @@ public class PatheApi implements Cinema {
             return;
         }
         if(oldData == null){
-            repository.save(newData);
+            repository.save(makeCacheFromResponse(newData));
             LOGGER.trace("First time retreving data for movie {} and storing in repo", movieId);
             return;
         }
-        if(oldData.equals(newData)) {
+        if(newData.getShowingsids().isEmpty()){
+            LOGGER.trace("Received no showings for movieid {} so nothing to do for this movieid", movieId);
+            return;
+        }
+        if(oldData.getShowingids().containsAll(newData.getShowingsids())) {
             LOGGER.trace("Old and new data for movie {} are equal", movieId);
             return;
         }
-        repository.save(newData);
+        repository.save(makeCacheFromResponse(newData));
         LOGGER.trace("Stored new data for movie {}", movieId);
+
         List<PatheShowing> showings = newData.getShowings();
-        showings.removeAll(oldData.getShowings());
+        List<Long> oldshowings =  oldData.getShowingids();
+
+        showings.removeIf(s -> oldshowings.contains(s.getId()));
         watchers.forEach(w -> this.sendUpdates(w, showings));
+    }
+
+    private PatheMovieCache makeCacheFromResponse(PatheMoviesResponse newData){
+        return new PatheMovieCache(newData.getMovieid(), newData.getShowingsids());
     }
 
     private void sendUpdates(Watcher watcher, List<PatheShowing> showings) {
         for(PatheShowing showing : showings)
             if(accepts(watcher, showing)) {
                 LOGGER.trace("Watcher accepts Showing so now notifying user");
-                notificationService.notify(watcher.getUser(), makeMessage(watcher, showing));
+                notificationService.notify(watcher.getUserid(), makeMessage(watcher, showing));
             }
     }
 
-    private boolean accepts(Watcher watcher, PatheShowing showing){
-        int realWatcherCinemaId = Integer.parseInt(watcher.getCinemaid().substring(getCinemaIdPrefix().length()));
-        WatcherDetails d = watcher.getProps();
-        return showing.getMovieId() == watcher.getMovieid() &&
-                showing.getStart().getTimeInMillis() < watcher.getStartBefore() &&
-                showing.getStart().getTimeInMillis() > watcher.getStartAfter() &&
-                showing.getCinemaId() == realWatcherCinemaId &&
-                eq(d.isD3(), showing.getIs3d()) &&
-                eq(d.isImax(), showing.getImax()) &&
-                eq(d.isOv(), showing.getOv()) &&
-                eq(d.isNl(), showing.getNl()) &&
-                eq(d.isHfr(), showing.getHfr()) &&
-                eq(d.isDolbyatmos(), showing.getIsAtmos()) &&
-                eq(d.isK4(), showing.getIs4k()) &&
-                eq(d.isLaser(), showing.getIsLaser());
+    public boolean accepts(Watcher watcher, PatheShowing showing){
+        int realWatcherCinemaId = Integer.parseInt(watcher.getFilters().getCinemaid().substring(getCinemaIdPrefix().length()));
+        WatcherFilters d = watcher.getFilters();
+        if(showing.getCinemaId() != realWatcherCinemaId){
+            LOGGER.debug("Cinema id does not equal");
+            return false;
+        }
+        if(!(showing.getStart() <= d.getStartbefore())){
+            LOGGER.debug("End does not do good");
+            return false;
+        }
+        if(!(showing.getStart() >= d.getStartafter())){
+            LOGGER.debug("Start does not do good");
+            return false;
+        }
+        if(showing.getMovieId() != watcher.getMovieid()){
+            LOGGER.debug("Movie id is not equal!");
+            return false;
+        }
+
+        if(     !eq(d.isD3(), showing.getIs3d()) ||
+                !eq(d.isImax(), showing.getImax()) ||
+                !eq(d.isOv(), showing.getOv()) ||
+                !eq(d.isNl(), showing.getNl()) ||
+                !eq(d.isHfr(), showing.getHfr()) ||
+                !eq(d.isDolbyatmos(), showing.getIsAtmos()) ||
+                !eq(d.isK4(), showing.getIs4k()) ||
+                !eq(d.isLaser(), showing.getIsLaser()) ||
+                !eqBool(d.isDx4(), showing.getIs4dx())
+                ){
+            LOGGER.debug("The boolean filters failed");
+            return false;
+        }
+        return true;
     }
 
-    private boolean eq(Boolean expected, int actual) {
-        return expected == null || expected == (actual == 1);
+    public boolean eq(FilterOption expected, Integer actual) {
+        return expected == NOPREFERENCE
+                || actual == null
+                || (expected == YES && (actual == 1))
+                || (expected == NO && (actual == 0));
+    }
+
+    public boolean eqBool(FilterOption expected, Boolean actual) {
+        return expected == NOPREFERENCE
+                || actual == null
+                || (expected == YES && actual)
+                || (expected == NO && !actual);
     }
 
     private String makeMessage(Watcher watcher, PatheShowing showing){
@@ -139,11 +195,13 @@ public class PatheApi implements Cinema {
             builder.append(" 4K");
         if(showing.getIsLaser() == 1)
             builder.append(" LASER");
+        if(showing.getIs4dx())
+            builder.append(" 4DX");
 
         builder.append(System.lineSeparator());
-        if(showing.getStart() != null)
-            builder.append(format1.format(showing.getStart().getTime())).append(" - ")
-                    .append(format2.format(showing.getEnd().getTime()))
+        if(showing.getStart() != -1L)
+            builder.append(format1.format(new Date(showing.getStart()))).append(" - ")
+                    .append(format2.format(new Date(showing.getEnd())))
                     .append(System.lineSeparator());
         builder.append("https://www.pathe.nl/tickets/start/")
                 .append(showing.getId());

@@ -5,6 +5,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import it.sijmen.jump.JumpRequest;
 import it.sijmen.jump.listeners.UpdateListener;
 import it.sijmen.movienotifier.model.Model;
+import it.sijmen.movienotifier.model.Watcher;
+import it.sijmen.movienotifier.model.WatcherFilters;
 import it.sijmen.movienotifier.model.exceptions.UnauthorizedException;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
@@ -24,6 +26,8 @@ import java.util.Collections;
 import java.util.List;
 
 import static com.fasterxml.jackson.annotation.JsonProperty.Access.READ_ONLY;
+import static it.sijmen.movienotifier.model.FilterOption.NO;
+import static it.sijmen.movienotifier.model.FilterOption.YES;
 
 public class UpdateActor<T extends Model> extends Actor<T, UpdateListener<T>> {
 
@@ -42,7 +46,7 @@ public class UpdateActor<T extends Model> extends Actor<T, UpdateListener<T>> {
     public ResponseEntity handle(JumpRequest request) {
         listener.checkUpdateRequest(request);
 
-        final T model = repository.findOne(request.getUrldata());
+        final T model = listener.getById(repository, request.getUrldata());
         final T updatingData = readModelFromBody(modelClass, request.getBody());
 
         if(!listener.allowUpdate(request, model)) {
@@ -58,13 +62,13 @@ public class UpdateActor<T extends Model> extends Actor<T, UpdateListener<T>> {
     private T updateModel(T model, T updatingData){
         applyUpdates(model, updatingData);
 
-        T model2 = listener.beforeUpdateValidation(model);
-        model2.validate();
+        model = listener.beforeUpdateValidation(model);
+        model.validate();
 
-        model2 = listener.beforeUpdateStore(model2);
-        repository.save(model2);
-        LOGGER.trace("Update {} stored to repository. New model: {}", modelClass.getSimpleName(), model2);
-        return model2;
+        model = listener.beforeUpdateStore(model);
+        repository.save(model);
+        LOGGER.trace("Update {} stored to repository. New model: {}", modelClass.getSimpleName(), model);
+        return model;
     }
 
     private void applyUpdates(Object model, Object updatingData) {
@@ -93,21 +97,19 @@ public class UpdateActor<T extends Model> extends Actor<T, UpdateListener<T>> {
         try {
             field.setAccessible(true);
             Object o = field.get(object);
-            return o != null && !isEmptyArray(o);
+            return o != null;
         } catch (IllegalAccessException e) {
             LOGGER.error("No access to field {} while checking {}", field, object, e);
             throw new InternalServerErrorException();
         }
     }
 
-    private boolean isEmptyArray(@NotNull Object object){
-        return object instanceof List && ((List) object).isEmpty();
-    }
-
     private void copyField(Field field, Object source, Object target){
         try {
-            if(field.isAnnotationPresent(RecursiveUpdate.class))
-                applyUpdates(field.get(source), field.get(target));
+            if(field.isAnnotationPresent(RecursiveUpdate.class)) {
+                applyUpdates(field.get(target), field.get(source));
+                return;
+            }
             field.set(target, field.get(source));
         } catch (IllegalAccessException e) {
             LOGGER.error("No access to field {} while copying data from {} to {}", field, source, target, e);

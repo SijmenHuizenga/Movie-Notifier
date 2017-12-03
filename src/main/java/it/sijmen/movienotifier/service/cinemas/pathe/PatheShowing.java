@@ -1,54 +1,17 @@
 package it.sijmen.movienotifier.service.cinemas.pathe;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import it.sijmen.movienotifier.model.serialization.UnixTimestampDeserializer;
+import org.springframework.data.annotation.Transient;
+import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.util.Calendar;
-
-import static java.util.Calendar.HOUR_OF_DAY;
-
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class PatheShowing {
 
     @JsonProperty
     private int cinemaId;
-
-    @JsonProperty
-    private Calendar end;
-
-    @JsonProperty
-    private int is3d;
-
-    @JsonProperty
-    private int nl;
-
-    @JsonProperty
-    private int imax;
-
-    @JsonProperty
-    private int ov;
-
-    @JsonProperty
-    private int vip;
-
-    @JsonProperty
-    private int hfr;
-
-    @JsonProperty
-    private int isAtmos;
-
-    @JsonProperty
-    private int is4k;
-
-    @JsonProperty
-    private int isLaser;
-
-    @JsonProperty
-    private int isPremium;
-
-    @JsonProperty
-    private int hallIsLarge;
-
-    @JsonProperty
-    private int hallIsRooftop;
 
     @JsonProperty
     private long movieId;
@@ -56,23 +19,68 @@ public class PatheShowing {
     @JsonProperty
     private long id;
 
+    @JsonDeserialize(using=UnixTimestampDeserializer.class)
     @JsonProperty
-    private long specialId;
+    private long start;
+
+    @JsonDeserialize(using=UnixTimestampDeserializer.class)
+    @JsonProperty
+    private long end;
+
+    @JsonProperty("3d")
+    private Integer is3d;
 
     @JsonProperty
-    private Calendar start;
+    private Integer nl;
 
     @JsonProperty
-    private int status;
+    private Integer imax;
 
-    public Calendar getEnd() {
-        return this.end == null ? getFakeEnd() : this.end;
+    @JsonProperty
+    private Integer ov;
+
+    @JsonProperty
+    private Integer hfr;
+
+    @JsonProperty
+    private Integer isAtmos;
+
+    @JsonProperty
+    private Integer is4k;
+
+    @JsonProperty
+    private Integer isLaser;
+
+    @JsonProperty
+    private Boolean is4dx;
+
+    public PatheShowing(int cinemaId, long movieId, long id, long start, long end, Integer is3d, Integer nl,
+                        Integer imax, Integer ov, Integer hfr, Integer isAtmos, Integer is4k, Integer isLaser, Boolean is4dx) {
+        this.cinemaId = cinemaId;
+        this.movieId = movieId;
+        this.id = id;
+        this.start = start;
+        this.end = end;
+        this.is3d = is3d;
+        this.nl = nl;
+        this.imax = imax;
+        this.ov = ov;
+        this.hfr = hfr;
+        this.isAtmos = isAtmos;
+        this.is4k = is4k;
+        this.isLaser = isLaser;
+        this.is4dx = is4dx;
     }
 
-    private Calendar getFakeEnd() {
-        Calendar c = (Calendar) getStart().clone();
-        c.add(HOUR_OF_DAY, 3);
-        return c;
+    public PatheShowing() { }
+
+    public long getEnd() {
+        return this.end == -1 ? getFakeEnd() : this.end;
+    }
+
+    private long getFakeEnd() {
+        //3 hours in millis
+        return this.start + 10_800_000;
     }
 
     public int getCinemaId() {
@@ -83,104 +91,80 @@ public class PatheShowing {
         this.cinemaId = cinemaId;
     }
 
-    public void setEnd(Calendar end) {
+    public void setEnd(long end) {
         this.end = end;
     }
 
-    public int getIs3d() {
+    public Integer getIs3d() {
         return is3d;
     }
 
-    public void setIs3d(int is3d) {
+    public void setIs3d(Integer is3d) {
         this.is3d = is3d;
     }
 
-    public int getNl() {
+    public Integer getNl() {
         return nl;
     }
 
-    public void setNl(int nl) {
+    public void setNl(Integer nl) {
         this.nl = nl;
     }
 
-    public int getImax() {
+    public Integer getImax() {
         return imax;
     }
 
-    public void setImax(int imax) {
+    public void setImax(Integer imax) {
         this.imax = imax;
     }
 
-    public int getOv() {
+    public Integer getOv() {
         return ov;
     }
 
-    public void setOv(int ov) {
+    public void setOv(Integer ov) {
         this.ov = ov;
     }
 
-    public int getVip() {
-        return vip;
-    }
-
-    public void setVip(int vip) {
-        this.vip = vip;
-    }
-
-    public int getHfr() {
+    public Integer getHfr() {
         return hfr;
     }
 
-    public void setHfr(int hfr) {
+    public void setHfr(Integer hfr) {
         this.hfr = hfr;
     }
 
-    public int getIsAtmos() {
+    public Integer getIsAtmos() {
         return isAtmos;
     }
 
-    public void setIsAtmos(int isAtmos) {
+    public void setIsAtmos(Integer isAtmos) {
         this.isAtmos = isAtmos;
     }
 
-    public int getIs4k() {
+    public Integer getIs4k() {
         return is4k;
     }
 
-    public void setIs4k(int is4k) {
+    public void setIs4k(Integer is4k) {
         this.is4k = is4k;
     }
 
-    public int getIsLaser() {
+    public Integer getIsLaser() {
         return isLaser;
     }
 
-    public void setIsLaser(int isLaser) {
+    public void setIsLaser(Integer isLaser) {
         this.isLaser = isLaser;
     }
 
-    public int getIsPremium() {
-        return isPremium;
+    public Boolean getIs4dx() {
+        return is4dx;
     }
 
-    public void setIsPremium(int isPremium) {
-        this.isPremium = isPremium;
-    }
-
-    public int getHallIsLarge() {
-        return hallIsLarge;
-    }
-
-    public void setHallIsLarge(int hallIsLarge) {
-        this.hallIsLarge = hallIsLarge;
-    }
-
-    public int getHallIsRooftop() {
-        return hallIsRooftop;
-    }
-
-    public void setHallIsRooftop(int hallIsRooftop) {
-        this.hallIsRooftop = hallIsRooftop;
+    public void setIs4dx(Boolean is4dx) {
+        this.is4dx = is4dx;
     }
 
     public long getMovieId() {
@@ -199,28 +183,12 @@ public class PatheShowing {
         this.id = id;
     }
 
-    public long getSpecialId() {
-        return specialId;
+    public long getStart() {
+        return this.start;
     }
 
-    public void setSpecialId(long specialId) {
-        this.specialId = specialId;
-    }
-
-    public Calendar getStart() {
-        return start;
-    }
-
-    public void setStart(Calendar start) {
+    public void setStart(long start) {
         this.start = start;
-    }
-
-    public int getStatus() {
-        return status;
-    }
-
-    public void setStatus(int status) {
-        this.status = status;
     }
 
     @Override

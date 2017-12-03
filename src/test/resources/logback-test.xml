@@ -6,5 +6,6 @@
     <logger name="org.springframework" level="ERROR"/>
     <logger name="com.mkyong" level="ERROR"/>
     <logger name="org.mongodb" level="ERROR"/>
+    <logger name="it.sijmen.movienotifier.integrationtests" level="INFO"/>
 
 </configuration>

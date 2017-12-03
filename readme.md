@@ -1,6 +1,6 @@
 # Movie Notifier
 [![GitHub tag](https://img.shields.io/github/release/sijmenhuizenga/Movie-Notifier.svg)](https://github.com/SijmenHuizenga/Movie-Notifier/releases)
-[![License](https://img.shields.io/github/license/mashape/apistatus.svg)](https://github.com/SijmenHuizenga/Movie-Notifier/blob/develop/license.txt)
+[![License](https://img.shields.io/github/license/sijmenhuizenga/movie-notifier.svg)](https://github.com/SijmenHuizenga/Movie-Notifier/blob/develop/license.txt)
 [![Travis](https://travis-ci.org/SijmenHuizenga/Movie-Notifier.svg?branch=develop)](https://travis-ci.org/SijmenHuizenga/Movie-Notifier)
 [![Docker](https://img.shields.io/badge/docker%20image-available-brightgreen.svg)](https://hub.docker.com/r/sijmenhuizenga/movienotifier/)
 [![Codebeat](https://codebeat.co/badges/02e75a98-a0e0-4afe-aada-30b8a28beb12)](https://codebeat.co/projects/github-com-sijmenhuizenga-movie-notifier-develop)
@@ -65,10 +65,8 @@ services:
     image: mongo
     volumes:
       - [replace with path to persistant db store location]:/data/db
-    restart: on-failure
   movie-notifier:
-    image: sijmenhuizenga/movienotifier:3.0-SNAPSHOT
-    restart: on-failure
+    image: sijmenhuizenga/movienotifier:3.1
     volumes:
       - [replace with path to movie-notifier.properties]:/movie-notifier.properties
     depends_on:
@@ -89,7 +87,6 @@ services:
     labels:
         com.github.jrcs.letsencrypt_nginx_proxy_companion.nginx_proxy: "true"
     container_name: nginx
-    restart: on-failure
     ports:
       - "443:443"
       - "80:80"
@@ -101,7 +98,6 @@ services:
   nginx-letsencrypt:
     image: jrcs/letsencrypt-nginx-proxy-companion
     container_name: nginx-letsencrypt
-    restart: on-failure
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
     volumes_from:
@@ -110,10 +106,8 @@ services:
     image: mongo
     volumes:
       - [replace with path to persistant db store location]:/data/db
-    restart: on-failure
   movie-notifier:
-    image: sijmenhuizenga/movienotifier:3.0-SNAPSHOT
-    restart: on-failure
+    image: sijmenhuizenga/movienotifier:3.1
     volumes:
       - [replace with path to movie-notifier.properties]:/movie-notifier.properties
     environment:

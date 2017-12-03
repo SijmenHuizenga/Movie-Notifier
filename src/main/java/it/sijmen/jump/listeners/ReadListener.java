@@ -8,4 +8,5 @@ public interface ReadListener<T> extends ActorListener<T> {
 
     default boolean allowRead(JumpRequest request, T result) {return true; }
 
+    default T beforeReadResult(JumpRequest request, T result){ return result; }
 }

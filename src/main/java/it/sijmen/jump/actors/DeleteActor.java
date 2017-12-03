@@ -27,7 +27,7 @@ public class DeleteActor<T extends Model> extends Actor<T, DeleteListener<T>> {
     @Override
     public ResponseEntity handle(JumpRequest request) {
         listener.checkDeleteRequest(request);
-        T toDelete = repository.findOne(request.getUrldata());
+        T toDelete = listener.getById(repository, request.getUrldata());
         if(toDelete == null) {
             LOGGER.warn("ToDelete {} not found with request {}", modelClass.getSimpleName(), request);
             throw new UnauthorizedException();
@@ -37,6 +37,7 @@ public class DeleteActor<T extends Model> extends Actor<T, DeleteListener<T>> {
             throw new UnauthorizedException();
         }
         repository.delete(toDelete);
+        listener.postDelete(request, toDelete);
         LOGGER.trace("{} deleted: {}", modelClass.getSimpleName(), toDelete);
 
         return ResponseEntity.ok().build();

@@ -70,7 +70,7 @@ abstract class UserTestBase {
     }
 
     void addToMockedDb(User user){
-        when(userRepo.findOne(user.getId())).thenReturn(user);
+        when(userRepo.getFirstByUuid(user.getId())).thenReturn(user);
         when(userRepo.findFirstByApikey(user.getApikey())).thenReturn(user);
         when(userRepo.findFirstByName(user.getName())).thenReturn(user);
 
@@ -78,7 +78,7 @@ abstract class UserTestBase {
         when(userRepo.getAllByEmail(user.getEmail())).thenReturn(Collections.singletonList(user));
     }
     void removeFromMockedDb(User user){
-        when(userRepo.findOne(user.getId())).thenReturn(null);
+        when(userRepo.getFirstByUuid(user.getId())).thenReturn(null);
         when(userRepo.findFirstByApikey(user.getApikey())).thenReturn(null);
         when(userRepo.findFirstByName(user.getName())).thenReturn(null);
 

@@ -35,7 +35,7 @@ public class UserUpdateTest extends UserTestBase {
                 .andExpect(jsonPath("$.name").value(testuser2.getName()))
                 .andExpect(jsonPath("$.email").value(testuser2.getEmail()))
                 .andExpect(jsonPath("$.phonenumber").value(testuser2.getPhonenumber()))
-                .andExpect(jsonPath("$.uuid").value(testuser.getId()))
+                .andExpect(jsonPath("$.id").value(testuser.getId()))
                 .andExpect(jsonPath("$.apikey").value(IsNull.notNullValue()))
                 .andExpect(jsonPath("$.notifications")
                         .value(new JSONArray().appendElement("FBM").appendElement("MIL")))

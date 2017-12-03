@@ -45,7 +45,7 @@ public class FBMessengerNotifier implements Notifier {
 
         if(!resp.isSuccessful())
             throw new IOException("Facebook Messenger responded with error. Result: " + resp.getResult());
-        LOGGER.info("Sent FB Messenger notification to {}. Message: {}", phoneReceiver, simpleTextMessage);
+        LOGGER.info("Sent FB Messenger notification to {}. Message: {}", phoneReceiver.getPhoneNumber(), simpleTextMessage.getText());
     }
 
     @Override

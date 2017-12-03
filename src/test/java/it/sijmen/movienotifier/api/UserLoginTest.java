@@ -26,7 +26,7 @@ public class UserLoginTest extends UserTestBase {
         ))
                 .andExpect(status().isOk()).andExpect(content().json(
                 "{\n" +
-                "    \"uuid\": \""+testuser.getId()+"\",\n" +
+                "    \"id\": \""+testuser.getId()+"\",\n" +
                 "    \"name\": \""+testuser.getName()+"\",\n" +
                 "    \"email\": \""+testuser.getEmail()+"\",\n" +
                 "    \"phonenumber\": \""+testuser.getPhonenumber()+"\",\n" +

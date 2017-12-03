@@ -38,7 +38,11 @@ public class NotificationService {
     }
 
     public void notify(String userId, String message) {
-        User user = userRepository.findOne(userId);
+        User user = userRepository.getFirstByUuid(userId);
+        if(user == null){
+            LOGGER.error("Could not find " + userId + " while this user has enabled watchers");
+            return;
+        }
         if(user.getEnabledNotifications() == null || user.getEnabledNotifications().isEmpty()){
             LOGGER.error("Could not notify user {} because no notification types are enabled. message: {}", user.getId(), message);
             return;
@@ -52,7 +56,7 @@ public class NotificationService {
         Notifier notifier = getNotifier(notificationType);
         try {
             notifier.notify(user, message);
-        } catch (IOException e) {
+        } catch (Exception e) {
             LOGGER.error("Notification failed to user {} with message {}", user.getId(), message, e);
         }
     }

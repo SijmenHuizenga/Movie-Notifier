@@ -17,16 +17,22 @@ public class WatchJob {
         this.cinemaService = cinemaService;
     }
 
-    @Scheduled(cron = "${random.int[0,59]} */${random.int[10,15]}  22-23 * * *")
-    @Scheduled(cron = "${random.int[0,59]} */${random.int[10,15]}  0-6 * * *")
+    //todo: this random thing doesnt work
+    @Scheduled(cron = "${random.int[0,59]} */12  22-23 * * *")
+    @Scheduled(cron = "${random.int[0,59]} */12  0-6 * * *")
     public void executeByNight(){
         LOGGER.info("Executing night job");
         cinemaService.checkCinemasForChangesAndNotifyWatchers();
     }
 
-    @Scheduled(cron = "${random.int[0,59]} */${random.int[2,6]} 8-21 * * *")
+    @Scheduled(cron = "${random.int[0,59]} */5 6-21 * * *")
     public void executeByDay(){
         LOGGER.info("Executing day job");
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         cinemaService.checkCinemasForChangesAndNotifyWatchers();
     }
 

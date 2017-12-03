@@ -19,16 +19,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class WatcherCreateTest extends WatcherTestBase {
 
     private String buildJsonCreation(Watcher watcher){
-        return buildJsonCreation(watcher.getUser(), watcher);
+        return buildJsonCreation(watcher.getUserid(), watcher);
     }
 
     private String buildJsonCreation(String userid, Watcher watcher){
-        return buildJson(null, userid, watcher.getName(), watcher.getMovieid(), watcher.getCinemaid(),
-                watcher.getStartAfter(), watcher.getStartBefore(), buildJson(watcher.getProps()));
-    }
-    private String buildJsonCreation(long startBefore, long startAfter, Watcher watcher){
-        return buildJson(null, watcher.getUser(), watcher.getName(), watcher.getMovieid(), watcher.getCinemaid(),
-                startAfter, startBefore, buildJson(watcher.getProps()));
+        return buildJson(null, userid, watcher.getName(), watcher.getMovieid(),
+                watcher.getBegin(), watcher.getEnd(), buildJson(watcher.getFilters()));
     }
 
     @Test
@@ -44,13 +40,12 @@ public class WatcherCreateTest extends WatcherTestBase {
         this.mvc.perform(put("/watchers/").accept(MediaType.APPLICATION_JSON)
                 .header("APIKEY", testuser.getApikey()).content(buildJsonCreation(testwatcher)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.uuid").value(testwatcher.getId()))
-                .andExpect(jsonPath("$.user").value(testwatcher.getUser()))
+                .andExpect(jsonPath("$.id").value(testwatcher.getId()))
+                .andExpect(jsonPath("$.userid").value(testwatcher.getUserid()))
                 .andExpect(jsonPath("$.name").value(testwatcher.getName()))
                 .andExpect(jsonPath("$.movieid").value(testwatcher.getMovieid()))
-                .andExpect(jsonPath("$.cinemaid").value(testwatcher.getCinemaid()))
-                .andExpect(jsonPath("$.startAfter").value(testwatcher.getStartAfter()))
-                .andExpect(jsonPath("$.startBefore").value(testwatcher.getStartBefore()));
+                .andExpect(jsonPath("$.end").value(testwatcher.getEnd()))
+                .andExpect(jsonPath("$.begin").value(testwatcher.getBegin()));
         verify(watcherRepo, times(1)).save((Watcher) any());
     }
 
@@ -65,17 +60,46 @@ public class WatcherCreateTest extends WatcherTestBase {
     }
 
     @Test
+    public void testCreateBeginBiggerThanEnd() throws Exception {
+        addToMockedDb(testuser);
+        Watcher watcher = new Watcher(testwatcher);
+        watcher.setBegin(50);
+        watcher.setEnd(30);
+        this.mvc.perform(put("/watchers/").accept(MediaType.APPLICATION_JSON)
+                .header("APIKEY", testuser.getApikey()).content(buildJsonCreation(watcher)))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.errors").value(Matchers.containsInAnyOrder(
+                        "end must be later than begin"
+                )));
+        verifyZeroInteractions(watcherRepo);
+    }
+
+    @Test
+    public void testCreateBeginTooFarFromEnd() throws Exception {
+        addToMockedDb(testuser);
+        Watcher watcher = new Watcher(testwatcher);
+        watcher.setBegin(10);
+        watcher.setEnd(10L+2629746000L);//10 seconds + 1 month
+        this.mvc.perform(put("/watchers/").accept(MediaType.APPLICATION_JSON)
+                .header("APIKEY", testuser.getApikey()).content(buildJsonCreation(watcher)))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.errors").value(Matchers.containsInAnyOrder(
+                        "time between begin and end must be smaller than 1 month"
+                )));
+        verifyZeroInteractions(watcherRepo);
+    }
+
+    @Test
     public void testCreateNoParams() throws Exception {
         addToMockedDb(testuser);
         this.mvc.perform(put("/watchers/").accept(MediaType.APPLICATION_JSON)
-                .header("APIKEY", testuser.getApikey()).content("{\"user\": \""+testuser.getId()+"\"}"))
+                .header("APIKEY", testuser.getApikey()).content("{\"userid\": \""+testuser.getId()+"\"}"))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.errors").value(Matchers.containsInAnyOrder(
                         "name may not be empty",
-                        "cinemaid may not be empty",
-                        "movieid must be between 1 and 9223372036854775807",
-                        "startBefore Date must be in the present or future",
-                        "startAfter Date must be in the present or future"
+                        "movieid must be greater than or equal to 1",
+                        "filters may not be null",
+                        "end must be later than begin"
                 )));
         verifyZeroInteractions(watcherRepo);
     }
@@ -106,19 +130,6 @@ public class WatcherCreateTest extends WatcherTestBase {
         this.mvc.perform(put("/watchers/").accept(MediaType.APPLICATION_JSON)
                 .header("APIKEY", testuser.getApikey()).content(buildJsonCreation(testuser2.getId(), testwatcher)))
                 .andExpect(status().isUnauthorized());
-        verifyZeroInteractions(watcherRepo);
-    }
-
-    @Test
-    public void testStarTimeInPast() throws Exception {
-        addToMockedDb(testuser);
-        this.mvc.perform(put("/watchers/").accept(MediaType.APPLICATION_JSON)
-                .header("APIKEY", testuser.getApikey()).content(buildJsonCreation(1501797276, 1501793276, testwatcher)))
-                .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.errors").value(Matchers.containsInAnyOrder(
-                        "startAfter Date must be in the present or future",
-                        "startBefore Date must be in the present or future"
-                )));
         verifyZeroInteractions(watcherRepo);
     }
 
