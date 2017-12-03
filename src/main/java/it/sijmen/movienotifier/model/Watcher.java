@@ -1,5 +1,6 @@
 package it.sijmen.movienotifier.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import it.sijmen.jump.actors.UpdateActor;
 import org.hibernate.validator.constraints.NotBlank;
@@ -104,6 +105,7 @@ public class Watcher implements Model {
         this.uuid = id;
     }
 
+    @JsonIgnore
     public String getCinemaPrefix() {
         return this.filters.getCinemaid().replaceAll("[0-9]", "");
     }

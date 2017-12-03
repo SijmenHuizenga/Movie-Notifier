@@ -6,6 +6,7 @@ import it.sijmen.movienotifier.api.JumpConfiguration;
 import it.sijmen.movienotifier.model.PatheMovieCache;
 import it.sijmen.movienotifier.model.Watcher;
 import it.sijmen.movienotifier.model.WatcherFilters;
+import it.sijmen.movienotifier.model.serialization.UnixTimestampDeserializer;
 import it.sijmen.movienotifier.repositories.PatheCacheRepository;
 import it.sijmen.movienotifier.repositories.UserRepository;
 import it.sijmen.movienotifier.repositories.WatcherRepository;
@@ -17,6 +18,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.text.ParseException;
 import java.util.Collections;
 import java.util.Date;
 
@@ -139,6 +141,23 @@ public class PatheApiTest {
 
         verify(notificationService, times(fired ? 1 : 0)).notify(eq("SOMEUSER"), any());
     }
+
+    @Test
+    public void testIS4DX() throws ParseException {
+        PatheApi api = spy(new PatheApi(new ObjectMapper(), "SOMEKEY", patheCacheRepository, notificationService));
+
+        Watcher watcher = new Watcher("SOMEID", "SOMEUSER", "Star Wars 8 (R'dam Dolby Cinema week 1)", 21432, 1510992000185L, 1513186080310L, new WatcherFilters(
+                "PATHE12",
+                1513353540786L, 1513540800699L, NOPREFERENCE, NOPREFERENCE, NOPREFERENCE, NOPREFERENCE, NOPREFERENCE, NOPREFERENCE, NOPREFERENCE,
+                NOPREFERENCE, NO, NOPREFERENCE, NOPREFERENCE
+        ));
+
+        PatheShowing patheShowing = new PatheShowing(12, 21432, 2382115, UnixTimestampDeserializer.PATHEFORMAT.parse("2017-12-15T21:00:00+01:00").getTime(),
+                UnixTimestampDeserializer.PATHEFORMAT.parse("2017-12-15T23:50:00+01:00").getTime(), 1, 0, 0, 0, 0, 0, 0, 0, true);
+
+        assertFalse(api.accepts(watcher, patheShowing));
+    }
+
     @Test
     public void testEq(){
         PatheApi api = spy(new PatheApi(new ObjectMapper(), "SOMEKEY", patheCacheRepository, notificationService));

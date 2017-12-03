@@ -54,6 +54,26 @@ public class PatheShowing {
     @JsonProperty
     private Boolean is4dx;
 
+    public PatheShowing(int cinemaId, long movieId, long id, long start, long end, Integer is3d, Integer nl,
+                        Integer imax, Integer ov, Integer hfr, Integer isAtmos, Integer is4k, Integer isLaser, Boolean is4dx) {
+        this.cinemaId = cinemaId;
+        this.movieId = movieId;
+        this.id = id;
+        this.start = start;
+        this.end = end;
+        this.is3d = is3d;
+        this.nl = nl;
+        this.imax = imax;
+        this.ov = ov;
+        this.hfr = hfr;
+        this.isAtmos = isAtmos;
+        this.is4k = is4k;
+        this.isLaser = isLaser;
+        this.is4dx = is4dx;
+    }
+
+    public PatheShowing() { }
+
     public long getEnd() {
         return this.end == -1 ? getFakeEnd() : this.end;
     }
