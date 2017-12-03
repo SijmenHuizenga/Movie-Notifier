@@ -14,6 +14,8 @@ tags:
     description: Everything about watchers.
   - name: Notification Type
     description: Methods of communication that can be enabled by the user to notifie the user when new movie show is available.
+  - name: Cinemas
+    description: Everything about cinemas
   - name: Operations
     description: Server status, statistics and system management.
 schemes:
@@ -181,7 +183,7 @@ paths:
       description: Get a list of all watchers that you are owned by you. You own a watcher when the user in the watcher has your id.
       responses:
         200:
-          description: All the watchers you own. If you own no watchers a empty array is returned. 
+          description: All the watchers you own. If you own no watchers a empty array is returned.
           schema:
             type: array
             items:
@@ -278,7 +280,20 @@ paths:
           $ref: '#/responses/InternalServerError'
       security:
         - APIKEY: []
-
+  /cinemas:
+    get:
+      tags:
+        - Cinemas
+      description: Get all cinemas and it's details that are supported by the system.
+      responses:
+        200:
+          description: List of all cinemas.
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Cinema'
+        500:
+          $ref: '#/responses/InternalServerError'
   /health:
     get:
       tags:
@@ -411,7 +426,7 @@ definitions:
         example: 123456
       cinemaid:
         type: string
-        description: The unique identifier of the movie to watch for. The format of this field is described in the system specifications.
+        description: The unique identifier of the movie to watch for. Get a list of all supported cinemas by using the `/cinemas` endpoint.
         example: "PATHE12"
       begin:
         title: Start watching from
@@ -443,7 +458,7 @@ definitions:
           - dbox
           - 4dx
           - dolbycinema
-          - dolbyatomos
+          - dolbyatmos
         properties:
           startafter:
             title: Showing must start after this timestamp
@@ -519,6 +534,25 @@ definitions:
       description:
         description: The extended description of this notification type
         type: string
+  Cinema:
+    type: object
+    properties:
+      id:
+        description: The unique id of this cinema
+        type: string
+        example: PATHE9
+      name:
+        description: The name of this cinema. Use this field for displaying to the user.
+        type: string
+        example: Pathé Arena
+      lat:
+        description: The lattitude location of this cinema
+        type: number
+        example: 52.31233
+      lon:
+        description: The longtitude location this cinema
+        type: number
+        example: 4.94577
 responses:
   UnauthorizedError:
     description: This error is thrown when the authentication fails or when the authorized user does not have permission to execute the command. A common cause of this exception is a missing or invalid apikey. An example; When you request the details of a user with the apikey of onther user using GET /user/userid, you will always get this exception regardless of the user exists in the system.
