@@ -66,7 +66,7 @@ services:
     volumes:
       - [replace with path to persistant db store location]:/data/db
   movie-notifier:
-    image: sijmenhuizenga/movienotifier:3.0-SNAPSHOT
+    image: sijmenhuizenga/movienotifier:3.2-SNAPSHOT
     volumes:
       - [replace with path to movie-notifier.properties]:/movie-notifier.properties
     depends_on:
@@ -107,7 +107,7 @@ services:
     volumes:
       - [replace with path to persistant db store location]:/data/db
   movie-notifier:
-    image: sijmenhuizenga/movienotifier:3.0-SNAPSHOT
+    image: sijmenhuizenga/movienotifier:3.2-SNAPSHOT
     volumes:
       - [replace with path to movie-notifier.properties]:/movie-notifier.properties
     environment:
