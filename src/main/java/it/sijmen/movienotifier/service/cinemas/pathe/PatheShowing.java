@@ -54,8 +54,11 @@ public class PatheShowing {
     @JsonProperty
     private Boolean is4dx;
 
-    public PatheShowing(int cinemaId, long movieId, long id, long start, long end, Integer is3d, Integer nl,
-                        Integer imax, Integer ov, Integer hfr, Integer isAtmos, Integer is4k, Integer isLaser, Boolean is4dx) {
+    @JsonProperty
+    private Boolean isVision;
+
+    public PatheShowing(int cinemaId, long movieId, long id, long start, long end, Integer is3d, Integer nl, Integer imax,
+                        Integer ov, Integer hfr, Integer isAtmos, Integer is4k, Integer isLaser, Boolean is4dx, Boolean isVision) {
         this.cinemaId = cinemaId;
         this.movieId = movieId;
         this.id = id;
@@ -70,6 +73,7 @@ public class PatheShowing {
         this.is4k = is4k;
         this.isLaser = isLaser;
         this.is4dx = is4dx;
+        this.isVision = isVision;
     }
 
     public PatheShowing() { }
@@ -165,6 +169,14 @@ public class PatheShowing {
 
     public void setIs4dx(Boolean is4dx) {
         this.is4dx = is4dx;
+    }
+
+    public Boolean getIsVision() {
+        return isVision;
+    }
+
+    public void setIsVision(Boolean isVision) {
+        this.isVision = isVision;
     }
 
     public long getMovieId() {
