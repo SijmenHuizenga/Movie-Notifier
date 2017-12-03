@@ -154,15 +154,16 @@ public class PatheApi implements Cinema {
             return false;
         }
 
-        if(!(eq(d.isD3(), showing.getIs3d()) &&
-                eq(d.isImax(), showing.getImax()) &&
-                eq(d.isOv(), showing.getOv()) &&
-                eq(d.isNl(), showing.getNl()) &&
-                eq(d.isHfr(), showing.getHfr()) &&
-                eq(d.isDolbyatmos(), showing.getIsAtmos()) &&
-                eq(d.isK4(), showing.getIs4k()) &&
-                eq(d.isLaser(), showing.getIsLaser())) &&
-                eqBool(d.isDx4(), showing.getIs4dx())){
+        if(     !eq(d.isD3(), showing.getIs3d()) ||
+                !eq(d.isImax(), showing.getImax()) ||
+                !eq(d.isOv(), showing.getOv()) ||
+                !eq(d.isNl(), showing.getNl()) ||
+                !eq(d.isHfr(), showing.getHfr()) ||
+                !eq(d.isDolbyatmos(), showing.getIsAtmos()) ||
+                !eq(d.isK4(), showing.getIs4k()) ||
+                !eq(d.isLaser(), showing.getIsLaser()) ||
+                !eqBool(d.isDx4(), showing.getIs4dx())
+                ){
             LOGGER.debug("The boolean filters failed");
             return false;
         }
