@@ -140,7 +140,7 @@ public class PatheApiTest {
                 )
         ));
 
-        verify(notificationService, times(fired ? 1 : 0)).notify(eq("SOMEUSER"), any());
+        verify(notificationService, times(fired ? 1 : 0)).notify(eq("SOMEUSER"), any(), any());
     }
 
     @Test

@@ -41,7 +41,7 @@ public class MailNotifier implements Notifier {
         Response response = Mail.using(mailgunConfig)
                 .to(recipient.getEmail())
                 .subject(getTitle(messageHeader))
-                .text(messageHeader + System.lineSeparator() + messageBody)
+                .text(messageHeader + System.lineSeparator() + System.lineSeparator() + messageBody)
                 .build()
                 .send();
         if(!response.isOk())

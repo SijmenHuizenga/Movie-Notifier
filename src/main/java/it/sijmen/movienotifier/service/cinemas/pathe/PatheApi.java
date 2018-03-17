@@ -131,24 +131,24 @@ public class PatheApi implements Cinema {
                 matches.add(showing);
             }
         }
-        if(matches.size() > 0) {
-            matches.sort((s1, s2) -> {
-                if(s1.getStart() != -1L && s2.getStart() != -1L) {
-                    return Long.compare(s1.getStart(), s2.getStart());
-                } else if(s1.getStart() != -1L) {
-                    return -1;
-                } else { // s2.getStart() != -1L
-                    return 1;
-                }
-            });
-            StringBuilder body = new StringBuilder(System.lineSeparator());
-            for(PatheShowing match : matches) {
-                body.append(makeMessageBody(match));
-            }
-            LOGGER.trace("Notifying user about {} matches for watcher", matches.size());
+        if(matches.size() == 0)
+            return;
 
-            notificationService.notify(watcher.getUserid(), makeMessageHeader(watcher, matches.size()), body.toString());
-        }
+        LOGGER.trace("Notifying user about {} matches for watcher", matches.size());
+
+        matches.sort((s1, s2) -> {
+            if(s1.getStart() == -1L)
+                return 1;
+            if(s2.getStart() == -1L)
+                return -1;
+            return Long.compare(s1.getStart(), s2.getStart());
+        });
+        StringBuilder body = new StringBuilder(System.lineSeparator());
+        for(PatheShowing match : matches)
+            body.append(makeMessageBody(match));
+
+        notificationService.notify(watcher.getUserid(), makeMessageHeader(watcher, matches.size()), body.toString());
+
     }
 
     public boolean accepts(Watcher watcher, PatheShowing showing){
@@ -203,13 +203,11 @@ public class PatheApi implements Cinema {
     }
 
     private String makeMessageHeader(Watcher watcher, int matches){
-        StringBuilder builder = new StringBuilder(watcher.getName());
-        builder.append(System.lineSeparator())
-                .append("+")
-                .append(matches)
-                .append(" matches");
-
-        return builder.toString();
+        return watcher.getName() +
+                System.lineSeparator() +
+                "+" +
+                matches +
+                " matches";
     }
 
     private String makeMessageBody(PatheShowing showing) {
