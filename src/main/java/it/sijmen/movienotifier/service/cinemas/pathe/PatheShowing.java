@@ -4,11 +4,15 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import it.sijmen.movienotifier.model.serialization.UnixTimestampDeserializer;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class PatheShowing {
+public class PatheShowing implements Comparable<PatheShowing> {
 
     @JsonProperty
     private int cinemaId;
@@ -54,8 +58,11 @@ public class PatheShowing {
     @JsonProperty
     private Boolean is4dx;
 
-    public PatheShowing(int cinemaId, long movieId, long id, long start, long end, Integer is3d, Integer nl,
-                        Integer imax, Integer ov, Integer hfr, Integer isAtmos, Integer is4k, Integer isLaser, Boolean is4dx) {
+    @JsonProperty
+    private Boolean isVision;
+
+    public PatheShowing(int cinemaId, long movieId, long id, long start, long end, Integer is3d, Integer nl, Integer imax,
+                        Integer ov, Integer hfr, Integer isAtmos, Integer is4k, Integer isLaser, Boolean is4dx, Boolean isVision) {
         this.cinemaId = cinemaId;
         this.movieId = movieId;
         this.id = id;
@@ -70,6 +77,7 @@ public class PatheShowing {
         this.is4k = is4k;
         this.isLaser = isLaser;
         this.is4dx = is4dx;
+        this.isVision = isVision;
     }
 
     public PatheShowing() { }
@@ -167,6 +175,14 @@ public class PatheShowing {
         this.is4dx = is4dx;
     }
 
+    public Boolean getIsVision() {
+        return isVision;
+    }
+
+    public void setIsVision(Boolean isVision) {
+        this.isVision = isVision;
+    }
+
     public long getMovieId() {
         return movieId;
     }
@@ -204,5 +220,47 @@ public class PatheShowing {
     @Override
     public int hashCode() {
         return (int) (getId() ^ (getId() >>> 32));
+    }
+
+    private static final SimpleDateFormat format1 = new SimpleDateFormat("EEE d MMMM HH:mm");
+    private static final SimpleDateFormat format2 = new SimpleDateFormat("HH:mm");
+
+    public String toMessageString() {
+        StringBuilder builder = new StringBuilder();
+
+        if(getStart() != -1L)
+            builder.append(format1.format(new Date(getStart()))).append(" - ")
+                    .append(format2.format(new Date(getEnd())))
+                    .append(", ");
+
+        if(getImax() == 1)
+            builder.append(" IMAX");
+
+        if(getIsVision())
+            builder.append(" Dolby Cinema");
+        else if(getIsLaser() == 1)
+            builder.append(" LASER");
+
+        if(getIs4dx())
+            builder.append(" 4DX");
+        if(getIs4k() == 1)
+            builder.append(" 4K");
+        if(getIs3d() == 1)
+            builder.append(" 3D, ");
+        else
+            builder.append(" 2D, ");
+
+        builder.append("https://www.pathe.nl/tickets/start/").append(getId());
+
+        return builder.toString();
+    }
+
+    @Override
+    public int compareTo(@NotNull PatheShowing o) {
+        if (this.getStart() == -1)
+            return 1;
+        if (o.getStart() == -1)
+            return -1;
+        return Long.compare(this.getStart(), o.getStart());
     }
 }

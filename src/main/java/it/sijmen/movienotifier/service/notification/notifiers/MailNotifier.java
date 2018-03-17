@@ -37,17 +37,17 @@ public class MailNotifier implements Notifier {
     }
 
     @Override
-    public void notify(User recipient, String message) throws IOException {
+    public void notify(User recipient, String messageHeader, String messageBody) throws IOException {
         Response response = Mail.using(mailgunConfig)
                 .to(recipient.getEmail())
-                .subject(getTitle(message))
-                .text(message)
+                .subject(getTitle(messageHeader))
+                .text(messageHeader + System.lineSeparator() + System.lineSeparator() + messageBody)
                 .build()
                 .send();
         if(!response.isOk())
             throw new IOException("Mailgun returned not ok. Code: " + response.responseCode()
                     + ". Message: " + response.responseMessage());
-        LOGGER.trace("Sent mail message through mailgun to {}. Message: {}", recipient.getEmail(), message);
+        LOGGER.trace("Sent mail message through mailgun to {}. Message: {} {}", recipient.getEmail(), messageHeader, messageBody);
     }
 
     private String getTitle(String message) {

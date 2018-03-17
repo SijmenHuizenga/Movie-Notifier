@@ -6,7 +6,7 @@ import java.io.IOException;
 
 public interface Notifier extends Model {
 
-    void notify(User recipient, String message) throws IOException;
+    void notify(User recipient, String messageHeader, String messageBody) throws IOException;
 
     @JsonProperty(value="key", access = JsonProperty.Access.READ_ONLY)
     String getId();
