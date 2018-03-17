@@ -134,7 +134,7 @@ public class PatheApi implements Cinema {
         Collections.sort(matches);
         String body = matches.stream()
                 .sorted()
-                .map(Object::toString)
+                .map(PatheShowing::toMessageString)
                 .collect(Collectors.joining(lineSeparator()));
 
         notificationService.notify(watcher.getUserid(), makeMessageHeader(watcher, matches.size()), body);

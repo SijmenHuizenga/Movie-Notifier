@@ -225,32 +225,32 @@ public class PatheShowing implements Comparable<PatheShowing> {
     private static final SimpleDateFormat format1 = new SimpleDateFormat("EEE d MMMM HH:mm");
     private static final SimpleDateFormat format2 = new SimpleDateFormat("HH:mm");
 
-    public String toString(PatheShowing showing) {
+    public String toMessageString() {
         StringBuilder builder = new StringBuilder();
 
-        if(showing.getStart() != -1L)
-            builder.append(format1.format(new Date(showing.getStart()))).append(" - ")
-                    .append(format2.format(new Date(showing.getEnd())))
+        if(getStart() != -1L)
+            builder.append(format1.format(new Date(getStart()))).append(" - ")
+                    .append(format2.format(new Date(getEnd())))
                     .append(", ");
 
-        if(showing.getImax() == 1)
+        if(getImax() == 1)
             builder.append(" IMAX");
 
-        if(showing.getIsVision())
+        if(getIsVision())
             builder.append(" Dolby Cinema");
-        else if(showing.getIsLaser() == 1)
+        else if(getIsLaser() == 1)
             builder.append(" LASER");
 
-        if(showing.getIs4dx())
+        if(getIs4dx())
             builder.append(" 4DX");
-        if(showing.getIs4k() == 1)
+        if(getIs4k() == 1)
             builder.append(" 4K");
-        if(showing.getIs3d() == 1)
+        if(getIs3d() == 1)
             builder.append(" 3D, ");
         else
             builder.append(" 2D, ");
 
-        builder.append("https://www.pathe.nl/tickets/start/").append(showing.getId());
+        builder.append("https://www.pathe.nl/tickets/start/").append(getId());
 
         return builder.toString();
     }
