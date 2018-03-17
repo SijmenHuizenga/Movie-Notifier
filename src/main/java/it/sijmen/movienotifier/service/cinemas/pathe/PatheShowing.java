@@ -4,11 +4,15 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import it.sijmen.movienotifier.model.serialization.UnixTimestampDeserializer;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class PatheShowing {
+public class PatheShowing implements Comparable<PatheShowing> {
 
     @JsonProperty
     private int cinemaId;
@@ -216,5 +220,47 @@ public class PatheShowing {
     @Override
     public int hashCode() {
         return (int) (getId() ^ (getId() >>> 32));
+    }
+
+    private static final SimpleDateFormat format1 = new SimpleDateFormat("EEE d MMMM HH:mm");
+    private static final SimpleDateFormat format2 = new SimpleDateFormat("HH:mm");
+
+    public String toString(PatheShowing showing) {
+        StringBuilder builder = new StringBuilder();
+
+        if(showing.getStart() != -1L)
+            builder.append(format1.format(new Date(showing.getStart()))).append(" - ")
+                    .append(format2.format(new Date(showing.getEnd())))
+                    .append(", ");
+
+        if(showing.getImax() == 1)
+            builder.append(" IMAX");
+
+        if(showing.getIsVision())
+            builder.append(" Dolby Cinema");
+        else if(showing.getIsLaser() == 1)
+            builder.append(" LASER");
+
+        if(showing.getIs4dx())
+            builder.append(" 4DX");
+        if(showing.getIs4k() == 1)
+            builder.append(" 4K");
+        if(showing.getIs3d() == 1)
+            builder.append(" 3D, ");
+        else
+            builder.append(" 2D, ");
+
+        builder.append("https://www.pathe.nl/tickets/start/").append(showing.getId());
+
+        return builder.toString();
+    }
+
+    @Override
+    public int compareTo(@NotNull PatheShowing o) {
+        if (this.getStart() == -1)
+            return 1;
+        if (o.getStart() == -1)
+            return -1;
+        return Long.compare(this.getStart(), o.getStart());
     }
 }

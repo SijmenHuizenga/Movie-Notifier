@@ -26,15 +26,13 @@ import java.util.stream.Collectors;
 import static it.sijmen.movienotifier.model.FilterOption.NO;
 import static it.sijmen.movienotifier.model.FilterOption.NOPREFERENCE;
 import static it.sijmen.movienotifier.model.FilterOption.YES;
+import static java.lang.System.lineSeparator;
 
 @Singleton
 @Service
 public class PatheApi implements Cinema {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(PatheApi.class);
-
-    private SimpleDateFormat format1 = new SimpleDateFormat("EEE d MMMM HH:mm");
-    private SimpleDateFormat format2 = new SimpleDateFormat("HH:mm");
 
     private ObjectMapper mapper;
     private String patheApiKey;
@@ -113,7 +111,7 @@ public class PatheApi implements Cinema {
         LOGGER.trace("Stored new data for movie {}", movieId);
 
         List<PatheShowing> showings = newData.getShowings();
-        List<Long> oldshowings =  oldData.getShowingids();
+        List<Long> oldshowings = oldData.getShowingids();
 
         showings.removeIf(s -> oldshowings.contains(s.getId()));
         watchers.forEach(w -> this.sendUpdates(w, showings));
@@ -124,54 +122,45 @@ public class PatheApi implements Cinema {
     }
 
     private void sendUpdates(Watcher watcher, List<PatheShowing> showings) {
-        List<PatheShowing> matches = new ArrayList<>();
-        for(PatheShowing showing : showings) {
-            if(accepts(watcher, showing)) {
-                LOGGER.trace("Watcher accepts Showing");
-                matches.add(showing);
-            }
-        }
+        List<PatheShowing> matches = showings.stream()
+                .filter(showing -> accepts(watcher, showing))
+                .collect(Collectors.toList());
+
         if(matches.size() == 0)
             return;
 
         LOGGER.trace("Notifying user about {} matches for watcher", matches.size());
 
-        matches.sort((s1, s2) -> {
-            if(s1.getStart() == -1L)
-                return 1;
-            if(s2.getStart() == -1L)
-                return -1;
-            return Long.compare(s1.getStart(), s2.getStart());
-        });
-        StringBuilder body = new StringBuilder(System.lineSeparator());
-        for(PatheShowing match : matches)
-            body.append(makeMessageBody(match));
+        Collections.sort(matches);
+        String body = matches.stream()
+                .sorted()
+                .map(Object::toString)
+                .collect(Collectors.joining(lineSeparator()));
 
-        notificationService.notify(watcher.getUserid(), makeMessageHeader(watcher, matches.size()), body.toString());
-
+        notificationService.notify(watcher.getUserid(), makeMessageHeader(watcher, matches.size()), body);
     }
 
-    public boolean accepts(Watcher watcher, PatheShowing showing){
+    public boolean accepts(Watcher watcher, PatheShowing showing) {
         int realWatcherCinemaId = Integer.parseInt(watcher.getFilters().getCinemaid().substring(getCinemaIdPrefix().length()));
         WatcherFilters d = watcher.getFilters();
-        if(showing.getCinemaId() != realWatcherCinemaId){
+        if (showing.getCinemaId() != realWatcherCinemaId) {
             LOGGER.debug("Cinema id does not equal");
             return false;
         }
-        if(!(showing.getStart() <= d.getStartbefore())){
+        if (!(showing.getStart() <= d.getStartbefore())) {
             LOGGER.debug("End does not do good");
             return false;
         }
-        if(!(showing.getStart() >= d.getStartafter())){
+        if (!(showing.getStart() >= d.getStartafter())) {
             LOGGER.debug("Start does not do good");
             return false;
         }
-        if(showing.getMovieId() != watcher.getMovieid()){
+        if (showing.getMovieId() != watcher.getMovieid()) {
             LOGGER.debug("Movie id is not equal!");
             return false;
         }
 
-        if(     !eq(d.isD3(), showing.getIs3d()) ||
+        if (!eq(d.isD3(), showing.getIs3d()) ||
                 !eq(d.isImax(), showing.getImax()) ||
                 !eq(d.isOv(), showing.getOv()) ||
                 !eq(d.isNl(), showing.getNl()) ||
@@ -181,7 +170,7 @@ public class PatheApi implements Cinema {
                 !eq(d.isLaser(), showing.getIsLaser()) ||
                 !eqBool(d.isDx4(), showing.getIs4dx()) ||
                 !eqBool(d.isDolbycinema(), showing.getIsVision())
-                ){
+                ) {
             LOGGER.debug("The boolean filters failed");
             return false;
         }
@@ -202,42 +191,7 @@ public class PatheApi implements Cinema {
                 || (expected == NO && !actual);
     }
 
-    private String makeMessageHeader(Watcher watcher, int matches){
-        return watcher.getName() +
-                System.lineSeparator() +
-                "+" +
-                matches +
-                " matches";
-    }
-
-    private String makeMessageBody(PatheShowing showing) {
-        StringBuilder builder = new StringBuilder(System.lineSeparator());
-
-        if(showing.getStart() != -1L)
-            builder.append(format1.format(new Date(showing.getStart()))).append(" - ")
-                    .append(format2.format(new Date(showing.getEnd())))
-                    .append(", ");
-
-        if(showing.getImax() == 1)
-            builder.append(" IMAX");
-        if(showing.getIsVision()) {
-            builder.append(" Dolby Cinema");
-        } else if(showing.getIsLaser() == 1) {
-            builder.append(" LASER");
-        }
-        if(showing.getIs4dx())
-            builder.append(" 4DX");
-        if(showing.getIs4k() == 1)
-            builder.append(" 4K");
-        if(showing.getIs3d() == 1) {
-            builder.append(" 3D, ");
-        } else {
-            builder.append(" 2D, ");
-        }
-
-        builder.append("https://www.pathe.nl/tickets/start/")
-                .append(showing.getId());
-
-        return builder.toString();
+    private String makeMessageHeader(Watcher watcher, int matches) {
+        return watcher.getName() + lineSeparator() + "+" + matches + " matches";
     }
 }
