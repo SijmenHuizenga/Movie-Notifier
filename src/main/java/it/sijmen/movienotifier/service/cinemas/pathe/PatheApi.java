@@ -20,10 +20,7 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static it.sijmen.movienotifier.model.FilterOption.NO;
@@ -127,11 +124,31 @@ public class PatheApi implements Cinema {
     }
 
     private void sendUpdates(Watcher watcher, List<PatheShowing> showings) {
-        for(PatheShowing showing : showings)
+        List<PatheShowing> matches = new ArrayList<>();
+        for(PatheShowing showing : showings) {
             if(accepts(watcher, showing)) {
-                LOGGER.trace("Watcher accepts Showing so now notifying user");
-                notificationService.notify(watcher.getUserid(), makeMessage(watcher, showing));
+                LOGGER.trace("Watcher accepts Showing");
+                matches.add(showing);
             }
+        }
+        if(matches.size() > 0) {
+            matches.sort((s1, s2) -> {
+                if(s1.getStart() != -1L && s2.getStart() != -1L) {
+                    return Long.compare(s1.getStart(), s2.getStart());
+                } else if(s1.getStart() != -1L) {
+                    return -1;
+                } else { // s2.getStart() != -1L
+                    return 1;
+                }
+            });
+            StringBuilder body = new StringBuilder(System.lineSeparator());
+            for(PatheShowing match : matches) {
+                body.append(makeMessageBody(match));
+            }
+            LOGGER.trace("Notifying user about {} matches for watcher", matches.size());
+
+            notificationService.notify(watcher.getUserid(), makeMessageHeader(watcher, matches.size()), body.toString());
+        }
     }
 
     public boolean accepts(Watcher watcher, PatheShowing showing){
@@ -185,8 +202,23 @@ public class PatheApi implements Cinema {
                 || (expected == NO && !actual);
     }
 
-    private String makeMessage(Watcher watcher, PatheShowing showing){
+    private String makeMessageHeader(Watcher watcher, int matches){
         StringBuilder builder = new StringBuilder(watcher.getName());
+        builder.append(System.lineSeparator())
+                .append("+")
+                .append(matches)
+                .append(" matches");
+
+        return builder.toString();
+    }
+
+    private String makeMessageBody(PatheShowing showing) {
+        StringBuilder builder = new StringBuilder(System.lineSeparator());
+
+        if(showing.getStart() != -1L)
+            builder.append(format1.format(new Date(showing.getStart()))).append(" - ")
+                    .append(format2.format(new Date(showing.getEnd())))
+                    .append(", ");
 
         if(showing.getImax() == 1)
             builder.append(" IMAX");
@@ -197,16 +229,14 @@ public class PatheApi implements Cinema {
         }
         if(showing.getIs4dx())
             builder.append(" 4DX");
-        if(showing.getIs3d() == 1)
-            builder.append(" 3D");
         if(showing.getIs4k() == 1)
             builder.append(" 4K");
+        if(showing.getIs3d() == 1) {
+            builder.append(" 3D, ");
+        } else {
+            builder.append(" 2D, ");
+        }
 
-        builder.append(System.lineSeparator());
-        if(showing.getStart() != -1L)
-            builder.append(format1.format(new Date(showing.getStart()))).append(" - ")
-                    .append(format2.format(new Date(showing.getEnd())))
-                    .append(System.lineSeparator());
         builder.append("https://www.pathe.nl/tickets/start/")
                 .append(showing.getId());
 

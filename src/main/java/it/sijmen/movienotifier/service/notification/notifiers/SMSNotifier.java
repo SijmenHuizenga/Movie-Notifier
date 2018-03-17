@@ -44,7 +44,7 @@ public class SMSNotifier implements Notifier {
     }
 
     @Override
-    public void notify(User recipient, String message) throws IOException {
+    public void notify(User recipient, String messageHeader, String messageBody) throws IOException {
         Map<String, MessageAttributeValue> smsAttributes = new HashMap<>();
         smsAttributes.put("AWS.SNS.SMS.MaxPrice", new MessageAttributeValue()
                 .withStringValue("0.25")
@@ -52,13 +52,13 @@ public class SMSNotifier implements Notifier {
 
         try{
             snsClient.publish(new PublishRequest()
-                    .withMessage(message)
+                    .withMessage(messageHeader)
                     .withPhoneNumber(recipient.getPhonenumber())
                     .withMessageAttributes(smsAttributes));
         }catch (Exception e){
             throw new IOException("Could not send sms message. Error " + e.getMessage(), e);
         }
-        LOGGER.trace("Sent sms notification trough AWS SNS to {}. Message: {}" + recipient.getPhonenumber(), message);
+        LOGGER.trace("Sent sms notification trough AWS SNS to {}. Message: {}" + recipient.getPhonenumber(), messageHeader);
     }
 
     @Override
