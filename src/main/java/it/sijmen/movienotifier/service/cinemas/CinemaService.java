@@ -43,6 +43,7 @@ public class CinemaService {
         allCinemas.add(new CinemaLocation("PATHE28", "Pathé Zwolle", 52.514f, 6.08677f));
         allCinemas.add(new CinemaLocation("PATHE29", "CineMec Ede", 52.01575f, 5.64801f));
         allCinemas.add(new CinemaLocation("PATHE31", "CineMec Nijmegen", 51.87994f, 5.862f));
+        allCinemas.add(new CinemaLocation("PATHE32", "Tivoli en Cinema Leeuwarden", 53.20119f, 5.79235f));
     }
 
     private static final Logger LOGGER = LoggerFactory.getLogger(CinemaService.class);
