@@ -236,10 +236,14 @@ public class PatheShowing implements Comparable<PatheShowing> {
         if(getImax() == 1)
             builder.append(" IMAX");
 
-        if(getIsVision())
+        if(getIsVision()) {
             builder.append(" Dolby Cinema");
-        else if(getIsLaser() == 1)
-            builder.append(" LASER");
+        } else {
+            if(getIsAtmos() == 1)
+                builder.append(" Dolby Atmos");
+            if(getIsLaser() == 1)
+                builder.append(" LASER");
+        }
 
         if(getIs4dx())
             builder.append(" 4DX");
