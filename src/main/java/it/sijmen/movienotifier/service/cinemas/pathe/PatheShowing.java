@@ -234,25 +234,25 @@ public class PatheShowing implements Comparable<PatheShowing> {
                     .append(", ");
 
         if(getImax() == 1)
-            builder.append(" IMAX");
+            builder.append("IMAX ");
 
         if(getIsVision()) {
-            builder.append(" Dolby Cinema");
+            builder.append("Dolby Cinema ");
         } else {
             if(getIsAtmos() == 1)
-                builder.append(" Dolby Atmos");
+                builder.append("Dolby Atmos ");
             if(getIsLaser() == 1)
-                builder.append(" LASER");
+                builder.append("Laser ");
         }
 
         if(getIs4dx())
-            builder.append(" 4DX");
+            builder.append("4DX ");
         if(getIs4k() == 1)
-            builder.append(" 4K");
+            builder.append("4K ");
         if(getIs3d() == 1)
-            builder.append(" 3D, ");
+            builder.append("3D, ");
         else
-            builder.append(" 2D, ");
+            builder.append("2D, ");
 
         builder.append("https://www.pathe.nl/tickets/start/").append(getId());
 
