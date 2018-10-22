@@ -28,7 +28,7 @@ public class CinemaService {
         allCinemas.add(new CinemaLocation("PATHE5", "Pathé Buitenhof", 52.07858f, 4.31089f));
         allCinemas.add(new CinemaLocation("PATHE7", "Pathé Scheveningen", 52.11241f, 4.2839f));
         allCinemas.add(new CinemaLocation("PATHE3", "Pathé Rembrandt Utrecht", 52.09388f, 5.11629f));
-        allCinemas.add(new CinemaLocation("PATHE30", "CineMec Utrecht", 52.09684f, 5.07095f));
+        allCinemas.add(new CinemaLocation("PATHE30", "Pathé Utrecht Leidsche Rijn", 52.09684f, 5.07095f));
         allCinemas.add(new CinemaLocation("PATHE23", "Pathé Amersfoort", 52.15876f, 5.3808f));
         allCinemas.add(new CinemaLocation("PATHE27", "Pathé Arnhem", 51.98422f, 5.90339f));
         allCinemas.add(new CinemaLocation("PATHE20", "Pathé Breda", 51.58972f, 4.78503f));
@@ -41,8 +41,10 @@ public class CinemaService {
         allCinemas.add(new CinemaLocation("PATHE19", "Pathé Tilburg", 51.5579f, 5.08961f));
         allCinemas.add(new CinemaLocation("PATHE14", "Pathé Zaandam", 52.43842f, 4.81777f));
         allCinemas.add(new CinemaLocation("PATHE28", "Pathé Zwolle", 52.514f, 6.08677f));
-        allCinemas.add(new CinemaLocation("PATHE29", "CineMec Ede", 52.01575f, 5.64801f));
-        allCinemas.add(new CinemaLocation("PATHE31", "CineMec Nijmegen", 51.87994f, 5.862f));
+        allCinemas.add(new CinemaLocation("PATHE29", "Pathé Ede", 52.01575f, 5.64801f));
+        allCinemas.add(new CinemaLocation("PATHE31", "Pathé Nijmegen", 51.87994f, 5.862f));
+        allCinemas.add(new CinemaLocation("PATHE32", "Tivoli en Cinema Leeuwarden", 53.20119f, 5.79235f));
+        allCinemas.add(new CinemaLocation("PATHE34", "Cinema Hengelo", 52.2646f, 6.79098f));
     }
 
     private static final Logger LOGGER = LoggerFactory.getLogger(CinemaService.class);
