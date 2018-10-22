@@ -56,6 +56,16 @@ class UserIT {
         LOGGER.info("Updated User");
     }
 
+    void updateOnlyUsername(){
+        HashMap<String, Object> body = new HashMap<>();
+        body.put(NAME, "heeikbennieuw");
+        testuser.put(NAME, "heeikbennieuw");
+        checkUserResponse(
+                given().header(HEADKEY, apikey()).body(body).post("/user/"+id()).then().extract().response().then()
+        );
+        LOGGER.info("Updated Username");
+    }
+
     void delete(){
         given().header(HEADKEY, apikey()).delete("/user/"+id()).then().statusCode(200);
         LOGGER.info("Deleted User");
