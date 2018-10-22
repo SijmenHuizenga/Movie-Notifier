@@ -1,7 +1,11 @@
+FROM maven:3-jdk-8 as builder
+
+COPY . /project
+WORKDIR /project
+RUN mvn package
+
 FROM java:8-jre
-MAINTAINER Sijmen Huizenga
+COPY --from=builder /project/target/movie-notifier.jar /service.jar
 
-ENTRYPOINT ["/usr/bin/java", "-jar", "service.jar", "--spring.config.location=movie-notifier.properties"]
+ENTRYPOINT ["/usr/bin/java", "-jar", "/service.jar", "--spring.config.location=/movie-notifier.properties"]
 EXPOSE 80
-
-ADD target/movie-notifier.jar service.jar
