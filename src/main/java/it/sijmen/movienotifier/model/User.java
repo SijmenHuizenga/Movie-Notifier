@@ -2,10 +2,6 @@ package it.sijmen.movienotifier.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import it.sijmen.movienotifier.model.exceptions.BadRequestException;
-import it.sijmen.movienotifier.model.validation.notification.ValidNotification;
-import it.sijmen.movienotifier.repositories.UserRepository;
-import it.sijmen.movienotifier.util.ExceptionStringifier;
 
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotBlank;
@@ -15,18 +11,16 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
 import javax.persistence.Entity;
-import javax.validation.ConstraintViolation;
-import javax.validation.Path;
-import javax.validation.Validation;
-import javax.validation.Validator;
-import javax.validation.ValidatorFactory;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Set;
-import java.util.stream.StreamSupport;
+
+import it.sijmen.movienotifier.model.exceptions.BadRequestException;
+import it.sijmen.movienotifier.model.validation.notification.ValidNotification;
+import it.sijmen.movienotifier.repositories.UserRepository;
 
 /**
  * All fields are documented in the Swagger Api Specification in the `/docs` directory.
