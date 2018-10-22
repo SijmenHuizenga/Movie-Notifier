@@ -37,15 +37,22 @@ public class FBMessengerNotifier implements Notifier {
     @Override
     public void notify(User recipient, String messageHeader, String messageBody) throws IOException {
         PhoneMessageRecipient phoneReceiver = new PhoneMessageRecipient(recipient.getPhonenumber());
-        Message simpleTextMessage = new Message(messageHeader + System.lineSeparator() + System.lineSeparator() + messageBody);
+        String totalMessage = messageHeader + System.lineSeparator() + System.lineSeparator() + messageBody;
 
-        SendResponse resp = pageClient.publish("me/messages", SendResponse.class,
-                Parameter.with("recipient", phoneReceiver),
-                Parameter.with("message", simpleTextMessage));
+        while(totalMessage.length() > 0) {
+            int endIndex = Math.min(totalMessage.length()-1, 1800);
+            String message = totalMessage.substring(0, endIndex);
+            totalMessage = totalMessage.substring(endIndex, totalMessage.length()-1);
 
-        if(!resp.isSuccessful())
-            throw new IOException("Facebook Messenger responded with error. Result: " + resp.getResult());
-        LOGGER.info("Sent FB Messenger notification to {}. Message: {}", phoneReceiver.getPhoneNumber(), simpleTextMessage.getText());
+            Message simpleTextMessage = new Message(message);
+            SendResponse resp = pageClient.publish("me/messages", SendResponse.class,
+                    Parameter.with("recipient", phoneReceiver),
+                    Parameter.with("message", simpleTextMessage));
+
+            if(!resp.isSuccessful())
+                throw new IOException("Facebook Messenger responded with error. Result: " + resp.getResult());
+            LOGGER.info("Sent FB Messenger notification to {}. Message: {}", phoneReceiver.getPhoneNumber(), simpleTextMessage.getText());
+        }
     }
 
     @Override
