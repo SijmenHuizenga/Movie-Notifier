@@ -2,7 +2,7 @@ FROM maven:3-jdk-8 as builder
 
 COPY . /project
 WORKDIR /project
-RUN mvn package
+RUN mvn package --batch-mode
 
 FROM java:8-jre
 COPY --from=builder /project/target/movie-notifier.jar /service.jar
