@@ -1,12 +1,9 @@
 package it.sijmen.movienotifier.util;
 
 import org.springframework.stereotype.Service;
-
-import javax.inject.Singleton;
 import java.util.Random;
 
 @Service
-@Singleton
 public class ApiKeyHelper {
 
     private final char[] symbols;

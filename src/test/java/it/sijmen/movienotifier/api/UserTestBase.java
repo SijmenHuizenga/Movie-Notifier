@@ -44,7 +44,7 @@ abstract class UserTestBase {
         testuser2 = new User("TESTUSERID2", "testgebruiker2", "test2@example.com", "+31654321095",
                 PasswordAuthentication.hash("123455"), "5B88FF72CD8A003704261DB5809513FF902E0DBFB5BC4D9B7C87AB2085369A88",
                 new Calendar.Builder().setDate(2017,7,30).setTimeOfDay(20, 50, 15).build().getTime(),
-                Collections.singletonList("FBM"));
+                Collections.singletonList("EXAMPLEKEY"));
     }
 
     @After
@@ -64,7 +64,7 @@ abstract class UserTestBase {
         if(password != null)
             items.add("\"password\": \""+password+"\"");
         if(notifications != null)
-            items.add("\"notifications\": ["+notifications.stream().map(s -> "\"" + s + "\"").collect(Collectors.joining(", "))+"]\n");
+            items.add("\"gcm-registration-tokens\": ["+notifications.stream().map(s -> "\"" + s + "\"").collect(Collectors.joining(", "))+"]\n");
 
         return "{\n" + String.join(",\n", items) +"}";
     }

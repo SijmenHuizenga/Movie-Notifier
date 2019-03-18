@@ -13,13 +13,11 @@ import it.sijmen.movienotifier.service.cinemas.Cinema;
 import it.sijmen.movienotifier.service.notification.NotificationService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import javax.inject.Inject;
-import javax.inject.Singleton;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -28,7 +26,6 @@ import static it.sijmen.movienotifier.model.FilterOption.NOPREFERENCE;
 import static it.sijmen.movienotifier.model.FilterOption.YES;
 import static java.lang.System.lineSeparator;
 
-@Singleton
 @Service
 public class PatheApi implements Cinema {
 
@@ -39,7 +36,7 @@ public class PatheApi implements Cinema {
     private PatheCacheRepository repository;
     private NotificationService notificationService;
 
-    @Inject
+    @Autowired
     public PatheApi(ObjectMapper mapper, @Value("${cinema.pathe.apikey}") String patheApiKey, PatheCacheRepository repository, NotificationService notificationService) {
         this.mapper = mapper;
         this.patheApiKey = patheApiKey;

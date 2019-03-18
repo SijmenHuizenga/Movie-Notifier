@@ -1,7 +1,6 @@
 package it.sijmen.movienotifier.controllers;
 
 import it.sijmen.movienotifier.model.User;
-import it.sijmen.movienotifier.model.exceptions.BadRequestException;
 import it.sijmen.movienotifier.model.exceptions.UnauthorizedException;
 import it.sijmen.movienotifier.repositories.UserRepository;
 import it.sijmen.movienotifier.repositories.WatcherRepository;
@@ -9,43 +8,38 @@ import it.sijmen.movienotifier.util.ApiKeyHelper;
 import it.sijmen.movienotifier.util.PasswordAuthentication;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import javax.inject.Inject;
-import javax.inject.Named;
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.Date;
+import java.util.Map;
+import java.util.UUID;
 
 @Controller
 public class UserController extends ApiController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(UserController.class);
 
-    private List<String> defaultNotifications;
     private ApiKeyHelper apiKeyHelper;
     private ModelUpdater modelUpdater = new ModelUpdater();
 
     private WatcherRepository watcherRepository;
 
-    @Inject
+    @Autowired
     public UserController(
-            @Named("default-notifications") List<String> defaultNotifications,
             UserRepository userRepository,
             ApiKeyHelper apiKeyHelper,
             WatcherRepository watcherRepository) {
         super(userRepository);
-        this.defaultNotifications = defaultNotifications;
         this.apiKeyHelper = apiKeyHelper;
         this.watcherRepository = watcherRepository;
     }
 
     @PutMapping("/user")
     public HttpEntity putUser(@RequestBody User newUser) {
-        newUser.setEnabledNotifications(defaultNotifications);
         newUser.setApikey(apiKeyHelper.randomAPIKey());
         newUser.setCreated(new Date());
 
@@ -85,10 +79,6 @@ public class UserController extends ApiController {
 
         updatingUser.validate();
 
-        List<String> errors = allowNotifications(updatingUser.getEnabledNotifications());
-        if(!errors.isEmpty())
-            throw new BadRequestException(errors);
-
         updatingUser.validateUniqueness(userRepository);
         userRepository.save(updatingUser);
 
@@ -120,13 +110,6 @@ public class UserController extends ApiController {
             throw new UnauthorizedException();
         }
         return user;
-    }
-
-    private List<String> allowNotifications(List<String> notificationKeys) {
-        return notificationKeys.stream().map(
-                n -> ("FBM".equals(n) || "MIL".equals(n)) ? null :
-                        "You do not have permission to use the " + n + " notification type."
-        ).filter(Objects::nonNull).collect(Collectors.toList());
     }
 
 }

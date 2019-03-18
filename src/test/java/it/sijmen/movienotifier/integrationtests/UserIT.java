@@ -2,7 +2,7 @@ package it.sijmen.movienotifier.integrationtests;
 
 import io.restassured.response.Response;
 import io.restassured.response.ValidatableResponse;
-import jersey.repackaged.com.google.common.collect.Lists;
+import org.assertj.core.util.Lists;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

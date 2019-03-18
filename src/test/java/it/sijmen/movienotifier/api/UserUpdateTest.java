@@ -31,32 +31,17 @@ public class UserUpdateTest extends UserTestBase {
 
         this.mvc.perform(post("/user/" + testuser.getId()).accept(MediaType.APPLICATION_JSON).contentType(MediaType.APPLICATION_JSON)
                 .header("APIKEY", testuser.getApikey()).content(
-                        buildJson(testuser2.getName(), testuser2.getEmail(), testuser2.getPhonenumber(), "564321", Arrays.asList("FBM","MIL"))
+                        buildJson(testuser2.getName(), testuser2.getEmail(), testuser2.getPhonenumber(), "564321", Arrays.asList("ABC","DEF"))
         )).andExpect(status().isOk())
                 .andExpect(jsonPath("$.name").value(testuser2.getName()))
                 .andExpect(jsonPath("$.email").value(testuser2.getEmail()))
                 .andExpect(jsonPath("$.phonenumber").value(testuser2.getPhonenumber()))
                 .andExpect(jsonPath("$.id").value(testuser.getId()))
                 .andExpect(jsonPath("$.apikey").value(IsNull.notNullValue()))
-                .andExpect(jsonPath("$.notifications")
-                        .value(new JSONArray().appendElement("FBM").appendElement("MIL")))
+                .andExpect(jsonPath("$.gcm-registration-tokens")
+                        .value(new JSONArray().appendElement("ABC").appendElement("DEF")))
                 .andExpect(jsonPath("$.password").doesNotExist());
         verify(userRepo, times(1)).save((User)any());
-    }
-
-    @Test
-    public void updateUnauthorizedNotification() throws Exception {
-        addToMockedDb(testuser);
-        removeFromMockedDb(testuser2);
-
-        this.mvc.perform(post("/user/" + testuser.getId()).accept(MediaType.APPLICATION_JSON).contentType(MediaType.APPLICATION_JSON)
-                .header("APIKEY", testuser.getApikey()).content(
-                        buildJson(null, null, null, null, Arrays.asList("FBM","SMS"))
-                )).andExpect(status().isBadRequest())
-                    .andExpect(jsonPath("$.errors").value(Matchers.containsInAnyOrder(
-                            "You do not have permission to use the SMS notification type."
-                    )));
-        verify(userRepo, times(0)).save((User)any());
     }
 
     public void updateToTakenUsernameEmail() throws Exception {

@@ -1,10 +1,10 @@
 package it.sijmen.movienotifier.controllers;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import it.sijmen.movienotifier.model.exceptions.BadRequestException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.ws.rs.InternalServerErrorException;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -49,7 +49,7 @@ public class ModelUpdater {
             return o != null;
         } catch (IllegalAccessException e) {
             LOGGER.error("No access to field {} while checking {}", field, object, e);
-            throw new InternalServerErrorException();
+            throw new BadRequestException("Something went wrong.");
         }
     }
 
@@ -62,7 +62,7 @@ public class ModelUpdater {
             field.set(target, field.get(source));
         } catch (IllegalAccessException e) {
             LOGGER.error("No access to field {} while copying data from {} to {}", field, source, target, e);
-            throw new InternalServerErrorException();
+            throw new BadRequestException("Something went wrong.");
         }
     }
 

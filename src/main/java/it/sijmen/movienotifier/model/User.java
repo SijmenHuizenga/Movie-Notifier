@@ -19,7 +19,6 @@ import java.util.Date;
 import java.util.List;
 
 import it.sijmen.movienotifier.model.exceptions.BadRequestException;
-import it.sijmen.movienotifier.model.validation.notification.ValidNotification;
 import it.sijmen.movienotifier.repositories.UserRepository;
 
 /**
@@ -47,7 +46,6 @@ public class User implements Model {
     @Indexed(unique = true)
     @JsonProperty
     private String name;
-
 
     @NotBlank
     @Email
@@ -80,15 +78,14 @@ public class User implements Model {
     private Date created;
 
     @Field
-    @ValidNotification
-    @JsonProperty("notifications")
-    private List<String> enabledNotifications;
+    @JsonProperty("gcm-registration-tokens")
+    private List<String> registrationTokens;
 
     public User() {
     }
 
     public User(String id, String name, String email, String phonenumber, String password, String apikey,
-                Date created, List<String> enabledNotifications) {
+                Date created, List<String> registrationTokens) {
         this.uuid = id;
         this.name = name;
         this.email = email;
@@ -96,7 +93,7 @@ public class User implements Model {
         this.password = password;
         this.apikey = apikey;
         this.created = created;
-        this.enabledNotifications = enabledNotifications;
+        this.registrationTokens = registrationTokens;
     }
 
     public void validateUniqueness(UserRepository userRepository) {
@@ -153,20 +150,20 @@ public class User implements Model {
         this.apikey = apikey;
     }
 
-    public List<String> getEnabledNotifications() {
-        return enabledNotifications;
-    }
-
-    public void setEnabledNotifications(List<String> enabledNotifications) {
-        this.enabledNotifications = enabledNotifications;
-    }
-
     public void setCreated(Date created) {
         this.created = created;
     }
 
     public void setId(String id) {
         this.uuid = id;
+    }
+
+    public List<String> getRegistrationTokens() {
+        return registrationTokens;
+    }
+
+    public void setRegistrationTokens(List<String> registrationTokens) {
+        this.registrationTokens = registrationTokens;
     }
 }
 

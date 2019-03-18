@@ -1,63 +1,62 @@
 package it.sijmen.movienotifier.service.notification;
 
-import it.sijmen.movienotifier.model.Notifier;
+import com.google.auth.oauth2.GoogleCredentials;
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.FirebaseOptions;
+import com.google.firebase.messaging.FirebaseMessaging;
+import com.google.firebase.messaging.FirebaseMessagingException;
+import com.google.firebase.messaging.Message;
+import com.google.firebase.messaging.Notification;
 import it.sijmen.movienotifier.model.User;
-import it.sijmen.movienotifier.model.exceptions.BadRequestException;
 import it.sijmen.movienotifier.repositories.UserRepository;
-import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.List;
 
 @Service
 public class NotificationService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(NotificationService.class);
-
     private UserRepository userRepository;
-    private final List<Notifier> allNotifiers;
 
-    public NotificationService(UserRepository userRepository, List<Notifier> allNotifiers) {
+    @Autowired
+    public NotificationService(
+            UserRepository userRepository,
+            @Value("${gcm.serviceaccountkeyfile}") String serviceAccountKeyFile) throws IOException {
         this.userRepository = userRepository;
-        this.allNotifiers = allNotifiers;
-    }
 
-    public List<Notifier> getAllNotifiers(){
-        return allNotifiers;
-    }
-
-    public Notifier getNotifier(@NotNull String notifierKey){
-        return allNotifiers.stream().filter(
-                n -> n.getId().equals(notifierKey)
-        ).findFirst().orElseThrow(
-                () -> new BadRequestException("Notificationtype with given key not found.")
+        if(!"disabled".equals(serviceAccountKeyFile))
+        FirebaseApp.initializeApp(
+                new FirebaseOptions.Builder()
+                        .setCredentials(GoogleCredentials.fromStream(new FileInputStream(serviceAccountKeyFile)))
+                        .build()
         );
     }
 
-    public void notify(String userId, String messageHeader, String messageBody) {
-        User user = userRepository.getFirstByUuid(userId);
-        if(user == null){
-            LOGGER.error("Could not find " + userId + " while this user has enabled watchers");
+    public void notify(String userid, String messageTitle, String messageBody) {
+        User user = userRepository.getFirstByUuid(userid);
+        if(user == null) {
+            LOGGER.error("Cannot notify user {} because it does not exist.", userid);
             return;
         }
-        if(user.getEnabledNotifications() == null || user.getEnabledNotifications().isEmpty()){
-            LOGGER.error("Could not notify user {} because no notification types are enabled. message: {} {}",user.getId(), messageHeader, messageBody);
-            return;
-        }
-        user.getEnabledNotifications().forEach(
-                t -> notify(user, messageHeader, messageBody, t)
-        );
-    }
 
-    private void notify(User user, String messageHeader, String messageBody, String notificationType) {
-        Notifier notifier = getNotifier(notificationType);
-        try {
-            notifier.notify(user, messageHeader, messageBody);
-        } catch (Exception e) {
-            LOGGER.error("Notification failed to user {} with message {} {}", user.getId(), messageHeader, messageBody, e);
+        for (String token : user.getRegistrationTokens()) {
+            try {
+                FirebaseMessaging.getInstance().send(
+                        Message.builder()
+                                .setNotification(new Notification(messageTitle, messageBody))
+                                .setToken(token)
+                                .build()
+                );
+                LOGGER.info("Sent message to {} token {} title: {}", user.getName(), token, messageTitle);
+            } catch (FirebaseMessagingException e) {
+                LOGGER.error("Could not send message to {} token: {} title: {}", user.getName(), token, messageTitle, e);
+            }
         }
     }
 }

@@ -32,7 +32,7 @@ public class UserLoginTest extends UserTestBase {
                 "    \"email\": \""+testuser.getEmail()+"\",\n" +
                 "    \"phonenumber\": \""+testuser.getPhonenumber()+"\",\n" +
                 "    \"apikey\": \""+testuser.getApikey()+"\",\n" +
-                "    \"notifications\": [\""+String.join(",", testuser.getEnabledNotifications())+"\"]\n" +
+                "    \"gcm-registration-tokens\": [\""+String.join(",", testuser.getRegistrationTokens())+"\"]\n" +
                 "}"
         ));
     }

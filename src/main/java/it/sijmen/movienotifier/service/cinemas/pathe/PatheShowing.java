@@ -4,9 +4,6 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import it.sijmen.movienotifier.model.serialization.UnixTimestampDeserializer;
-import org.jetbrains.annotations.NotNull;
-import org.springframework.data.annotation.Transient;
-import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -260,7 +257,7 @@ public class PatheShowing implements Comparable<PatheShowing> {
     }
 
     @Override
-    public int compareTo(@NotNull PatheShowing o) {
+    public int compareTo(PatheShowing o) {
         if (this.getStart() == -1)
             return 1;
         if (o.getStart() == -1)

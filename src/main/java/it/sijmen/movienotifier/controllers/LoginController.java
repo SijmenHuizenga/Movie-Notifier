@@ -7,11 +7,10 @@ import it.sijmen.movienotifier.repositories.UserRepository;
 import it.sijmen.movienotifier.util.PasswordAuthentication;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-
-import javax.inject.Inject;
 
 @Controller
 public class LoginController {
@@ -20,7 +19,7 @@ public class LoginController {
 
     private final UserRepository userRepository;
 
-    @Inject
+    @Autowired
     public LoginController(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
@@ -28,8 +27,7 @@ public class LoginController {
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public User login(
-            @RequestBody(required = true) LoginDetails loginDetails) {
+    public User login(@RequestBody LoginDetails loginDetails) {
 
         loginDetails.validate();
 

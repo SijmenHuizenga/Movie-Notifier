@@ -40,7 +40,6 @@ public class UserCreateTest extends UserTestBase {
           .andExpect(jsonPath("$.phonenumber").value(testuser.getPhonenumber()))
           .andExpect(jsonPath("$.id").value(testuser.getId()))
           .andExpect(jsonPath("$.apikey").value(IsNull.notNullValue()))
-          .andExpect(jsonPath("$.notifications").value(new JSONArray().appendElement("FBM")))
           .andExpect(jsonPath("$.password").doesNotExist());
         verify(userRepo, times(1)).save((User)any());
     }

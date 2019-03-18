@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import it.sijmen.movienotifier.controllers.ModelUpdater;
 import org.hibernate.validator.constraints.NotBlank;
-import org.jetbrains.annotations.Nullable;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -153,7 +152,7 @@ public class Watcher implements Model {
         return filters;
     }
 
-    public void setFilters(@Nullable WatcherFilters filters) {
+    public void setFilters(WatcherFilters filters) {
         this.filters = filters;
     }
 
