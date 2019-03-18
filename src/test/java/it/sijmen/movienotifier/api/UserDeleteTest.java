@@ -1,5 +1,6 @@
 package it.sijmen.movienotifier.api;
 
+import it.sijmen.movienotifier.controllers.UserController;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -11,7 +12,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
-@WebMvcTest(JumpConfiguration.class)
+@WebMvcTest(UserController.class)
 public class UserDeleteTest extends UserTestBase {
 
     @Test
@@ -64,7 +65,7 @@ public class UserDeleteTest extends UserTestBase {
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
                         .header("APIKEY", testuser.getApikey())
-        ).andExpect(status().isNotFound());
+        ).andExpect(status().isInternalServerError());
     }
 
     @Test

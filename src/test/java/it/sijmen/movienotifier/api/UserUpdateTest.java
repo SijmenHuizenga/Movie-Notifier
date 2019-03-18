@@ -1,5 +1,6 @@
 package it.sijmen.movienotifier.api;
 
+import it.sijmen.movienotifier.controllers.UserController;
 import it.sijmen.movienotifier.model.User;
 import net.minidev.json.JSONArray;
 import org.hamcrest.Matchers;
@@ -20,7 +21,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
-@WebMvcTest(JumpConfiguration.class)
+@WebMvcTest(UserController.class)
 public class UserUpdateTest extends UserTestBase {
 
     @Test
@@ -28,7 +29,7 @@ public class UserUpdateTest extends UserTestBase {
         addToMockedDb(testuser);
         removeFromMockedDb(testuser2);
 
-        this.mvc.perform(post("/user/" + testuser.getId()).accept(MediaType.APPLICATION_JSON)
+        this.mvc.perform(post("/user/" + testuser.getId()).accept(MediaType.APPLICATION_JSON).contentType(MediaType.APPLICATION_JSON)
                 .header("APIKEY", testuser.getApikey()).content(
                         buildJson(testuser2.getName(), testuser2.getEmail(), testuser2.getPhonenumber(), "564321", Arrays.asList("FBM","MIL"))
         )).andExpect(status().isOk())
@@ -48,7 +49,7 @@ public class UserUpdateTest extends UserTestBase {
         addToMockedDb(testuser);
         removeFromMockedDb(testuser2);
 
-        this.mvc.perform(post("/user/" + testuser.getId()).accept(MediaType.APPLICATION_JSON)
+        this.mvc.perform(post("/user/" + testuser.getId()).accept(MediaType.APPLICATION_JSON).contentType(MediaType.APPLICATION_JSON)
                 .header("APIKEY", testuser.getApikey()).content(
                         buildJson(null, null, null, null, Arrays.asList("FBM","SMS"))
                 )).andExpect(status().isBadRequest())

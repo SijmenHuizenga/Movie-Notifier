@@ -1,4 +1,4 @@
-package it.sijmen.movienotifier.api.controllers;
+package it.sijmen.movienotifier.controllers;
 
 import it.sijmen.movienotifier.model.Notifier;
 import it.sijmen.movienotifier.model.exceptions.BadRequestException;

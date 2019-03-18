@@ -1,4 +1,4 @@
-package it.sijmen.movienotifier.api.controllers;
+package it.sijmen.movienotifier.controllers;
 
 import it.sijmen.movienotifier.service.cinemas.CinemaLocation;
 import it.sijmen.movienotifier.service.cinemas.CinemaService;

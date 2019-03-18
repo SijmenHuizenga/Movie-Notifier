@@ -1,4 +1,4 @@
-package it.sijmen.movienotifier.api.controllers;
+package it.sijmen.movienotifier.controllers;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.RequestMapping;

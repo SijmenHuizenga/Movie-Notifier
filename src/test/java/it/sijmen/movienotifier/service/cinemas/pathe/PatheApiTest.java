@@ -2,7 +2,7 @@ package it.sijmen.movienotifier.service.cinemas.pathe;
 
 import com.mashape.unirest.http.HttpResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import it.sijmen.movienotifier.api.JumpConfiguration;
+import it.sijmen.movienotifier.controllers.WatcherController;
 import it.sijmen.movienotifier.model.PatheMovieCache;
 import it.sijmen.movienotifier.model.Watcher;
 import it.sijmen.movienotifier.model.WatcherFilters;
@@ -33,7 +33,7 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.*;
 
 @RunWith(SpringRunner.class)
-@WebMvcTest(JumpConfiguration.class)
+@WebMvcTest(WatcherController.class)
 public class PatheApiTest {
 
     private static final long DAY = 86_400_000;

@@ -1,6 +1,5 @@
-package it.sijmen.movienotifier.api.controllers;
+package it.sijmen.movienotifier.controllers;
 
-import it.sijmen.jump.JumpRequest;
 import it.sijmen.movienotifier.model.User;
 import it.sijmen.movienotifier.model.exceptions.BadRequestException;
 import it.sijmen.movienotifier.model.exceptions.UnauthorizedException;
@@ -21,18 +20,14 @@ abstract class ApiController {
         this.userRepository = userRepository;
     }
 
-    protected String getApiKey(JumpRequest request) {
-        return getApiKey(request.getHeaders());
-    }
-
     protected String getApiKey(Map<String, String> requestHeaders) {
         return requestHeaders == null ? null :
                 requestHeaders.getOrDefault("APIKEY",
                         requestHeaders.getOrDefault("apikey", null));
     }
 
-    protected void checkApiKeyExistence(JumpRequest request){
-        if(getApiKey(request.getHeaders()) == null)
+    protected void checkApiKeyExistence(Map<String, String> requestHeaders){
+        if(getApiKey(requestHeaders) == null)
             throw new BadRequestException("apikey is not provided");
     }
 

@@ -1,5 +1,6 @@
 package it.sijmen.movienotifier.api;
 
+import it.sijmen.movienotifier.controllers.WatcherController;
 import it.sijmen.movienotifier.model.Watcher;
 import org.hamcrest.Matchers;
 import org.junit.Test;
@@ -15,7 +16,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
-@WebMvcTest(JumpConfiguration.class)
+@WebMvcTest(WatcherController.class)
 public class WatcherCreateTest extends WatcherTestBase {
 
     private String buildJsonCreation(Watcher watcher){
@@ -37,7 +38,9 @@ public class WatcherCreateTest extends WatcherTestBase {
             return arg;
         });
 
-        this.mvc.perform(put("/watchers/").accept(MediaType.APPLICATION_JSON)
+        this.mvc.perform(put("/watchers/")
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
                 .header("APIKEY", testuser.getApikey()).content(buildJsonCreation(testwatcher)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(testwatcher.getId()))
@@ -52,7 +55,9 @@ public class WatcherCreateTest extends WatcherTestBase {
     @Test
     public void testCreateInvalidJson() throws Exception {
         addToMockedDb(testuser);
-        this.mvc.perform(put("/watchers/").accept(MediaType.APPLICATION_JSON)
+        this.mvc.perform(put("/watchers/")
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
                 .header("APIKEY", testuser.getApikey()).content("{"))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.message").value(Matchers.startsWith("JSON not valid")));
@@ -65,7 +70,9 @@ public class WatcherCreateTest extends WatcherTestBase {
         Watcher watcher = new Watcher(testwatcher);
         watcher.setBegin(50);
         watcher.setEnd(30);
-        this.mvc.perform(put("/watchers/").accept(MediaType.APPLICATION_JSON)
+        this.mvc.perform(put("/watchers/")
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
                 .header("APIKEY", testuser.getApikey()).content(buildJsonCreation(watcher)))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.errors").value(Matchers.containsInAnyOrder(
@@ -80,7 +87,9 @@ public class WatcherCreateTest extends WatcherTestBase {
         Watcher watcher = new Watcher(testwatcher);
         watcher.setBegin(10);
         watcher.setEnd(10L+2629746000L);//10 seconds + 1 month
-        this.mvc.perform(put("/watchers/").accept(MediaType.APPLICATION_JSON)
+        this.mvc.perform(put("/watchers/")
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
                 .header("APIKEY", testuser.getApikey()).content(buildJsonCreation(watcher)))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.errors").value(Matchers.containsInAnyOrder(
@@ -92,7 +101,9 @@ public class WatcherCreateTest extends WatcherTestBase {
     @Test
     public void testCreateNoParams() throws Exception {
         addToMockedDb(testuser);
-        this.mvc.perform(put("/watchers/").accept(MediaType.APPLICATION_JSON)
+        this.mvc.perform(put("/watchers/")
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
                 .header("APIKEY", testuser.getApikey()).content("{\"userid\": \""+testuser.getId()+"\"}"))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.errors").value(Matchers.containsInAnyOrder(
@@ -108,7 +119,9 @@ public class WatcherCreateTest extends WatcherTestBase {
     public void testCreateNotYourApikey() throws Exception {
         addToMockedDb(testuser);
         addToMockedDb(testuser2);
-        this.mvc.perform(put("/watchers/").accept(MediaType.APPLICATION_JSON)
+        this.mvc.perform(put("/watchers/")
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
                 .header("APIKEY", testuser2.getApikey()).content(buildJsonCreation(testwatcher)))
                 .andExpect(status().isUnauthorized());
         verifyZeroInteractions(watcherRepo);
@@ -117,7 +130,9 @@ public class WatcherCreateTest extends WatcherTestBase {
     @Test
     public void testCreateWrongApikey() throws Exception {
         addToMockedDb(testuser);
-        this.mvc.perform(put("/watchers/").accept(MediaType.APPLICATION_JSON)
+        this.mvc.perform(put("/watchers/")
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
                 .header("APIKEY", "ASDFADSF").content(buildJsonCreation(testwatcher)))
                 .andExpect(status().isUnauthorized());
         verifyZeroInteractions(watcherRepo);
@@ -127,7 +142,9 @@ public class WatcherCreateTest extends WatcherTestBase {
     public void testCreateWrongUser() throws Exception {
         addToMockedDb(testuser);
         addToMockedDb(testuser2);
-        this.mvc.perform(put("/watchers/").accept(MediaType.APPLICATION_JSON)
+        this.mvc.perform(put("/watchers/")
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
                 .header("APIKEY", testuser.getApikey()).content(buildJsonCreation(testuser2.getId(), testwatcher)))
                 .andExpect(status().isUnauthorized());
         verifyZeroInteractions(watcherRepo);

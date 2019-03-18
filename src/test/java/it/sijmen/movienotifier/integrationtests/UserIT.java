@@ -2,14 +2,12 @@ package it.sijmen.movienotifier.integrationtests;
 
 import io.restassured.response.Response;
 import io.restassured.response.ValidatableResponse;
-import it.sijmen.jump.actors.ReadActor;
 import jersey.repackaged.com.google.common.collect.Lists;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.*;

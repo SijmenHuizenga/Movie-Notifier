@@ -2,9 +2,8 @@ package it.sijmen.movienotifier.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import it.sijmen.jump.actors.UpdateActor;
+import it.sijmen.movienotifier.controllers.ModelUpdater;
 import org.hibernate.validator.constraints.NotBlank;
-import org.hibernate.validator.constraints.Range;
 import org.jetbrains.annotations.Nullable;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
@@ -62,7 +61,7 @@ public class Watcher implements Model {
     @JsonProperty
     @Valid
     @NotNull
-    @UpdateActor.RecursiveUpdate
+    @ModelUpdater.RecursiveUpdate
     private WatcherFilters filters;
 
     public Watcher(String id, String userid, String name, int movieid, long begin, long end, WatcherFilters filters) {

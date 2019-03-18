@@ -1,5 +1,6 @@
 package it.sijmen.movienotifier.api;
 
+import it.sijmen.movienotifier.controllers.UserController;
 import it.sijmen.movienotifier.model.User;
 import net.minidev.json.JSONArray;
 import org.hamcrest.Matchers;
@@ -19,7 +20,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
-@WebMvcTest(JumpConfiguration.class)
+@WebMvcTest(UserController.class)
 public class UserCreateTest extends UserTestBase {
 
     @Test
@@ -31,7 +32,7 @@ public class UserCreateTest extends UserTestBase {
             return arg;
         });
 
-        this.mvc.perform(put("/user/").accept(MediaType.APPLICATION_JSON).content(
+        this.mvc.perform(put("/user/").accept(MediaType.APPLICATION_JSON).contentType(MediaType.APPLICATION_JSON).content(
                 buildJson(testuser.getName(), testuser.getEmail(), testuser.getPhonenumber(), "12345678", null)
         )).andExpect(status().isOk())
           .andExpect(jsonPath("$.name").value(testuser.getName()))
@@ -46,7 +47,7 @@ public class UserCreateTest extends UserTestBase {
 
     @Test
     public void testCreateInvalidJson() throws Exception {
-        this.mvc.perform(put("/user/").accept(MediaType.APPLICATION_JSON).content("{"))
+        this.mvc.perform(put("/user/").accept(MediaType.APPLICATION_JSON).contentType(MediaType.APPLICATION_JSON).content("{"))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.message").value(Matchers.startsWith("JSON not valid")));
         verifyZeroInteractions(userRepo);
@@ -54,7 +55,7 @@ public class UserCreateTest extends UserTestBase {
 
     @Test
     public void testCreateNoParams() throws Exception {
-        this.mvc.perform(put("/user/").accept(MediaType.APPLICATION_JSON).content("{}"))
+        this.mvc.perform(put("/user/").accept(MediaType.APPLICATION_JSON).contentType(MediaType.APPLICATION_JSON).content("{}"))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.errors").value(Matchers.containsInAnyOrder(
                         "email may not be empty",
@@ -67,7 +68,7 @@ public class UserCreateTest extends UserTestBase {
 
     @Test
     public void testCreateInvalidParams() throws Exception {
-        this.mvc.perform(put("/user/").accept(MediaType.APPLICATION_JSON).content(
+        this.mvc.perform(put("/user/").accept(MediaType.APPLICATION_JSON).contentType(MediaType.APPLICATION_JSON).content(
                 buildJson("inv", "inv", "+3108", "123", null)
         ))
                 .andExpect(status().isBadRequest())
@@ -86,7 +87,7 @@ public class UserCreateTest extends UserTestBase {
         when(userRepo.getAllByName(testuser.getName())).thenReturn(Collections.singletonList(testuser));
         when(userRepo.getAllByEmail(testuser.getEmail())).thenReturn(Collections.singletonList(testuser));
 
-        this.mvc.perform(put("/user/").accept(MediaType.APPLICATION_JSON).content(
+        this.mvc.perform(put("/user/").accept(MediaType.APPLICATION_JSON).contentType(MediaType.APPLICATION_JSON).content(
                 buildJson(testuser.getName(), testuser.getEmail(), testuser.getPhonenumber(), "12345678", null)
         )).andExpect(status().isBadRequest())
           .andExpect(jsonPath("$.errors").value(Matchers.containsInAnyOrder(
