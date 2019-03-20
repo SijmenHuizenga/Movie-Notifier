@@ -1,14 +1,24 @@
-package it.sijmen.movienotifier.service.cinemas.pathe;
+package it.sijmen.movienotifier.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class PatheCinema {
+public class Cinema {
 
     @JsonProperty
     private int id;
 
     @JsonProperty
     private String name;
+
+    @JsonProperty
+    private float lat, lon;
+
+    public Cinema(int id, String name, float lat, float lon) {
+        this.id = id;
+        this.name = name;
+        this.lat = lat;
+        this.lon = lon;
+    }
 
     public int getId() {
         return this.id;
@@ -26,9 +36,25 @@ public class PatheCinema {
         this.name = name;
     }
 
+    public float getLat() {
+        return lat;
+    }
+
+    public void setLat(float lat) {
+        this.lat = lat;
+    }
+
+    public float getLon() {
+        return lon;
+    }
+
+    public void setLon(float lon) {
+        this.lon = lon;
+    }
+
     @Override
     public String toString() {
-        return "PatheCinema{" +
+        return "Cinema{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
                 '}';
@@ -39,7 +65,7 @@ public class PatheCinema {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        PatheCinema that = (PatheCinema) o;
+        Cinema that = (Cinema) o;
 
         return getId() == that.getId();
     }

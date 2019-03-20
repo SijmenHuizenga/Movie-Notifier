@@ -1,7 +1,7 @@
 package it.sijmen.movienotifier.controllers;
 
-import it.sijmen.movienotifier.service.cinemas.CinemaLocation;
-import it.sijmen.movienotifier.service.cinemas.CinemaService;
+import it.sijmen.movienotifier.service.pathe.CinemaService;
+import it.sijmen.movienotifier.model.Cinema;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,8 +30,8 @@ public class CinemasController {
     @RequestMapping(method = RequestMethod.GET)
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public List<CinemaLocation> getAll() {
-        LOGGER.trace("Get all cinemas");
+    public List<Cinema> getAll() {
+        LOGGER.trace("Get all pathe");
         return cinemaService.getAllCinemaLocations();
     }
 }

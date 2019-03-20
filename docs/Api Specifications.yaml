@@ -15,7 +15,7 @@ tags:
   - name: Notification Type
     description: Methods of communication that can be enabled by the user to notifie the user when new movie show is available.
   - name: Cinemas
-    description: Everything about cinemas
+    description: Everything about pathe
   - name: Operations
     description: Server status, statistics and system management.
 schemes:
@@ -284,10 +284,10 @@ paths:
     get:
       tags:
         - Cinemas
-      description: Get all cinemas and it's details that are supported by the system.
+      description: Get all pathe and it's details that are supported by the system.
       responses:
         200:
-          description: List of all cinemas.
+          description: List of all pathe.
           schema:
             type: array
             items:
@@ -426,7 +426,7 @@ definitions:
         example: 123456
       cinemaid:
         type: string
-        description: The unique identifier of the movie to watch for. Get a list of all supported cinemas by using the `/cinemas` endpoint.
+        description: The unique identifier of the movie to watch for. Get a list of all supported pathe by using the `/pathe` endpoint.
         example: "PATHE12"
       begin:
         title: Start watching from

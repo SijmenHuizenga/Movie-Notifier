@@ -1,4 +1,4 @@
-package it.sijmen.movienotifier.service.cinemas.pathe;
+package it.sijmen.movienotifier.service.pathe.api;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;

@@ -1,4 +1,4 @@
-package it.sijmen.movienotifier.service.cinemas.pathe;
+package it.sijmen.movienotifier.service.pathe.api;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.data.annotation.Id;
@@ -6,7 +6,7 @@ import org.springframework.data.annotation.Id;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PatheMoviesResponse {
+public class PatheShowings {
 
     @Id
     private int movieid;
@@ -14,12 +14,12 @@ public class PatheMoviesResponse {
     @JsonProperty("schedules")
     private List<PatheShowing> showings;
 
-    public PatheMoviesResponse(int movieid){
+    public PatheShowings(int movieid){
         this.movieid = movieid;
         this.showings = new ArrayList<>();
     }
 
-    public PatheMoviesResponse(){
+    public PatheShowings(){
 
     }
 
@@ -44,7 +44,7 @@ public class PatheMoviesResponse {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        PatheMoviesResponse that = (PatheMoviesResponse) o;
+        PatheShowings that = (PatheShowings) o;
 
         if (getMovieid() != that.getMovieid()) return false;
         return getShowings() != null ? getShowings().equals(that.getShowings()) : that.getShowings() == null;

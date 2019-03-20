@@ -1,4 +1,4 @@
-package it.sijmen.movienotifier.service.cinemas.pathe;
+package it.sijmen.movienotifier.service.pathe.pathe;
 
 import com.mashape.unirest.http.HttpResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -11,6 +11,8 @@ import it.sijmen.movienotifier.repositories.PatheCacheRepository;
 import it.sijmen.movienotifier.repositories.UserRepository;
 import it.sijmen.movienotifier.repositories.WatcherRepository;
 import it.sijmen.movienotifier.service.notification.NotificationService;
+import it.sijmen.movienotifier.service.pathe.PatheApi;
+import it.sijmen.movienotifier.service.pathe.api.PatheShowing;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
@@ -153,10 +155,10 @@ public class PatheApiTest {
                 NOPREFERENCE, NO, NOPREFERENCE, NOPREFERENCE
         ));
 
-        PatheShowing patheShowing = new PatheShowing(12, 21432, 2382115, UnixTimestampDeserializer.PATHEFORMAT.parse("2017-12-15T21:00:00+01:00").getTime(),
+        PatheShowing patheShowingResponse = new PatheShowing(12, 21432, 2382115, UnixTimestampDeserializer.PATHEFORMAT.parse("2017-12-15T21:00:00+01:00").getTime(),
                 UnixTimestampDeserializer.PATHEFORMAT.parse("2017-12-15T23:50:00+01:00").getTime(), 1, 0, 0, 0, 0, 0, 0, 0, true, false);
 
-        assertFalse(api.accepts(watcher, patheShowing));
+        assertFalse(api.accepts(watcher, patheShowingResponse));
     }
 
     @Test
@@ -169,10 +171,10 @@ public class PatheApiTest {
                 NOPREFERENCE, NOPREFERENCE, NO, NOPREFERENCE
         ));
 
-        PatheShowing patheShowing = new PatheShowing(12, 21432, 2382115, UnixTimestampDeserializer.PATHEFORMAT.parse("2017-12-15T21:00:00+01:00").getTime(),
+        PatheShowing patheShowingResponse = new PatheShowing(12, 21432, 2382115, UnixTimestampDeserializer.PATHEFORMAT.parse("2017-12-15T21:00:00+01:00").getTime(),
                 UnixTimestampDeserializer.PATHEFORMAT.parse("2017-12-15T23:50:00+01:00").getTime(), 1, 0, 0, 0, 0, 0, 0, 1, false, true);
 
-        assertFalse(api.accepts(watcher, patheShowing));
+        assertFalse(api.accepts(watcher, patheShowingResponse));
     }
 
     @Test

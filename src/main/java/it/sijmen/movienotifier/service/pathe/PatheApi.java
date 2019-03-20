@@ -1,4 +1,4 @@
-package it.sijmen.movienotifier.service.cinemas.pathe;
+package it.sijmen.movienotifier.service.pathe;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mashape.unirest.http.HttpResponse;
@@ -9,8 +9,9 @@ import it.sijmen.movienotifier.model.PatheMovieCache;
 import it.sijmen.movienotifier.model.Watcher;
 import it.sijmen.movienotifier.model.WatcherFilters;
 import it.sijmen.movienotifier.repositories.PatheCacheRepository;
-import it.sijmen.movienotifier.service.cinemas.Cinema;
 import it.sijmen.movienotifier.service.notification.NotificationService;
+import it.sijmen.movienotifier.service.pathe.api.PatheShowing;
+import it.sijmen.movienotifier.service.pathe.api.PatheShowings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +28,7 @@ import static it.sijmen.movienotifier.model.FilterOption.YES;
 import static java.lang.System.lineSeparator;
 
 @Service
-public class PatheApi implements Cinema {
+public class PatheApi {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(PatheApi.class);
 
@@ -44,17 +45,17 @@ public class PatheApi implements Cinema {
         this.notificationService = notificationService;
     }
 
-    private PatheMoviesResponse getShowingsPerCinema(int movieId) throws IOException {
+    private PatheShowings getShowingsPerCinema(int movieId) throws IOException {
         String uri = "https://connect.pathe.nl/v1/movies/"+movieId+"/schedules";
         HttpResponse<String> stringHttpResponse = makeGetRequest(uri);
 
         if(stringHttpResponse.getStatus() != 200)
             throw new IOException("Status returned " + stringHttpResponse.getStatus() + " after request " + uri);
-        PatheMoviesResponse patheMoviesResponse = mapper.readValue(stringHttpResponse.getBody(), PatheMoviesResponse.class);
-        if(patheMoviesResponse == null)
+        PatheShowings patheShowings = mapper.readValue(stringHttpResponse.getBody(), PatheShowings.class);
+        if(patheShowings == null)
             throw new IOException("Unexpected api result");
-        patheMoviesResponse.setMovieid(movieId);
-        return patheMoviesResponse;
+        patheShowings.setMovieid(movieId);
+        return patheShowings;
     }
 
     public HttpResponse<String> makeGetRequest(String uri) throws IOException {
@@ -67,12 +68,6 @@ public class PatheApi implements Cinema {
         }
     }
 
-    @Override
-    public String getCinemaIdPrefix() {
-        return "PATHE";
-    }
-
-    @Override
     public void checkWatcher(List<Watcher> watcher) {
         LOGGER.trace("Checking #{} watchers", watcher.size());
         watcher.stream()
@@ -83,7 +78,7 @@ public class PatheApi implements Cinema {
     private void checkForUpdates(int movieId, List<Watcher> watchers) {
         LOGGER.trace("Checking #{} watchers with modieid {}", watchers.size(), movieId);
         PatheMovieCache oldData;
-        PatheMoviesResponse newData;
+        PatheShowings newData;
         try {
             oldData = repository.getFirstByMovieid(movieId);
             newData = this.getShowingsPerCinema(movieId);
@@ -114,7 +109,7 @@ public class PatheApi implements Cinema {
         watchers.forEach(w -> this.sendUpdates(w, showings));
     }
 
-    private PatheMovieCache makeCacheFromResponse(PatheMoviesResponse newData){
+    private PatheMovieCache makeCacheFromResponse(PatheShowings newData){
         return new PatheMovieCache(newData.getMovieid(), newData.getShowingsids());
     }
 
@@ -138,7 +133,11 @@ public class PatheApi implements Cinema {
     }
 
     public boolean accepts(Watcher watcher, PatheShowing showing) {
-        int realWatcherCinemaId = Integer.parseInt(watcher.getFilters().getCinemaid().substring(getCinemaIdPrefix().length()));
+        String watcherCinemaId = watcher.getFilters().getCinemaid();
+        if(watcherCinemaId.startsWith("PATHE")) {
+            watcherCinemaId = watcherCinemaId.substring("PATHE".length());
+        }
+        int realWatcherCinemaId = Integer.parseInt(watcherCinemaId);
         WatcherFilters d = watcher.getFilters();
         if (showing.getCinemaId() != realWatcherCinemaId) {
             LOGGER.debug("Cinema id does not equal");
