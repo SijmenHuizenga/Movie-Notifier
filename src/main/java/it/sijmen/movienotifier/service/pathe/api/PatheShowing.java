@@ -251,9 +251,13 @@ public class PatheShowing implements Comparable<PatheShowing> {
         else
             builder.append("2D, ");
 
-        builder.append("https://www.pathe.nl/tickets/start/").append(getId());
+        builder.append(getUrl()).append(getId());
 
         return builder.toString();
+    }
+
+    public String getUrl(){
+         return "https://www.pathe.nl/tickets/start/" + getId();
     }
 
     @Override

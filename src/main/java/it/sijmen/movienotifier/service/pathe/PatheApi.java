@@ -106,30 +106,15 @@ public class PatheApi {
         List<Long> oldshowings = oldData.getShowingids();
 
         showings.removeIf(s -> oldshowings.contains(s.getId()));
-        watchers.forEach(w -> this.sendUpdates(w, showings));
+        watchers.parallelStream().forEach(w ->
+                notificationService.sendUpdates(w, showings.stream()
+                    .filter(showing -> accepts(w, showing))
+                    .collect(Collectors.toList()))
+        );
     }
 
     private PatheMovieCache makeCacheFromResponse(PatheShowings newData){
         return new PatheMovieCache(newData.getMovieid(), newData.getShowingsids());
-    }
-
-    private void sendUpdates(Watcher watcher, List<PatheShowing> showings) {
-        List<PatheShowing> matches = showings.stream()
-                .filter(showing -> accepts(watcher, showing))
-                .collect(Collectors.toList());
-
-        if(matches.size() == 0)
-            return;
-
-        LOGGER.trace("Notifying user about {} matches for watcher", matches.size());
-
-        Collections.sort(matches);
-        String body = matches.stream()
-                .sorted()
-                .map(PatheShowing::toMessageString)
-                .collect(Collectors.joining(lineSeparator()));
-
-        notificationService.notify(watcher.getUserid(), makeMessageHeader(watcher, matches.size()), body);
     }
 
     public boolean accepts(Watcher watcher, PatheShowing showing) {
@@ -185,9 +170,5 @@ public class PatheApi {
                 || actual == null
                 || (expected == YES && actual)
                 || (expected == NO && !actual);
-    }
-
-    private String makeMessageHeader(Watcher watcher, int matches) {
-        return watcher.getName() + lineSeparator() + "+" + matches + " matches";
     }
 }
