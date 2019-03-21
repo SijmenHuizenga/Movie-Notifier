@@ -71,7 +71,7 @@ public class User implements Model {
     private Date created;
 
     @Field
-    @JsonProperty("gcm-registration-tokens")
+    @JsonProperty("fcm-registration-tokens")
     private List<String> registrationTokens;
 
     public User() {

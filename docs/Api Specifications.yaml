@@ -1,7 +1,7 @@
 swagger: '2.0'
 
 info:
-  version: '3.3-SNAPSHOT'
+  version: '4.0-SNAPSHOT'
   title: Movie Notifier
   description: 'This is a Movie Notifier server specification. Read more about the movie notifier at https://github.com/SijmenHuizenga/Movie-Notifier'
   contact:
@@ -12,8 +12,6 @@ tags:
     description: Everything about user management and authentication.
   - name: Watcher
     description: Everything about watchers.
-  - name: Notification Type
-    description: Methods of communication that can be enabled by the user to notifie the user when new movie show is available.
   - name: Cinemas
     description: Everything about pathe
   - name: Operations
@@ -140,42 +138,6 @@ paths:
           $ref: '#/responses/InternalServerError'
       security:
         - APIKEY: []
-
-  /notificationtypes:
-    get:
-      tags:
-        - Notification Type
-      description: Get a list of all notification types
-      responses:
-        200:
-          description: All the notification types in the system.
-          schema:
-            type: array
-            items:
-              $ref: '#/definitions/NotificationType'
-        500:
-          $ref: '#/responses/InternalServerError'
-  /notificationtypes/{notificationtypekey}:
-    get:
-      tags:
-        - Notification Type
-      description: Get the details of a single notificaiton type
-      parameters:
-        - name: notificationtypekey
-          in: path
-          description: The key of the notification type.
-          required: true
-          type: string
-      responses:
-        200:
-          description: The details of the notification identified by notificationtypekey
-          schema:
-            $ref: '#/definitions/NotificationType'
-        400:
-          $ref: '#/responses/BadRequestError'
-        500:
-          $ref: '#/responses/InternalServerError'
-
   /watchers:
     get:
       tags:
@@ -294,6 +256,47 @@ paths:
               $ref: '#/definitions/Cinema'
         500:
           $ref: '#/responses/InternalServerError'
+  /notification-test:
+    post:
+      tags:
+        - Operations
+      description: Make the api send a test-notification. The notification will be sent to all firebase cloud messaging devices. When the email adres is configured it will also be sent to the email address.
+      parameters:
+        - name: testdata
+          in: body
+          description: The example data to send to use for the notification
+          required: true
+          schema:
+            type: object
+            required:
+              - afds
+              - afsd
+            properties:
+              header:
+                type: string
+                description: The notification header.
+              body:
+                type: string
+                description: The notification body.
+              watcher-id:
+                type: string
+                description: The id of the watcher that this notification triggered. The value will be directly forwarded without any checking.
+              watcher-name:
+                type: string
+                description: The name of the watcher. The value will be directly forwarded without any checking.
+              match-count:
+                type: integer
+                description: The amount of matches that this watcher has.
+              movieid:
+                type: integer
+                description: The movie identifier that this notification is about.
+      responses:
+        200:
+          description: The notification has been succesfully sent.
+        500:
+          $ref: '#/responses/InternalServerError'
+      security:
+        - APIKEY: []
   /health:
     get:
       tags:
@@ -354,9 +357,6 @@ definitions:
     required:
       - id
       - name
-      - email
-      - phonenumber
-      - notifications
       - apikey
     properties:
       id:
@@ -375,19 +375,14 @@ definitions:
         title: Email
         type: string
         format: email
-        description: A valid email adres.
-      phonenumber:
-        title: Phone Number
-        type: string
-        description: A valid, Global Number as described in RFC 3966 section 5.1.4 (always in the format of +[countrycode][phonenumber]).
-      notifications:
-        title: Enabled Notifications
-        description: A list of enabled notificaiton types for this user.
+        description: A valid email adres. Optional. When not specified no notifications wil be sent to email.
+      fcm-registration-tokens:
+        title: Firebase Cloud Messaging registration token
+        description: A list of tokens referencing Firebase Cloud Messaging client devices. All clients will receive all notifications.
         type: array
         items:
-          title: Notification Type Key
           type: string
-          description: A three character string that uniquely identifies a notification type.
+          description: The Firebase Cloud Messaging registration token.
       apikey:
         description: A 64 character string that authenticates the user in api requests.
         type: string
@@ -522,25 +517,13 @@ definitions:
             type: string
             enum: [yes, no, no-preference]
             description: whether or not the showing is in dolbey atmos
-  NotificationType:
-    type: object
-    properties:
-      key:
-        description: A three character string that uniquely identifies a notification type.
-        type: string
-      name:
-        description: The name of this notification type
-        type: string
-      description:
-        description: The extended description of this notification type
-        type: string
   Cinema:
     type: object
     properties:
       id:
         description: The unique id of this cinema
         type: string
-        example: PATHE9
+        example: 9
       name:
         description: The name of this cinema. Use this field for displaying to the user.
         type: string

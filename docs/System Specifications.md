@@ -20,26 +20,19 @@ A user represents a cinema enthousiast that uses the system. A user looks like t
     "id": "5995f25708813b0001f99393",
     "name": "cinemaenthousia",
     "email": "enthousiast@example.com",
-    "phonenumber": "+31698765432",
     "password": "abcd1234",
-    "notifications": [
-        "FBM"
-    ],
-    "apikey": "rSE0cKPgwwTnxnSVx9EzJGPUhS6qcdP6TChk5NWOZ8escVCbA194fMurxJJPE51z"
+    "apikey": "rSE0cKPgwwTnxnSVx9EzJGPUhS6qcdP6TChk5NWOZ8escVCbA194fMurxJJPE51z",
+    "gcm-registration-tokens": []
 }
 ```
-The fields `name`, `email`, `phonenumber` and `password` are provided by the user at registration. Later the user can update these fields. The user is uniquely identified by its `id` that is generated when the user is registered. The `apikey` is used to authenticate the user in all requets that need to be authenticated. 
+The fields `name`, `email`, and `password` are provided by the user at registration. Later the user can update these fields. The user is uniquely identified by its `id` that is generated when the user is registered. The `apikey` is used to authenticate the user in all requets that need to be authenticated. 
 
 There are some extra rules for userdata that apply to all users:
 - [x] `name`, `email`, `phonenumber`, `password` and `notifications` are required and thus cannot be null.
 - [x] `name` must be between 4 and 16 charcters and only contains letters (a-z) and numbers (0-9), but no capital letters (A-Z). The first 4 characters must always be letters.
-- [x] `email` must contain a valid email address
-- [x] `phonenumber` must be a valid Global Number as described in RFC 3966 section 5.1.4. So always in the format of `+[countrycode][phonenumber]`.
-- [x] `notifications` can be an empty array but this results in receiving no notifications.
+- [x] `email` must contain a valid email address. This field is optional. When the field is set to `null` the user will receive no notifications over email.
 - [x] `password` must at least be 8 characters long and may only contain the letters (`a-z`), capital letters (`A-Z`), numbers (`0-9`) and the following special characters: `!@#$%^&*()_-+={}[]:;?><.,`
-- [x] Items in the `notifications` array must be one of the following: `FBM` (facebook messenger), `MIL` (email) or `SMS`. Not all users are allowed to enable all types of notifications. The user will be informed of these restrictions when they try to enable one of the restricted notifications. Currently there is no way to get these restrictions upfront.
-
-Notifications through facebook messenger use the user phone number. If the user has not connected it's phone number to a facebook messenger account the notification will not arrive. 
+- [x] `fcm-registration-tokens` is a list of firebase-cloud-messaging device registration tokens. Notifications are sent to all tokens in this list.
 
 ### Watchers
 Users can register watchers. A watcher looks like this:
@@ -71,13 +64,13 @@ Users can register watchers. A watcher looks like this:
 ```
 The watcher is uniquely identified by its `id`. The `userid` is the id of the user that owns of this watcher. The `name` is the textual description of the watcher that is specified by the user.
 
-The movie that is watched by this watcher is specified as a numerical id in the field `movieid`. At this moment the movieid corresponds with the movie id of given to movies by [pathe.nl](https://pathe.nl). Later this will be changed to use the movie index of IMDB.
+The movie that is watched by this watcher is specified as a numerical id in the field `movieid`. The movieid corresponds with the movie id of given to movies by [pathe.nl](https://pathe.nl).
 
 `begin` and `end` specify in what period this watcher is enabled. These fields are necessary to stop watchers from watching forever. There are some rules that apply to these fields that are specified below.
 
 All fields witin the `filters` property are used to filter out new movie showings from getting notifications to the user. `cinemaid` specifies the cinema the showing is shown at. For all filters a preference must be specified.
 
-This `cinemaid` filter consists of two parts: the cinema chain id and the cinema number. At this moment only Pathe Cinema is supported (id `PATHE`), but later Vue, Kinepolis and others might be added. Cinemec is part of Pathe.:) The cinema chain id and the cinema number are concatinated together as the string representation as `cinemaid`. At this moment there is no check weather or not the cinema is valid! This filter is required as you can only watch showings for a specific movie in a specific cinema.
+This `cinemaid` filter selects a cinema. This id references a cinema from the `GET /cinemas/` list. At this moment there is no check weather or not the cinema is valid! This filter is required as you can only watch showings for a specific movie in a specific cinema. In previous versions this string was a concatination of the cinema chain id and the cinema number. For example `PATHE12`. 
 
 The following other parameters are supported:
 * `startafter` Showings that start later than this timestamp 

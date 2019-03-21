@@ -9,11 +9,16 @@ import it.sijmen.movienotifier.util.ApiKeyHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.Map;
 
 @Controller
@@ -34,9 +39,9 @@ public class NotificationTestController {
         this.apiKeyHelper = apiKeyHelper;
     }
 
-    @GetMapping("/notification-test")
+    @PostMapping("/notification-test")
     public void sendTestNotification(@RequestHeader Map<String, String> requestHeaders,
-                              @RequestBody NotificationTestdata testfields) {
+                                           @RequestBody NotificationTestdata testfields) {
         User user = userRepository.getFirstByUuid(apiKeyHelper.getApiKey(requestHeaders));
         if(user == null) {
             throw new UnauthorizedException();
@@ -46,8 +51,16 @@ public class NotificationTestController {
 
         LOGGER.info("User {} requested test-notification with header {}", user.getName(), testfields.getHeader());
 
-        notificationService.sendUpdate(user, testfields.getHeader(), testfields.getBody(), testfields.getWatcherId(),
-                testfields.getWatcherName(), testfields.getMatchCount(), testfields.getMovieid());
+        try {
+            notificationService.sendUpdate(user, testfields.getHeader(), testfields.getBody(), testfields.getWatcherId(),
+                    testfields.getWatcherName(), testfields.getMatchCount(), testfields.getMovieid());
+        } catch (IOException e) {
+            StringWriter sw = new StringWriter();
+            PrintWriter pw = new PrintWriter(sw);
+            e.printStackTrace(pw);
+            String sStackTrace = sw.toString(); // stack trace as a string
+            throw new RuntimeException(e.getMessage() + "\nCaused by: \n" + sStackTrace);
+        }
 
     }
 

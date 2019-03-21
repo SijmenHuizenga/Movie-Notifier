@@ -72,11 +72,15 @@ public class NotificationService {
 
         String header = makeMessageHeader(watcher, matches.size());
 
-        sendUpdate(user, header, body, watcher.getId(), watcher.getName(), matches.size(), watcher.getMovieid());
+        try {
+            sendUpdate(user, header, body, watcher.getId(), watcher.getName(), matches.size(), watcher.getMovieid());
+        } catch (IOException e) {
+            LOGGER.error("Could not send fb messages to {}. title: {}", user.getName(), header, e);
+        }
     }
 
-    public void sendUpdate(User user, String header, String body, String watcherId, String watcherName, int matchCount, int movieid) {
-        LOGGER.info("Sent notifications to {} with header {}", user.getName(), header);
+    public void sendUpdate(User user, String header, String body, String watcherId, String watcherName, int matchCount, int movieid) throws IOException {
+        LOGGER.info("Sending notifications to {} with header {}", user.getName(), header);
 
         if(user.getEmail() != null) {
             sendEmail(user.getEmail(), header, body);
@@ -100,21 +104,23 @@ public class NotificationService {
         try {
             FirebaseMessaging.getInstance().sendAll(messages);
         } catch (FirebaseMessagingException e) {
-            LOGGER.error("Could not send fb messages to {}. title: {}", user.getName(), header, e);
+            throw new IOException(e);
         }
     }
 
-    private void sendEmail(String email, String messageHeader, String messageBody) {
+    private void sendEmail(String email, String messageHeader, String messageBody) throws IOException {
         Response response = Mail.using(mailgunConfig)
                 .to(email)
                 .subject(getTitle(messageHeader))
                 .text(messageHeader + System.lineSeparator() + System.lineSeparator() + messageBody)
                 .build()
                 .send();
-        if(response.isOk())
-            LOGGER.trace("Sent mail message through mailgun to {}. Message: {} {}", email, messageHeader, messageBody);
-        else
+        if(!response.isOk()) {
             LOGGER.error("Mailgun returned not ok. Code: {}. Message: {}", response.responseCode(), response.responseMessage());
+            throw new IOException("Mailgun returned not ok. code: " + response.responseCode() + ", Message: " + response.responseMessage());
+        }
+
+        LOGGER.trace("Sent mail message through mailgun to {}. Message: {} {}", email, messageHeader, messageBody);
     }
 
     private String getTitle(String message) {

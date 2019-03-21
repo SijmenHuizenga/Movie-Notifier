@@ -14,15 +14,15 @@ public class NotificationTestdata implements Model {
     private String body;
 
     @NotBlank
-    @JsonProperty
+    @JsonProperty("watcher-id")
     private String watcherId;
 
     @NotBlank
-    @JsonProperty
+    @JsonProperty("watcher-name")
     private String watcherName;
 
     @NotBlank
-    @JsonProperty
+    @JsonProperty("match-count")
     private int matchCount;
 
     @NotBlank
