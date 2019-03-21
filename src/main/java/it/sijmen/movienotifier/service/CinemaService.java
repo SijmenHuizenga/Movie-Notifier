@@ -6,12 +6,11 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 
-@Service
 public class CinemaService {
 
-    private List<Cinema> allCinemas;
+    private static final List<Cinema> allCinemas;
 
-    public CinemaService() {
+    static {
         allCinemas = new ArrayList<>();
 
         allCinemas.add(new Cinema(9, "Pathé Arena", 52.31233f, 4.94577f));
@@ -43,7 +42,7 @@ public class CinemaService {
         allCinemas.add(new Cinema(34, "Cinema Hengelo", 52.2646f, 6.79098f));
     }
 
-    public List<Cinema> getAllCinemaLocations(){
+    public static List<Cinema> getAllCinemaLocations(){
         return allCinemas;
     }
 

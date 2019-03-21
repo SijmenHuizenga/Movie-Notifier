@@ -273,7 +273,7 @@ paths:
               - watcher-id
               - watcher-name
               - match-count
-              - type
+              - movie-id
             properties:
               body:
                 type: string
@@ -287,7 +287,7 @@ paths:
               match-count:
                 type: integer
                 description: The amount of matches that this watcher has.
-              movieid:
+              movie-id:
                 type: integer
                 description: The movie identifier that this notification is about.
       responses:
@@ -420,9 +420,9 @@ definitions:
         description: The unique identifier of the movie to watch for.
         example: 123456
       cinemaid:
-        type: string
+        type: integer
         description: The unique identifier of the movie to watch for. Get a list of all supported pathe by using the `/pathe` endpoint.
-        example: "PATHE12"
+        example: 12
       begin:
         title: Start watching from
         description: The timestamp this watcher should be activated
@@ -522,7 +522,7 @@ definitions:
     properties:
       id:
         description: The unique id of this cinema
-        type: string
+        type: integer
         example: 9
       name:
         description: The name of this cinema. Use this field for displaying to the user.

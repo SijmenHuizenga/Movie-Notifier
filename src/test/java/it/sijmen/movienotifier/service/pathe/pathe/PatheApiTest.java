@@ -137,7 +137,7 @@ public class PatheApiTest {
         api.checkWatcher(Collections.singletonList(
                 new Watcher("SOMEID", "SOMEUSER", "SOMENAME", MOVIEID, watcherbegin, watcherend,
                     new WatcherFilters(
-                        "PATHE"+ CINEMAID, filterafter, filterbefore, YES, NO, NO,
+                        CINEMAID, filterafter, filterbefore, YES, NO, NO,
                         NO, NO, NO, NO, NOPREFERENCE, NOPREFERENCE, NOPREFERENCE, YES
                     )
                 )
@@ -152,7 +152,7 @@ public class PatheApiTest {
         PatheApi api = spy(new PatheApi(new ObjectMapper(), "SOMEKEY", patheCacheRepository, notificationService));
 
         Watcher watcher = new Watcher("SOMEID", "SOMEUSER", "Star Wars 8 (R'dam 4DX week 1)", 21432, 1510992000185L, 1513186080310L, new WatcherFilters(
-                "PATHE12",
+                12,
                 1513353540786L, 1513540800699L, NOPREFERENCE, NOPREFERENCE, NOPREFERENCE, NOPREFERENCE, NOPREFERENCE, NOPREFERENCE, NOPREFERENCE,
                 NOPREFERENCE, NO, NOPREFERENCE, NOPREFERENCE
         ));
@@ -168,7 +168,7 @@ public class PatheApiTest {
         PatheApi api = spy(new PatheApi(new ObjectMapper(), "SOMEKEY", patheCacheRepository, notificationService));
 
         Watcher watcher = new Watcher("SOMEID", "SOMEUSER", "Star Wars 8 (R'dam Dolby Cinema week 1)", 21432, 1510992000185L, 1513186080310L, new WatcherFilters(
-                "PATHE12",
+                12,
                 1513353540786L, 1513540800699L, NOPREFERENCE, NOPREFERENCE, NOPREFERENCE, NOPREFERENCE, NOPREFERENCE, NOPREFERENCE, NOPREFERENCE,
                 NOPREFERENCE, NOPREFERENCE, NO, NOPREFERENCE
         ));

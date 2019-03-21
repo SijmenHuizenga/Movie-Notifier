@@ -120,13 +120,8 @@ public class PatheApi {
     }
 
     public boolean accepts(Watcher watcher, PatheShowing showing) {
-        String watcherCinemaId = watcher.getFilters().getCinemaid();
-        if(watcherCinemaId.startsWith("PATHE")) {
-            watcherCinemaId = watcherCinemaId.substring("PATHE".length());
-        }
-        int realWatcherCinemaId = Integer.parseInt(watcherCinemaId);
         WatcherFilters d = watcher.getFilters();
-        if (showing.getCinemaId() != realWatcherCinemaId) {
+        if (showing.getCinemaId() != watcher.getFilters().getCinemaid()) {
             LOGGER.debug("Cinema id does not equal");
             return false;
         }

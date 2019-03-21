@@ -4,7 +4,6 @@ import it.sijmen.movienotifier.service.CinemaService;
 import it.sijmen.movienotifier.model.Cinema;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,18 +19,11 @@ public class CinemasController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(CinemasController.class);
 
-    private final CinemaService cinemaService;
-
-    @Autowired
-    public CinemasController(CinemaService cinemaService) {
-        this.cinemaService = cinemaService;
-    }
-
     @RequestMapping(method = RequestMethod.GET)
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public List<Cinema> getAll() {
         LOGGER.trace("Get all pathe");
-        return cinemaService.getAllCinemaLocations();
+        return CinemaService.getAllCinemaLocations();
     }
 }

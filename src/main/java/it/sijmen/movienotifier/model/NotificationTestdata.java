@@ -22,7 +22,7 @@ public class NotificationTestdata implements Model {
     private int matchCount;
 
     @NotBlank
-    @JsonProperty
+    @JsonProperty("movie-id")
     private int movieid;
 
     public NotificationTestdata() {

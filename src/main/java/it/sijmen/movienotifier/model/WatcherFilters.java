@@ -1,7 +1,7 @@
 package it.sijmen.movienotifier.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.hibernate.validator.constraints.NotBlank;
+import it.sijmen.movienotifier.service.CinemaService;
 
 import javax.validation.constraints.AssertTrue;
 import javax.validation.constraints.Min;
@@ -12,9 +12,9 @@ import javax.validation.constraints.NotNull;
  */
 public class WatcherFilters implements Model {
 
-    @NotBlank
     @JsonProperty
-    private String cinemaid;
+    @Min(0)
+    private int cinemaid;
 
     @JsonProperty
     @Min(0)
@@ -68,7 +68,7 @@ public class WatcherFilters implements Model {
     @JsonProperty
     private FilterOption dolbyatmos;
 
-    public WatcherFilters(String cinemaid, long startafter, long startbefore, FilterOption ov, FilterOption nl,
+    public WatcherFilters(int cinemaid, long startafter, long startbefore, FilterOption ov, FilterOption nl,
                           FilterOption imax, FilterOption d3, FilterOption hfr, FilterOption k4, FilterOption laser,
                           FilterOption dbox, FilterOption dx4, FilterOption dolbycinema, FilterOption dolbyatmos) {
         this.cinemaid = cinemaid;
@@ -115,6 +115,11 @@ public class WatcherFilters implements Model {
     @AssertTrue(message="between startbefore and startafter must be 2 weeks or less.")
     private boolean isTime() {
         return Math.abs(this.startbefore - this.startafter) <= 1209600000; // 2 weeks
+    }
+
+    @AssertTrue(message="between startbefore and startafter must be 2 weeks or less.")
+    private boolean isCinemaidValid() {
+        return CinemaService.getAllCinemaLocations().stream().anyMatch(cinema -> cinema.getId() == this.cinemaid);
     }
 
     public FilterOption isOv() {
@@ -221,11 +226,11 @@ public class WatcherFilters implements Model {
         return startbefore;
     }
 
-    public String getCinemaid() {
+    public int getCinemaid() {
         return cinemaid;
     }
 
-    public void setCinemaid(String cinemaid) {
+    public void setCinemaid(int cinemaid) {
         this.cinemaid = cinemaid;
     }
 
