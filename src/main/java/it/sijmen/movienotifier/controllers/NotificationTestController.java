@@ -41,18 +41,20 @@ public class NotificationTestController {
 
     @PostMapping("/notification-test")
     public void sendTestNotification(@RequestHeader Map<String, String> requestHeaders,
-                                           @RequestBody NotificationTestdata testfields) {
+                                     @RequestBody NotificationTestdata testfields) {
         User user = userRepository.getFirstByUuid(apiKeyHelper.getApiKey(requestHeaders));
-        if(user == null) {
+        if (user == null) {
             throw new UnauthorizedException();
         }
 
         testfields.validate();
 
-        LOGGER.info("User {} requested test-notification with header {}", user.getName(), testfields.getHeader());
+        LOGGER.info("User {} requested test-notification", user.getName());
 
         try {
-            notificationService.sendUpdate(user, testfields.getHeader(), testfields.getBody(), testfields.getWatcherId(),
+            notificationService.sendUpdate(user,
+                    "TEST: Watcher " + testfields.getWatcherName() + " has " + testfields.getMatchCount() + " matches.",
+                    testfields.getBody(), testfields.getWatcherId(),
                     testfields.getWatcherName(), testfields.getMatchCount(), testfields.getMovieid());
         } catch (IOException e) {
             StringWriter sw = new StringWriter();

@@ -7,10 +7,6 @@ public class NotificationTestdata implements Model {
 
     @NotBlank
     @JsonProperty
-    private String header;
-
-    @NotBlank
-    @JsonProperty
     private String body;
 
     @NotBlank
@@ -32,21 +28,12 @@ public class NotificationTestdata implements Model {
     public NotificationTestdata() {
     }
 
-    public NotificationTestdata(String header, String body, String watcherId, String watcherName, int matchCount, int movieid) {
-        this.header = header;
+    public NotificationTestdata(String body, String watcherId, String watcherName, int matchCount, int movieid) {
         this.body = body;
         this.watcherId = watcherId;
         this.watcherName = watcherName;
         this.matchCount = matchCount;
         this.movieid = movieid;
-    }
-
-    public String getHeader() {
-        return header;
-    }
-
-    public void setHeader(String header) {
-        this.header = header;
     }
 
     public String getBody() {

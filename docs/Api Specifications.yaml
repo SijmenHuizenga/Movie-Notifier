@@ -269,12 +269,12 @@ paths:
           schema:
             type: object
             required:
-              - afds
-              - afsd
+              - body
+              - watcher-id
+              - watcher-name
+              - match-count
+              - type
             properties:
-              header:
-                type: string
-                description: The notification header.
               body:
                 type: string
                 description: The notification body.
