@@ -117,7 +117,7 @@ public class WatcherFilters implements Model {
         return Math.abs(this.startbefore - this.startafter) <= 1209600000; // 2 weeks
     }
 
-    @AssertTrue(message="between startbefore and startafter must be 2 weeks or less.")
+    @AssertTrue(message="the cinemaid does not exist.")
     private boolean isCinemaidValid() {
         return CinemaService.getAllCinemaLocations().stream().anyMatch(cinema -> cinema.getId() == this.cinemaid);
     }

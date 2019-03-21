@@ -421,7 +421,7 @@ definitions:
         example: 123456
       cinemaid:
         type: integer
-        description: The unique identifier of the movie to watch for. Get a list of all supported pathe by using the `/pathe` endpoint.
+        description: The unique identifier of the movie to watch for. Get a list of all supported pathe by using the `/cinemas` endpoint.
         example: 12
       begin:
         title: Start watching from

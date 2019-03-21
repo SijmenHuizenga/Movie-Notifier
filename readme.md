@@ -29,4 +29,3 @@ cinema.pathe.apikey=
 fcm.serviceaccountkeyfile=
 ```
 Copy the above example and fill in the required properties. Movie-notifier uses Spring Boot which means that that there are many more options that can be configured in this file. These properties are described [here](https://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html)
-
