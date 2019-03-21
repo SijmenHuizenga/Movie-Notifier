@@ -37,7 +37,7 @@ public class UserUpdateTest extends UserTestBase {
                 .andExpect(jsonPath("$.email").value(testuser2.getEmail()))
                 .andExpect(jsonPath("$.id").value(testuser.getId()))
                 .andExpect(jsonPath("$.apikey").value(IsNull.notNullValue()))
-                .andExpect(jsonPath("$.gcm-registration-tokens")
+                .andExpect(jsonPath("$.fcm-registration-tokens")
                         .value(new JSONArray().appendElement("ABC").appendElement("DEF")))
                 .andExpect(jsonPath("$.password").doesNotExist());
         verify(userRepo, times(1)).save((User)any());

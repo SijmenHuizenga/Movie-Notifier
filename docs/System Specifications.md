@@ -22,7 +22,7 @@ A user represents a cinema enthousiast that uses the system. A user looks like t
     "email": "enthousiast@example.com",
     "password": "abcd1234",
     "apikey": "rSE0cKPgwwTnxnSVx9EzJGPUhS6qcdP6TChk5NWOZ8escVCbA194fMurxJJPE51z",
-    "gcm-registration-tokens": []
+    "fcm-registration-tokens": []
 }
 ```
 The fields `name`, `email`, and `password` are provided by the user at registration. Later the user can update these fields. The user is uniquely identified by its `id` that is generated when the user is registered. The `apikey` is used to authenticate the user in all requets that need to be authenticated. 

@@ -31,7 +31,7 @@ public class UserLoginTest extends UserTestBase {
                 "    \"name\": \""+testuser.getName()+"\",\n" +
                 "    \"email\": \""+testuser.getEmail()+"\",\n" +
                 "    \"apikey\": \""+testuser.getApikey()+"\",\n" +
-                "    \"gcm-registration-tokens\": [\""+String.join(",", testuser.getRegistrationTokens())+"\"]\n" +
+                "    \"fcm-registration-tokens\": [\""+String.join(",", testuser.getRegistrationTokens())+"\"]\n" +
                 "}"
         ));
     }

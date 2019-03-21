@@ -62,7 +62,7 @@ abstract class UserTestBase {
         if(password != null)
             items.add("\"password\": \""+password+"\"");
         if(notifications != null)
-            items.add("\"gcm-registration-tokens\": ["+notifications.stream().map(s -> "\"" + s + "\"").collect(Collectors.joining(", "))+"]\n");
+            items.add("\"fcm-registration-tokens\": ["+notifications.stream().map(s -> "\"" + s + "\"").collect(Collectors.joining(", "))+"]\n");
 
         return "{\n" + String.join(",\n", items) +"}";
     }

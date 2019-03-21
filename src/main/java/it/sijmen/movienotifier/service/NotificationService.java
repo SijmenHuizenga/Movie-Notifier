@@ -35,7 +35,7 @@ public class NotificationService {
     @Autowired
     public NotificationService(
             UserRepository userRepository,
-            @Value("${gcm.serviceaccountkeyfile}") String serviceAccountKeyFile,
+            @Value("${fcm.serviceaccountkeyfile}") String serviceAccountKeyFile,
             @Value("${mailgun.domnain}") String domain,
             @Value("${mailgun.apikey}") String apikey,
             @Value("${mailgun.from.name}") String fromName,
