@@ -16,95 +16,17 @@ Whatever way of deployment is chosen, a `movie-notifier.properties` file is requ
 # This property is required.
 spring.data.mongodb.uri=
 
-# Settings for AWS SNS api to notify users through SMS.
-notification.awssns.key=
-notification.awssns.secret=
-
-# Settings for facebook messenger notifications using the Facebook api.
-notification.facebook.token=
-
 # Settings for mail notifications using the Rollbar mailing api.
-notification.mailgun.domnain=
-notification.mailgun.apikey=
-notification.mailgun.from.mail=
-notification.mailgun.from.name=
+mailgun.domnain=
+mailgun.apikey=
+mailgun.from.mail=
+mailgun.from.name=
 
 # The api key of the Pathe Cinema Api
 cinema.pathe.apikey=
 
-# The token for rollbar to enable external logging.
-# If the apikey has the value 'disable' than rollbar logging is disabled.
-notification.rollbar.apikey=disable
-# The rollbar environment. Is ignored if rollbar logging is disabled.
-notification.rollbar.environment=disable
+# The path to a google cloud api json keyfile that gives access to firebase cloud messaging sending services.
+fcm.serviceaccountkeyfile=
 ```
 Copy the above example and fill in the required properties. Movie-notifier uses Spring Boot which means that that there are many more options that can be configured in this file. These properties are described [here](https://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html)
 
-## Manual run jar. 
-To mannually run this application download the latest runnable .jar file from [github releases](https://github.com/SijmenHuizenga/Movie-Notifier/releases). The only requirement to run the movie-notifier is the java runtime environment 8. Run the following command to start the app:
-
-``java -jar movie-notifier.jar --spring.config.location=movie-notifier.properties``
-
-The option `spring.config.location` specifies the location of the `movie-notifier.properties` file.
-
-
-## Docker Compose
-The easyest way to run this app is using Docker compose. The below `docker-compose.yml` file configures the movie-notifier app and a mongodb to run together. 
-
-```yaml
-version: '3'
-services:
-  movie-notifier-db:
-    image: mongo
-    volumes:
-      - [replace with path to persistant db store location]:/data/db
-  movie-notifier:
-    image: sijmenhuizenga/movienotifier:3.3-SNAPSHOT
-    volumes:
-      - [replace with path to movie-notifier.properties]:/movie-notifier.properties
-    depends_on:
-      - movie-notifier-db
-    ports:
-      - "80:80"
-```
-
-Note: when using this configuration the `spring.data.mongodb.uri` in the `movie-notifier.properties` file should have the value `mongodb://movie-notifier-db/movie-notifier`
-
-## Docker Compose + SSL
-To run this application with an ssl certificate the `docker-compose.yml` in the above example should be extended. The below configuration creates a nginx reverse proxy as well as a letsencrypt generation companion. 
-```yaml
-version: '2'
-services:
-  nginx-proxy:
-    image: jwilder/nginx-proxy
-    labels:
-        com.github.jrcs.letsencrypt_nginx_proxy_companion.nginx_proxy: "true"
-    container_name: nginx
-    ports:
-      - "443:443"
-      - "80:80"
-    volumes:
-      - /etc/nginx/certs:ro
-      - /etc/nginx/vhost.d
-      - /usr/share/nginx/html
-      - /var/run/docker.sock:/tmp/docker.sock:ro
-  nginx-letsencrypt:
-    image: jrcs/letsencrypt-nginx-proxy-companion
-    container_name: nginx-letsencrypt
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock:ro
-    volumes_from:
-      - nginx-proxy
-  movie-notifier-db:
-    image: mongo
-    volumes:
-      - [replace with path to persistant db store location]:/data/db
-  movie-notifier:
-    image: sijmenhuizenga/movienotifier:3.3-SNAPSHOT
-    volumes:
-      - [replace with path to movie-notifier.properties]:/movie-notifier.properties
-    environment:
-      - VIRTUAL_HOST=[replace with external hostname]
-      - LETSENCRYPT_HOST=[replace with external hostname]
-      - LETSENCRYPT_EMAIL=[replace with email of administrator]
-```
