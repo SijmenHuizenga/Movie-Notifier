@@ -1,6 +1,9 @@
 package it.sijmen.movienotifier.util;
 
+import it.sijmen.movienotifier.model.exceptions.BadRequestException;
 import org.springframework.stereotype.Service;
+
+import java.util.Map;
 import java.util.Random;
 
 @Service
@@ -30,5 +33,17 @@ public class ApiKeyHelper {
             buf[idx] = symbols[random.nextInt(symbols.length)];
         return new String(buf);
     }
+
+    public String getApiKey(Map<String, String> requestHeaders) {
+        return requestHeaders == null ? null :
+                requestHeaders.getOrDefault("APIKEY",
+                        requestHeaders.getOrDefault("apikey", null));
+    }
+
+    public void checkApiKeyExistence(Map<String, String> requestHeaders){
+        if(getApiKey(requestHeaders) == null)
+            throw new BadRequestException("apikey is not provided");
+    }
+
 
 }

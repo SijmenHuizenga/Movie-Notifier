@@ -9,7 +9,7 @@ import it.sijmen.movienotifier.model.PatheMovieCache;
 import it.sijmen.movienotifier.model.Watcher;
 import it.sijmen.movienotifier.model.WatcherFilters;
 import it.sijmen.movienotifier.repositories.PatheCacheRepository;
-import it.sijmen.movienotifier.service.notification.NotificationService;
+import it.sijmen.movienotifier.service.NotificationService;
 import it.sijmen.movienotifier.service.pathe.api.PatheShowing;
 import it.sijmen.movienotifier.service.pathe.api.PatheShowings;
 import org.slf4j.Logger;
@@ -25,7 +25,6 @@ import java.util.stream.Collectors;
 import static it.sijmen.movienotifier.model.FilterOption.NO;
 import static it.sijmen.movienotifier.model.FilterOption.NOPREFERENCE;
 import static it.sijmen.movienotifier.model.FilterOption.YES;
-import static java.lang.System.lineSeparator;
 
 @Service
 public class PatheApi {
@@ -106,11 +105,14 @@ public class PatheApi {
         List<Long> oldshowings = oldData.getShowingids();
 
         showings.removeIf(s -> oldshowings.contains(s.getId()));
-        watchers.parallelStream().forEach(w ->
-                notificationService.sendUpdates(w, showings.stream()
-                    .filter(showing -> accepts(w, showing))
-                    .collect(Collectors.toList()))
-        );
+        watchers.parallelStream().forEach(w -> {
+            List<PatheShowing> collect = showings.stream()
+                            .filter(showing -> accepts(w, showing))
+                            .collect(Collectors.toList());
+            if(!collect.isEmpty()) {
+                notificationService.sendUpdates(w, collect);
+            }
+        });
     }
 
     private PatheMovieCache makeCacheFromResponse(PatheShowings newData){

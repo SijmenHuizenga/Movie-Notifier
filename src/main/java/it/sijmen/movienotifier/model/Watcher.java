@@ -2,7 +2,7 @@ package it.sijmen.movienotifier.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import it.sijmen.movienotifier.controllers.ModelUpdater;
+import it.sijmen.movienotifier.util.ModelUpdater;
 import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;

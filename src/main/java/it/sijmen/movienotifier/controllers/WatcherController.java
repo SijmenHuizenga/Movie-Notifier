@@ -6,6 +6,8 @@ import it.sijmen.movienotifier.model.exceptions.BadRequestException;
 import it.sijmen.movienotifier.model.exceptions.UnauthorizedException;
 import it.sijmen.movienotifier.repositories.UserRepository;
 import it.sijmen.movienotifier.repositories.WatcherRepository;
+import it.sijmen.movienotifier.util.ApiKeyHelper;
+import it.sijmen.movienotifier.util.ModelUpdater;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,16 +21,23 @@ import java.util.Map;
 import java.util.UUID;
 
 @Controller
-public class WatcherController extends ApiController {
+public class WatcherController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(WatcherController.class);
 
-    private ModelUpdater modelUpdater = new ModelUpdater();
+    private final ModelUpdater modelUpdater;
+    private final ApiKeyHelper apiKeyHelper;
+    private final UserRepository userRepository;
     private final WatcherRepository watcherRepo;
 
     @Autowired
-    public WatcherController(UserRepository userRepo, WatcherRepository watcherRepo) {
-        super(userRepo);
+    public WatcherController(ModelUpdater modelUpdater,
+                             ApiKeyHelper apiKeyHelper,
+                             UserRepository userRepository,
+                             WatcherRepository watcherRepo) {
+        this.modelUpdater = modelUpdater;
+        this.apiKeyHelper = apiKeyHelper;
+        this.userRepository = userRepository;
         this.watcherRepo = watcherRepo;
     }
 
@@ -118,7 +127,7 @@ public class WatcherController extends ApiController {
     }
 
     private User ensureLoggedIn(Map<String, String> requestHeaders) {
-        User executingUser = userRepository.findFirstByApikey(getApiKey(requestHeaders));
+        User executingUser = userRepository.findFirstByApikey(apiKeyHelper.getApiKey(requestHeaders));
         if(executingUser == null)
             throw new UnauthorizedException();
         return executingUser;

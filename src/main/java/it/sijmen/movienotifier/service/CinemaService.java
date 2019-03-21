@@ -1,4 +1,4 @@
-package it.sijmen.movienotifier.service.pathe;
+package it.sijmen.movienotifier.service;
 
 import it.sijmen.movienotifier.model.Cinema;
 import org.springframework.stereotype.Service;

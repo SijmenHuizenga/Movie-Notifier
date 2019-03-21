@@ -33,11 +33,10 @@ public class UserCreateTest extends UserTestBase {
         });
 
         this.mvc.perform(put("/user/").accept(MediaType.APPLICATION_JSON).contentType(MediaType.APPLICATION_JSON).content(
-                buildJson(testuser.getName(), testuser.getEmail(), testuser.getPhonenumber(), "12345678", null)
+                buildJson(testuser.getName(), testuser.getEmail(), "12345678", null)
         )).andExpect(status().isOk())
           .andExpect(jsonPath("$.name").value(testuser.getName()))
           .andExpect(jsonPath("$.email").value(testuser.getEmail()))
-          .andExpect(jsonPath("$.phonenumber").value(testuser.getPhonenumber()))
           .andExpect(jsonPath("$.id").value(testuser.getId()))
           .andExpect(jsonPath("$.apikey").value(IsNull.notNullValue()))
           .andExpect(jsonPath("$.password").doesNotExist());
@@ -57,9 +56,7 @@ public class UserCreateTest extends UserTestBase {
         this.mvc.perform(put("/user/").accept(MediaType.APPLICATION_JSON).contentType(MediaType.APPLICATION_JSON).content("{}"))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.errors").value(Matchers.containsInAnyOrder(
-                        "email may not be empty",
                         "name may not be empty",
-                        "phonenumber may not be empty",
                         "password may not be empty"
                 )));
         verifyZeroInteractions(userRepo);
@@ -68,14 +65,13 @@ public class UserCreateTest extends UserTestBase {
     @Test
     public void testCreateInvalidParams() throws Exception {
         this.mvc.perform(put("/user/").accept(MediaType.APPLICATION_JSON).contentType(MediaType.APPLICATION_JSON).content(
-                buildJson("inv", "inv", "+3108", "123", null)
+                buildJson("inv", "inv", "123", null)
         ))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.errors").value(Matchers.containsInAnyOrder(
                         "email not a well-formed email address",
                         "name may only contain letters (a-z) and numbers (0-9), but no capital letters (A-Z). The first 4 characters must always be letters",
                         "name size must be between 4 and 16",
-                        "phonenumber must be in the format +[countrycode][phonenumber]",
                         "password size must be between 8 and 128"
                 )));
         verifyZeroInteractions(userRepo);
@@ -87,7 +83,7 @@ public class UserCreateTest extends UserTestBase {
         when(userRepo.getAllByEmail(testuser.getEmail())).thenReturn(Collections.singletonList(testuser));
 
         this.mvc.perform(put("/user/").accept(MediaType.APPLICATION_JSON).contentType(MediaType.APPLICATION_JSON).content(
-                buildJson(testuser.getName(), testuser.getEmail(), testuser.getPhonenumber(), "12345678", null)
+                buildJson(testuser.getName(), testuser.getEmail(), "12345678", null)
         )).andExpect(status().isBadRequest())
           .andExpect(jsonPath("$.errors").value(Matchers.containsInAnyOrder(
                   "The given username is already in use.",

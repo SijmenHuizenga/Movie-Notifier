@@ -5,6 +5,7 @@ import it.sijmen.movienotifier.model.exceptions.UnauthorizedException;
 import it.sijmen.movienotifier.repositories.UserRepository;
 import it.sijmen.movienotifier.repositories.WatcherRepository;
 import it.sijmen.movienotifier.util.ApiKeyHelper;
+import it.sijmen.movienotifier.util.ModelUpdater;
 import it.sijmen.movienotifier.util.PasswordAuthentication;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,23 +20,25 @@ import java.util.Map;
 import java.util.UUID;
 
 @Controller
-public class UserController extends ApiController {
+public class UserController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(UserController.class);
 
-    private ApiKeyHelper apiKeyHelper;
-    private ModelUpdater modelUpdater = new ModelUpdater();
-
-    private WatcherRepository watcherRepository;
+    private final UserRepository userRepository;
+    private final ApiKeyHelper apiKeyHelper;
+    private final ModelUpdater modelUpdater;
+    private final WatcherRepository watcherRepository;
 
     @Autowired
     public UserController(
             UserRepository userRepository,
             ApiKeyHelper apiKeyHelper,
-            WatcherRepository watcherRepository) {
-        super(userRepository);
+            WatcherRepository watcherRepository,
+            ModelUpdater modelUpdater) {
+        this.userRepository = userRepository;
         this.apiKeyHelper = apiKeyHelper;
         this.watcherRepository = watcherRepository;
+        this.modelUpdater = modelUpdater;
     }
 
     @PutMapping("/user")
@@ -100,10 +103,15 @@ public class UserController extends ApiController {
     }
 
     private User getUserObject(String userid, Map<String, String> requestHeaders) {
-        checkApiKeyExistence(requestHeaders);
+        apiKeyHelper.checkApiKeyExistence(requestHeaders);
         User user = userRepository.getFirstByUuid(userid);
+        String apikey = apiKeyHelper.getApiKey(requestHeaders);
 
-        User executingUser = getExecutingUser(getApiKey(requestHeaders));
+        User executingUser = userRepository.findFirstByApikey(apikey);
+        if(executingUser == null) {
+            LOGGER.trace("Could not find user with apikey {}", apikey);
+            throw new UnauthorizedException();
+        }
 
         if(user == null || !executingUser.getId().equals(user.getId())) {
             LOGGER.warn("Not authorized to act on this user.");

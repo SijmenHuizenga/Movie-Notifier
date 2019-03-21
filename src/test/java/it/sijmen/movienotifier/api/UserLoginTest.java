@@ -30,7 +30,6 @@ public class UserLoginTest extends UserTestBase {
                 "    \"id\": \""+testuser.getId()+"\",\n" +
                 "    \"name\": \""+testuser.getName()+"\",\n" +
                 "    \"email\": \""+testuser.getEmail()+"\",\n" +
-                "    \"phonenumber\": \""+testuser.getPhonenumber()+"\",\n" +
                 "    \"apikey\": \""+testuser.getApikey()+"\",\n" +
                 "    \"gcm-registration-tokens\": [\""+String.join(",", testuser.getRegistrationTokens())+"\"]\n" +
                 "}"

@@ -1,4 +1,4 @@
-package it.sijmen.movienotifier.service.notifying;
+package it.sijmen.movienotifier.service;
 
 import it.sijmen.movienotifier.model.Watcher;
 import it.sijmen.movienotifier.repositories.WatcherRepository;

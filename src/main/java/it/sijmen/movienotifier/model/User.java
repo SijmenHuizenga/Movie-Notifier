@@ -47,18 +47,11 @@ public class User implements Model {
     @JsonProperty
     private String name;
 
-    @NotBlank
     @Email
     @Field
     @Indexed(unique = true)
     @JsonProperty
     private String email;
-
-    @NotBlank
-    @Field
-    @Pattern(regexp = "^\\+([0-9]{2}[0-9]{9})$", message = "must be in the format +[countrycode][phonenumber]")
-    @JsonProperty
-    private String phonenumber;
 
     @NotBlank
     @Size(min=8, max = 128)
@@ -84,12 +77,11 @@ public class User implements Model {
     public User() {
     }
 
-    public User(String id, String name, String email, String phonenumber, String password, String apikey,
+    public User(String id, String name, String email, String password, String apikey,
                 Date created, List<String> registrationTokens) {
         this.uuid = id;
         this.name = name;
         this.email = email;
-        this.phonenumber = phonenumber;
         this.password = password;
         this.apikey = apikey;
         this.created = created;
@@ -124,14 +116,6 @@ public class User implements Model {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public String getPhonenumber() {
-        return phonenumber;
-    }
-
-    public void setPhonenumber(String phonenumber) {
-        this.phonenumber = phonenumber;
     }
 
     public String getPassword() {

@@ -1,6 +1,6 @@
 package it.sijmen.movienotifier.controllers;
 
-import it.sijmen.movienotifier.service.pathe.CinemaService;
+import it.sijmen.movienotifier.service.CinemaService;
 import it.sijmen.movienotifier.model.Cinema;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -37,11 +37,11 @@ abstract class UserTestBase {
     final User testuser2;
 
     public UserTestBase() {
-        testuser = new User("TESTUSERID1", "testgebruiker1", "test1@example.com", "+31654321094",
+        testuser = new User("TESTUSERID1", "testgebruiker1", "test1@example.com",
                 PasswordAuthentication.hash("123456"), "5B88FF72CD8A003704261DB5809513FF902E0DBFB5BC4D9B7C87AB2085369A87",
                 new Calendar.Builder().setDate(2017,7,30).setTimeOfDay(20, 30, 15).build().getTime(),
                 Collections.singletonList("FBM"));
-        testuser2 = new User("TESTUSERID2", "testgebruiker2", "test2@example.com", "+31654321095",
+        testuser2 = new User("TESTUSERID2", "testgebruiker2", "test2@example.com",
                 PasswordAuthentication.hash("123455"), "5B88FF72CD8A003704261DB5809513FF902E0DBFB5BC4D9B7C87AB2085369A88",
                 new Calendar.Builder().setDate(2017,7,30).setTimeOfDay(20, 50, 15).build().getTime(),
                 Collections.singletonList("EXAMPLEKEY"));
@@ -53,14 +53,12 @@ abstract class UserTestBase {
         Mockito.reset(watcherRepo);
     }
 
-    String buildJson(String name, String email, String phone, String password, List<String> notifications){
+    String buildJson(String name, String email, String password, List<String> notifications){
         List<String> items = new ArrayList<>();
         if(name != null)
             items.add("\"name\": \""+name+"\"");
         if(email != null)
             items.add("\"email\": \""+email+"\"");
-        if(phone != null)
-            items.add("\"phonenumber\": \""+phone+"\"");
         if(password != null)
             items.add("\"password\": \""+password+"\"");
         if(notifications != null)

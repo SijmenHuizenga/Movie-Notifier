@@ -4,13 +4,14 @@ import com.mashape.unirest.http.HttpResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import it.sijmen.movienotifier.controllers.WatcherController;
 import it.sijmen.movienotifier.model.PatheMovieCache;
+import it.sijmen.movienotifier.model.User;
 import it.sijmen.movienotifier.model.Watcher;
 import it.sijmen.movienotifier.model.WatcherFilters;
 import it.sijmen.movienotifier.model.serialization.UnixTimestampDeserializer;
 import it.sijmen.movienotifier.repositories.PatheCacheRepository;
 import it.sijmen.movienotifier.repositories.UserRepository;
 import it.sijmen.movienotifier.repositories.WatcherRepository;
-import it.sijmen.movienotifier.service.notification.NotificationService;
+import it.sijmen.movienotifier.service.NotificationService;
 import it.sijmen.movienotifier.service.pathe.PatheApi;
 import it.sijmen.movienotifier.service.pathe.api.PatheShowing;
 import org.junit.Test;
@@ -142,7 +143,8 @@ public class PatheApiTest {
                 )
         ));
 
-        verify(notificationService, times(fired ? 1 : 0)).notify(eq("SOMEUSER"), any(), any());
+        verify(notificationService, times(fired ? 1 : 0))
+                .sendUpdates(any(), any());
     }
 
     @Test

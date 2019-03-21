@@ -1,9 +1,10 @@
-package it.sijmen.movienotifier.controllers;
+package it.sijmen.movienotifier.util;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import it.sijmen.movienotifier.model.exceptions.BadRequestException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -16,6 +17,7 @@ import java.util.List;
 
 import static com.fasterxml.jackson.annotation.JsonProperty.Access.READ_ONLY;
 
+@Service
 public class ModelUpdater {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ModelUpdater.class);
