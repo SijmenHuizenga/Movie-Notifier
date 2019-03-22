@@ -101,6 +101,8 @@ public class NotificationService {
                         .build()
         ).collect(Collectors.toList());
 
+        if(messages.isEmpty())
+            return;
         try {
             FirebaseMessaging.getInstance().sendAll(messages);
         } catch (FirebaseMessagingException e) {
