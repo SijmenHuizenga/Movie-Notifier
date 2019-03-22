@@ -3,6 +3,8 @@ package it.sijmen.movienotifier.model;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.hibernate.validator.constraints.NotBlank;
 
+import javax.validation.constraints.Min;
+
 public class NotificationTestdata implements Model {
 
     @NotBlank
@@ -17,11 +19,11 @@ public class NotificationTestdata implements Model {
     @JsonProperty("watcher-name")
     private String watcherName;
 
-    @NotBlank
+    @Min(1)
     @JsonProperty("match-count")
     private int matchCount;
 
-    @NotBlank
+    @Min(1)
     @JsonProperty("movie-id")
     private int movieid;
 
