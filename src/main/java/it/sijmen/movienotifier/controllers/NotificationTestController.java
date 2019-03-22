@@ -42,7 +42,7 @@ public class NotificationTestController {
     @PostMapping("/notification-test")
     public void sendTestNotification(@RequestHeader Map<String, String> requestHeaders,
                                      @RequestBody NotificationTestdata testfields) {
-        User user = userRepository.getFirstByUuid(apiKeyHelper.getApiKey(requestHeaders));
+        User user = userRepository.findFirstByApikey(apiKeyHelper.getApiKey(requestHeaders));
         if (user == null) {
             throw new UnauthorizedException();
         }
