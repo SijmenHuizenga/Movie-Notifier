@@ -49,7 +49,6 @@ public class User implements Model {
 
     @Email
     @Field
-    @Indexed(unique = true)
     @JsonProperty
     private String email;
 
@@ -72,7 +71,7 @@ public class User implements Model {
 
     @Field
     @JsonProperty("fcm-registration-tokens")
-    private List<String> registrationTokens;
+    private List<String> registrationTokens = new ArrayList<>();
 
     public User() {
     }
@@ -85,15 +84,14 @@ public class User implements Model {
         this.password = password;
         this.apikey = apikey;
         this.created = created;
-        this.registrationTokens = registrationTokens;
+        if(registrationTokens != null)
+            this.registrationTokens = registrationTokens;
     }
 
     public void validateUniqueness(UserRepository userRepository) {
         List<String> errors = new ArrayList<>();
         if(userRepository.getAllByName(getName()).stream().filter(o -> !o.getId().equals(this.getId())).count() > 0)
             errors.add("The given username is already in use.");
-        if(userRepository.getAllByEmail(getEmail()).stream().filter(o -> !o.getId().equals(this.getId())).count() > 0)
-            errors.add("The given email is already in use.");
         if(!errors.isEmpty())
             throw new BadRequestException(errors);
     }
@@ -143,11 +141,16 @@ public class User implements Model {
     }
 
     public List<String> getRegistrationTokens() {
+        if(this.registrationTokens == null)
+            return new ArrayList<>();
         return registrationTokens;
     }
 
     public void setRegistrationTokens(List<String> registrationTokens) {
-        this.registrationTokens = registrationTokens;
+        if(registrationTokens == null)
+            this.registrationTokens = new ArrayList<>();
+        else
+            this.registrationTokens = registrationTokens;
     }
 }
 

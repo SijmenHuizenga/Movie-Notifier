@@ -77,18 +77,4 @@ public class UserCreateTest extends UserTestBase {
         verifyZeroInteractions(userRepo);
     }
 
-    @Test
-    public void testCreateUsernameEmailTaken() throws Exception {
-        when(userRepo.getAllByName(testuser.getName())).thenReturn(Collections.singletonList(testuser));
-        when(userRepo.getAllByEmail(testuser.getEmail())).thenReturn(Collections.singletonList(testuser));
-
-        this.mvc.perform(put("/user/").accept(MediaType.APPLICATION_JSON).contentType(MediaType.APPLICATION_JSON).content(
-                buildJson(testuser.getName(), testuser.getEmail(), "12345678", null)
-        )).andExpect(status().isBadRequest())
-          .andExpect(jsonPath("$.errors").value(Matchers.containsInAnyOrder(
-                  "The given username is already in use.",
-                  "The given email is already in use."
-          )));
-    }
-
 }

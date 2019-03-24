@@ -73,7 +73,7 @@ public class WatcherController {
         return ResponseEntity.ok(watcher);
     }
 
-    @GetMapping("/watchers/")
+    @GetMapping("/watchers")
     public HttpEntity getWatcher(@RequestHeader Map<String, String> requestHeaders) {
         User user = ensureLoggedIn(requestHeaders);
         List<Watcher> watchers = watcherRepo.getAllByUserid(user.getId());
