@@ -103,10 +103,32 @@ public class NotificationService {
 
         if(messages.isEmpty())
             return;
+        BatchResponse response;
         try {
-            FirebaseMessaging.getInstance().sendAll(messages);
+            LOGGER.info("Sending notifications to {} devices.", messages.size());
+            response = FirebaseMessaging.getInstance().sendAll(messages);
+            if(response == null)
+                throw new IOException("Firebase returned null.");
         } catch (FirebaseMessagingException e) {
-            throw new IOException(e);
+            throw new IOException("Something went wront at firebase: " + e.getErrorCode(), e);
+        }
+
+        if(response.getFailureCount() > 0) {
+            List<SendResponse> responses = response.getResponses();
+            StringBuilder failureMessage = new StringBuilder();
+            for (int i = 0; i < responses.size(); i++) {
+                SendResponse r = responses.get(i);
+                if(r.isSuccessful())
+                    continue;
+                failureMessage
+                        .append(user.getRegistrationTokens().get(i))
+                        .append(": ")
+                        .append(r.getException().getErrorCode())
+                        .append("\n");
+            }
+
+            String error = String.format("%d of the %d messages failed: \n%s", response.getFailureCount(), messages.size(), failureMessage.toString());
+            throw new IOException(error);
         }
     }
 

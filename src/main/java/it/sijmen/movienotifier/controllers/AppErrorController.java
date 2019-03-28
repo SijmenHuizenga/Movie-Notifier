@@ -12,7 +12,7 @@ public class AppErrorController implements ErrorController {
 
     @RequestMapping(value = PATH)
     public String error() {
-        throw new BadRequestException("Not found");
+        throw new BadRequestException("Generic bad request exception");
     }
 
     @Override
