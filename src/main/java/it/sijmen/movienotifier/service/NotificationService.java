@@ -75,17 +75,41 @@ public class NotificationService {
         try {
             sendUpdate(user, header, body, watcher.getId(), watcher.getName(), matches.size(), watcher.getMovieid());
         } catch (IOException e) {
-            LOGGER.error("Could not send fb messages to {}. title: {}", user.getName(), header, e);
+            LOGGER.error("Could not send notification to {}. title: {}. Caused By:\n", user.getName(), header, e.getMessage());
         }
     }
 
     public void sendUpdate(User user, String header, String body, String watcherId, String watcherName, int matchCount, int movieid) throws IOException {
         LOGGER.info("Sending notifications to {} with header {}", user.getName(), header);
 
+        IOException mailError = null;
+        IOException firebaseError = null;
+
         if(user.getEmail() != null) {
-            sendEmail(user.getEmail(), header, body);
+            try {
+                sendEmail(user.getEmail(), header, body);
+            }catch (IOException e) {
+                mailError = e;
+            }
         }
 
+        try {
+            sendAndroidNotification(user, body, watcherId, watcherName, matchCount, movieid);
+        }catch (IOException e) {
+            firebaseError = e;
+        }
+
+        if(mailError != null && firebaseError != null) {
+            throw new IOException("Notification to mail and firebase failed: \n" + mailError.getMessage() + "\n" + firebaseError.getMessage());
+        } else if(mailError != null) {
+            throw new IOException("Notification to mail failed: \n" + mailError.getMessage());
+        } else if(firebaseError != null) {
+            throw new IOException("Notification to firebase failed: \n" + firebaseError.getMessage());
+        }
+
+    }
+
+    private void sendAndroidNotification(User user, String body, String watcherId, String watcherName, int matchCount, int movieid) throws IOException {
         AndroidConfig config = AndroidConfig.builder().setPriority(AndroidConfig.Priority.HIGH).build();
 
         List<Message> messages = user.getRegistrationTokens().stream().map(token ->

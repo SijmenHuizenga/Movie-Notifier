@@ -40,7 +40,7 @@ public class NotificationTestController {
     @PostMapping("/notification-test")
     @ResponseStatus(value = HttpStatus.OK)
     public void sendTestNotification(@RequestHeader Map<String, String> requestHeaders,
-                                     @RequestBody NotificationTestdata testfields) {
+                                     @RequestBody NotificationTestdata testfields) throws IOException {
         User user = userRepository.findFirstByApikey(apiKeyHelper.getApiKey(requestHeaders));
         if (user == null) {
             throw new UnauthorizedException();
@@ -49,20 +49,10 @@ public class NotificationTestController {
         testfields.validate();
 
         LOGGER.info("User {} requested test-notification", user.getName());
-
-        try {
-            notificationService.sendUpdate(user,
-                    "TEST: Watcher " + testfields.getWatcherName() + " has " + testfields.getMatchCount() + " matches.",
-                    testfields.getBody(), testfields.getWatcherId(),
-                    testfields.getWatcherName(), testfields.getMatchCount(), testfields.getMovieid());
-        } catch (IOException e) {
-            StringWriter sw = new StringWriter();
-            PrintWriter pw = new PrintWriter(sw);
-            e.printStackTrace(pw);
-            String sStackTrace = sw.toString(); // stack trace as a string
-            throw new RuntimeException(e.getMessage() + "\nCaused by: \n" + sStackTrace);
-        }
-
+        notificationService.sendUpdate(user,
+                "TEST: Watcher " + testfields.getWatcherName() + " has " + testfields.getMatchCount() + " matches.",
+                testfields.getBody(), testfields.getWatcherId(),
+                testfields.getWatcherName(), testfields.getMatchCount(), testfields.getMovieid());
     }
 
 }

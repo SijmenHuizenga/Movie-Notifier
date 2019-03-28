@@ -110,7 +110,12 @@ public class PatheApi {
                             .filter(showing -> accepts(w, showing))
                             .collect(Collectors.toList());
             if(!collect.isEmpty()) {
-                notificationService.sendUpdates(w, collect);
+                try {
+                    notificationService.sendUpdates(w, collect);
+                }catch (Exception e) {
+                    LOGGER.error(e.getMessage());
+                }
+
             }
         });
     }
