@@ -30,7 +30,7 @@ The fields `name`, `email`, and `password` are provided by the user at registrat
 There are some extra rules for userdata that apply to all users:
 - [x] `name`, `email`, `phonenumber`, `password` and `notifications` are required and thus cannot be null.
 - [x] `name` must be between 4 and 16 charcters and only contains letters (a-z) and numbers (0-9), but no capital letters (A-Z). The first 4 characters must always be letters.
-- [x] `email` must contain a valid email address. This field is optional. When the field is set to `null` the user will receive no notifications over email.
+- [x] `email` must contain a valid email address. This field is optional. When the field is set to an empty string the user will receive no notifications over email.
 - [x] `password` must at least be 8 characters long and may only contain the letters (`a-z`), capital letters (`A-Z`), numbers (`0-9`) and the following special characters: `!@#$%^&*()_-+={}[]:;?><.,`
 - [x] `fcm-registration-tokens` is a list of firebase-cloud-messaging device registration tokens. Notifications are sent to all tokens in this list.
 

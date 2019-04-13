@@ -375,7 +375,7 @@ definitions:
         title: Email
         type: string
         format: email
-        description: A valid email adres. Optional. When not specified no notifications wil be sent to email.
+        description: A valid email adres. Optional. When set to an empty string, no notifications wil be sent to email.
       fcm-registration-tokens:
         title: Firebase Cloud Messaging registration token
         description: A list of tokens referencing Firebase Cloud Messaging client devices. All clients will receive all notifications.

@@ -85,7 +85,7 @@ public class NotificationService {
         IOException mailError = null;
         IOException firebaseError = null;
 
-        if(user.getEmail() != null) {
+        if(user.getEmail() != null && !user.getEmail().equals("")) {
             try {
                 sendEmail(user.getEmail(), header, body);
             }catch (IOException e) {
