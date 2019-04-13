@@ -71,7 +71,7 @@ public class User implements Model {
 
     @Field
     @JsonProperty("fcm-registration-tokens")
-    private List<String> registrationTokens = new ArrayList<>();
+    private List<String> registrationTokens;
 
     public User() {
     }
@@ -84,13 +84,12 @@ public class User implements Model {
         this.password = password;
         this.apikey = apikey;
         this.created = created;
-        if(registrationTokens != null)
-            this.registrationTokens = registrationTokens;
+        this.registrationTokens = registrationTokens;
     }
 
     public void validateUniqueness(UserRepository userRepository) {
         List<String> errors = new ArrayList<>();
-        if(userRepository.getAllByName(getName()).stream().filter(o -> !o.getId().equals(this.getId())).count() > 0)
+        if(userRepository.getAllByName(getName()).stream().anyMatch(o -> !o.getId().equals(this.getId())))
             errors.add("The given username is already in use.");
         if(!errors.isEmpty())
             throw new BadRequestException(errors);
