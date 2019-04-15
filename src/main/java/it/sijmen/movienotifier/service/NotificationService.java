@@ -55,7 +55,7 @@ public class NotificationService {
     }
 
     public void sendUpdates(Watcher watcher, List<PatheShowing> matches) {
-        User user = userRepository.getFirstByUuid(watcher.getId());
+        User user = userRepository.getFirstByUuid(watcher.getUserid());
         if(user == null) {
             LOGGER.error("Could not send notification to user {} because it does not exit.");
             return;
