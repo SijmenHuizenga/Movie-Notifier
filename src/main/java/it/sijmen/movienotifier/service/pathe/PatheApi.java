@@ -127,7 +127,7 @@ public class PatheApi {
     public boolean accepts(Watcher watcher, PatheShowing showing) {
         WatcherFilters d = watcher.getFilters();
         if (showing.getCinemaId() != watcher.getFilters().getCinemaid()) {
-            LOGGER.debug("Cinema id does not equal");
+            LOGGER.debug("Watcher's cinemaid {} does not equal showing cinemaid {}", watcher.getFilters().getCinemaid(), showing.getCinemaId());
             return false;
         }
         if (!(showing.getStart() <= d.getStartbefore())) {
