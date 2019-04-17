@@ -251,7 +251,7 @@ public class PatheShowing implements Comparable<PatheShowing> {
         else
             builder.append("2D, ");
 
-        builder.append(getUrl()).append(getId());
+        builder.append(getUrl());
 
         return builder.toString();
     }
