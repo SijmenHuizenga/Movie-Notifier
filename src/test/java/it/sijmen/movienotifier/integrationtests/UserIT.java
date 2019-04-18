@@ -2,14 +2,12 @@ package it.sijmen.movienotifier.integrationtests;
 
 import io.restassured.response.Response;
 import io.restassured.response.ValidatableResponse;
-import it.sijmen.jump.actors.ReadActor;
-import jersey.repackaged.com.google.common.collect.Lists;
+import org.assertj.core.util.Lists;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.*;
@@ -54,6 +52,16 @@ class UserIT {
                 given().header(HEADKEY, apikey()).body(userdata()).post("/user/"+id()).then().extract().response().then()
         );
         LOGGER.info("Updated User");
+    }
+
+    void updateOnlyUsername(){
+        HashMap<String, Object> body = new HashMap<>();
+        body.put(NAME, "heeikbennieuw");
+        testuser.put(NAME, "heeikbennieuw");
+        checkUserResponse(
+                given().header(HEADKEY, apikey()).body(body).post("/user/"+id()).then().extract().response().then()
+        );
+        LOGGER.info("Updated Username");
     }
 
     void delete(){

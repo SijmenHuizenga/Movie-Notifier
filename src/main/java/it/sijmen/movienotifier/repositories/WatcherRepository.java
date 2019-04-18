@@ -2,11 +2,11 @@ package it.sijmen.movienotifier.repositories;
 
 import it.sijmen.movienotifier.model.Watcher;
 import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.stereotype.Repository;
 
-import javax.inject.Singleton;
 import java.util.List;
 
-@Singleton
+@Repository
 public interface WatcherRepository extends MongoRepository<Watcher, String> {
 
     public Watcher getFirstByUuid(String id);

@@ -1,13 +1,12 @@
 package it.sijmen.movienotifier.repositories;
 
 import it.sijmen.movienotifier.model.User;
-import org.springframework.data.domain.Example;
 import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.stereotype.Repository;
 
-import javax.inject.Singleton;
 import java.util.List;
 
-@Singleton
+@Repository
 public interface UserRepository extends MongoRepository<User, String> {
 
     public User getFirstByUuid(String id);

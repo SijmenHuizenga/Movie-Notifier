@@ -1,5 +1,6 @@
 package it.sijmen.movienotifier.api;
 
+import it.sijmen.movienotifier.controllers.WatcherController;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -13,7 +14,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
-@WebMvcTest(JumpConfiguration.class)
+@WebMvcTest(WatcherController.class)
 public class WatcherReadTest extends WatcherTestBase {
 
     @Test
@@ -21,7 +22,9 @@ public class WatcherReadTest extends WatcherTestBase {
         addToMockedDb(testuser);
         addToMockedDb(testwatcher);
 
-        this.mvc.perform(get("/watchers/"+testwatcher.getId()).accept(MediaType.APPLICATION_JSON)
+        this.mvc.perform(get("/watchers/"+testwatcher.getId())
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
                 .header("APIKEY", testuser.getApikey()))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(testwatcher.getId()));
@@ -34,7 +37,9 @@ public class WatcherReadTest extends WatcherTestBase {
         addToMockedDb(testuser2);
         addToMockedDb(testwatcher);
 
-        this.mvc.perform(get("/watchers/"+testwatcher.getId()).accept(MediaType.APPLICATION_JSON)
+        this.mvc.perform(get("/watchers/"+testwatcher.getId())
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
                 .header("APIKEY", testuser2.getApikey()))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").doesNotExist());

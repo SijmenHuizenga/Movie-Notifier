@@ -22,6 +22,8 @@ class IntegrationTests {
         user1.login();
         user1.update();
         user1.read();
+        user1.updateOnlyUsername();
+        user1.read();
         user1.login();
 
         UserIT user2 = new UserIT();

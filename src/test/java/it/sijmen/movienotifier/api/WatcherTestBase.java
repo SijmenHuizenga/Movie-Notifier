@@ -24,7 +24,7 @@ abstract class WatcherTestBase extends UserTestBase {
         testwatcher = new Watcher("WATCHERID", testuser.getId(), "First Watcher", 1,
                 new DateTime(2027, 8, 1, 20, 30, 15).getMillis(),
                 new DateTime(2027, 8, 7, 20, 30, 15).getMillis(),
-                new WatcherFilters("A1", new DateTime(2028, 8, 1, 20, 30, 15).getMillis(),
+                new WatcherFilters(12, new DateTime(2028, 8, 1, 20, 30, 15).getMillis(),
                                          new DateTime(2028, 8, 6, 20, 30, 15).getMillis(),
                 NO, YES, NOPREFERENCE, NO, NO, NO, NOPREFERENCE, NO, NO, NOPREFERENCE, YES));
     }
@@ -60,9 +60,9 @@ abstract class WatcherTestBase extends UserTestBase {
                 d.isDx4(), d.isDolbycinema(), d.isDolbyatmos(), d.getCinemaid(), d.getStartafter(), d.getStartbefore());
     }
     private String buildJson(FilterOption ov, FilterOption nl, FilterOption imax, FilterOption d3, FilterOption hfr, FilterOption k4, FilterOption laser,
-                     FilterOption dbox, FilterOption dx4, FilterOption dolbycinema, FilterOption dolbyatmos, String cinemaid, long startafter, long startbefore){
+                     FilterOption dbox, FilterOption dx4, FilterOption dolbycinema, FilterOption dolbyatmos, int cinemaid, long startafter, long startbefore){
         List<String> items = new ArrayList<>();
-        if(cinemaid != null)
+        if(cinemaid != 0)
             items.add("\"cinemaid\": \""+cinemaid+"\"");
         if(ov != null)
             items.add("\"ov\": \""+ov+"\"");

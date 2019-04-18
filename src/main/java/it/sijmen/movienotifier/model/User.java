@@ -2,9 +2,7 @@ package it.sijmen.movienotifier.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import it.sijmen.movienotifier.model.exceptions.BadRequestException;
-import it.sijmen.movienotifier.model.validation.notification.ValidNotification;
-import it.sijmen.movienotifier.repositories.UserRepository;
+
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.data.annotation.Id;
@@ -15,9 +13,13 @@ import org.springframework.data.mongodb.core.mapping.Field;
 import javax.persistence.Entity;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+import it.sijmen.movienotifier.model.exceptions.BadRequestException;
+import it.sijmen.movienotifier.repositories.UserRepository;
 
 /**
  * All fields are documented in the Swagger Api Specification in the `/docs` directory.
@@ -45,19 +47,10 @@ public class User implements Model {
     @JsonProperty
     private String name;
 
-
-    @NotBlank
     @Email
     @Field
-    @Indexed(unique = true)
     @JsonProperty
     private String email;
-
-    @NotBlank
-    @Field
-    @Pattern(regexp = "^\\+([0-9]{2}[0-9]{9})$", message = "must be in the format +[countrycode][phonenumber]")
-    @JsonProperty
-    private String phonenumber;
 
     @NotBlank
     @Size(min=8, max = 128)
@@ -77,31 +70,27 @@ public class User implements Model {
     private Date created;
 
     @Field
-    @ValidNotification
-    @JsonProperty("notifications")
-    private List<String> enabledNotifications = new ArrayList<>();
+    @JsonProperty("fcm-registration-tokens")
+    private List<String> registrationTokens;
 
     public User() {
     }
 
-    public User(String id, String name, String email, String phonenumber, String password, String apikey,
-                Date created, List<String> enabledNotifications) {
+    public User(String id, String name, String email, String password, String apikey,
+                Date created, List<String> registrationTokens) {
         this.uuid = id;
         this.name = name;
         this.email = email;
-        this.phonenumber = phonenumber;
         this.password = password;
         this.apikey = apikey;
         this.created = created;
-        this.enabledNotifications = enabledNotifications;
+        this.registrationTokens = registrationTokens;
     }
 
     public void validateUniqueness(UserRepository userRepository) {
         List<String> errors = new ArrayList<>();
-        if(userRepository.getAllByName(getName()).stream().filter(o -> !o.getId().equals(this.getId())).count() > 0)
+        if(userRepository.getAllByName(getName()).stream().anyMatch(o -> !o.getId().equals(this.getId())))
             errors.add("The given username is already in use.");
-        if(userRepository.getAllByEmail(getEmail()).stream().filter(o -> !o.getId().equals(this.getId())).count() > 0)
-            errors.add("The given email is already in use.");
         if(!errors.isEmpty())
             throw new BadRequestException(errors);
     }
@@ -126,14 +115,6 @@ public class User implements Model {
         this.email = email;
     }
 
-    public String getPhonenumber() {
-        return phonenumber;
-    }
-
-    public void setPhonenumber(String phonenumber) {
-        this.phonenumber = phonenumber;
-    }
-
     public String getPassword() {
         return password;
     }
@@ -150,20 +131,25 @@ public class User implements Model {
         this.apikey = apikey;
     }
 
-    public List<String> getEnabledNotifications() {
-        return enabledNotifications;
-    }
-
-    public void setEnabledNotifications(List<String> enabledNotifications) {
-        this.enabledNotifications = enabledNotifications;
-    }
-
     public void setCreated(Date created) {
         this.created = created;
     }
 
     public void setId(String id) {
         this.uuid = id;
+    }
+
+    public List<String> getRegistrationTokens() {
+        if(this.registrationTokens == null)
+            return new ArrayList<>();
+        return registrationTokens;
+    }
+
+    public void setRegistrationTokens(List<String> registrationTokens) {
+        if(registrationTokens == null)
+            this.registrationTokens = new ArrayList<>();
+        else
+            this.registrationTokens = registrationTokens;
     }
 }
 
