@@ -16,6 +16,12 @@ public class Cinema {
     @JsonProperty
     private String timezone;
 
+    private static final String DEFAULT_TIMEZONE = "Europe/Amsterdam";
+
+    public Cinema(int id, String name, float lat, float lon) {
+        this(id, name, lat, lon, DEFAULT_TIMEZONE);
+    }
+
     public Cinema(int id, String name, float lat, float lon, String timezone) {
         this.id = id;
         this.name = name;
