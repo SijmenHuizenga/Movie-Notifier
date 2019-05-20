@@ -3,10 +3,13 @@ package it.sijmen.movienotifier.service.pathe.api;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import it.sijmen.movienotifier.model.Cinema;
 import it.sijmen.movienotifier.model.serialization.UnixTimestampDeserializer;
+import it.sijmen.movienotifier.service.CinemaService;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.TimeZone;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class PatheShowing implements Comparable<PatheShowing> {
@@ -225,10 +228,14 @@ public class PatheShowing implements Comparable<PatheShowing> {
     public String toMessageString() {
         StringBuilder builder = new StringBuilder();
 
-        if(getStart() != -1L)
+        if(getStart() != -1L) {
+            Cinema cinema = CinemaService.getFirstById(getCinemaId());
+            format1.setTimeZone(TimeZone.getTimeZone(cinema.getTimezone()));
+            format2.setTimeZone(TimeZone.getTimeZone(cinema.getTimezone()));
             builder.append(format1.format(new Date(getStart()))).append(" - ")
                     .append(format2.format(new Date(getEnd())))
                     .append(", ");
+        }
 
         if(getImax() == 1)
             builder.append("IMAX ");
