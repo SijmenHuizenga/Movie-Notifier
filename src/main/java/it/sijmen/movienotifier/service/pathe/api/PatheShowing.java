@@ -230,8 +230,10 @@ public class PatheShowing implements Comparable<PatheShowing> {
 
         if(getStart() != -1L) {
             Cinema cinema = CinemaService.getFirstById(getCinemaId());
-            format1.setTimeZone(TimeZone.getTimeZone(cinema.getTimezone()));
-            format2.setTimeZone(TimeZone.getTimeZone(cinema.getTimezone()));
+            if(cinema != null) {
+                format1.setTimeZone(TimeZone.getTimeZone(cinema.getTimezone()));
+                format2.setTimeZone(TimeZone.getTimeZone(cinema.getTimezone()));
+            }
             builder.append(format1.format(new Date(getStart()))).append(" - ")
                     .append(format2.format(new Date(getEnd())))
                     .append(", ");

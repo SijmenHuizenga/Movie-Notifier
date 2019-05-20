@@ -49,8 +49,7 @@ public class CinemaService {
         return allCinemas.stream()
                 .filter(cinema -> cinema.getId() == id)
                 .findFirst()
-                .orElseThrow(() -> new RuntimeException("No cinema exists for id " + id));
+                .orElse(null);
     }
-
 }
 

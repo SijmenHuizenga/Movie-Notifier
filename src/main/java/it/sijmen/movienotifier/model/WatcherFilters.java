@@ -119,7 +119,7 @@ public class WatcherFilters implements Model {
 
     @AssertTrue(message="the cinemaid does not exist.")
     private boolean isCinemaidValid() {
-        return CinemaService.getAllCinemaLocations().stream().anyMatch(cinema -> cinema.getId() == this.cinemaid);
+        return CinemaService.getFirstById(this.cinemaid) != null;
     }
 
     public FilterOption isOv() {
