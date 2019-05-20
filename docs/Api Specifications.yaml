@@ -533,9 +533,13 @@ definitions:
         type: number
         example: 52.31233
       lon:
-        description: The longtitude location this cinema
+        description: The longtitude location of this cinema
         type: number
         example: 4.94577
+      timezone:
+        description: The timezone of this cinema
+        type: string
+        example: Europe/Amsterdam
 responses:
   UnauthorizedError:
     description: This error is thrown when the authentication fails or when the authorized user does not have permission to execute the command. A common cause of this exception is a missing or invalid apikey. An example; When you request the details of a user with the apikey of onther user using GET /user/userid, you will always get this exception regardless of the user exists in the system.

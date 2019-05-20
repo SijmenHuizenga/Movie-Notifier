@@ -1,7 +1,6 @@
 package it.sijmen.movienotifier.service;
 
 import it.sijmen.movienotifier.model.Cinema;
-import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,6 +43,13 @@ public class CinemaService {
 
     public static List<Cinema> getAllCinemaLocations(){
         return allCinemas;
+    }
+
+    public static Cinema getFirstById(int id) {
+        return allCinemas.stream()
+                .filter(cinema -> cinema.getId() == id)
+                .findFirst()
+                .orElseThrow(() -> new RuntimeException("No cinema exists for id " + id));
     }
 
 }

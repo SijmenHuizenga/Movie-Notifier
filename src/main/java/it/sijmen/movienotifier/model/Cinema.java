@@ -13,11 +13,21 @@ public class Cinema {
     @JsonProperty
     private float lat, lon;
 
+    @JsonProperty
+    private String timezone;
+
+    private static final String DEFAULT_TIMEZONE = "Europe/Amsterdam";
+
     public Cinema(int id, String name, float lat, float lon) {
+        this(id, name, lat, lon, DEFAULT_TIMEZONE);
+    }
+
+    public Cinema(int id, String name, float lat, float lon, String timezone) {
         this.id = id;
         this.name = name;
         this.lat = lat;
         this.lon = lon;
+        this.timezone = timezone;
     }
 
     public int getId() {
@@ -50,6 +60,14 @@ public class Cinema {
 
     public void setLon(float lon) {
         this.lon = lon;
+    }
+
+    public String getTimezone() {
+        return timezone;
+    }
+
+    public void setTimezone(String timezone) {
+        this.timezone = timezone;
     }
 
     @Override
