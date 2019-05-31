@@ -38,7 +38,6 @@ public class CinemaService {
         allCinemas.add(new Cinema(29, "Pathé Ede", 52.01575f, 5.64801f));
         allCinemas.add(new Cinema(31, "Pathé Nijmegen", 51.87994f, 5.862f));
         allCinemas.add(new Cinema(32, "Tivoli en Cinema Leeuwarden", 53.20119f, 5.79235f));
-        allCinemas.add(new Cinema(34, "Cinema Hengelo", 52.2646f, 6.79098f));
     }
 
     public static List<Cinema> getAllCinemaLocations(){
