@@ -148,9 +148,9 @@ public class PatheApi {
                 !eq(d.isOv(), showing.getOv()) ||
                 !eq(d.isNl(), showing.getNl()) ||
                 !eq(d.isHfr(), showing.getHfr()) ||
-                !eq(d.isDolbyatmos(), showing.getIsAtmos()) ||
                 !eq(d.isK4(), showing.getIs4k()) ||
-                !eq(d.isLaser(), showing.getIsLaser()) ||
+                !eqAtmos(d.isDolbyatmos(), showing.getIsAtmos(), showing.getIsVision()) ||
+                !eqLaser(d.isLaser(), showing.getIsLaser(), showing.getIsVision(), showing.getImax(), showing.getCinemaId()) ||
                 !eqBool(d.isDx4(), showing.getIs4dx()) ||
                 !eqBool(d.isDolbycinema(), showing.getIsVision())
                 ) {
@@ -172,5 +172,22 @@ public class PatheApi {
                 || actual == null
                 || (expected == YES && actual)
                 || (expected == NO && !actual);
+    }
+
+    public boolean eqAtmos(FilterOption expected, Integer isAtmos, Boolean isDolbyCinema) {
+        return expected == NOPREFERENCE
+                || isAtmos == null
+                || isDolbyCinema == null
+                || (expected == YES && (isAtmos == 1 || isDolbyCinema))
+                || (expected == NO && (isAtmos == 0 && !isDolbyCinema));
+    }
+
+    public boolean eqLaser(FilterOption expected, Integer isLaser, Boolean isDolbyCinema, Integer isImax, int cinemaId) {
+        return expected == NOPREFERENCE
+                || isLaser == null
+                || isDolbyCinema == null
+                || isImax == null
+                || (expected == YES && (isLaser == 1 || isDolbyCinema || (isImax == 1 && (cinemaId == 6 || cinemaId == 9 || cinemaId == 13))))
+                || (expected == NO && (isLaser == 0 && !isDolbyCinema &&  !(isImax == 1 && (cinemaId == 6 || cinemaId == 9 || cinemaId == 13))));
     }
 }

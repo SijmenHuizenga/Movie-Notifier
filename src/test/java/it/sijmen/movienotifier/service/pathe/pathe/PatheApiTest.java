@@ -174,9 +174,41 @@ public class PatheApiTest {
         ));
 
         PatheShowing patheShowingResponse = new PatheShowing(12, 21432, 2382115, UnixTimestampDeserializer.PATHEFORMAT.parse("2017-12-15T21:00:00+01:00").getTime(),
-                UnixTimestampDeserializer.PATHEFORMAT.parse("2017-12-15T23:50:00+01:00").getTime(), 1, 0, 0, 0, 0, 0, 0, 1, false, true);
+                UnixTimestampDeserializer.PATHEFORMAT.parse("2017-12-15T23:50:00+01:00").getTime(), 0, 0, 0, 0, 0, 0, 0, 0, false, true);
 
         assertFalse(api.accepts(watcher, patheShowingResponse));
+    }
+
+    @Test
+    public void testISAtmosDolbyCinema() throws ParseException {
+        PatheApi api = spy(new PatheApi(new ObjectMapper(), "SOMEKEY", patheCacheRepository, notificationService));
+
+        Watcher watcher = new Watcher("SOMEID", "SOMEUSER", "SOMENAME", 23469, 1564380000000L, 1564432200000L, new WatcherFilters(
+                12,
+                1564840800000L, 1564866000000L, NOPREFERENCE, NOPREFERENCE, NOPREFERENCE, NOPREFERENCE, NOPREFERENCE, NOPREFERENCE, NOPREFERENCE,
+                NOPREFERENCE, NOPREFERENCE, NOPREFERENCE, YES
+        ));
+
+        PatheShowing patheShowingResponse = new PatheShowing(12, 23469, 3098804, UnixTimestampDeserializer.PATHEFORMAT.parse("2019-08-03T19:50:00+02:00").getTime(),
+                UnixTimestampDeserializer.PATHEFORMAT.parse("2019-08-03T22:26:00+02:00").getTime(), 0, 0, 0, 1, 0, 0, 0, 0, false, true);
+
+        assertTrue(api.accepts(watcher, patheShowingResponse));
+    }
+
+    @Test
+    public void testISLaserIMAX() throws ParseException {
+        PatheApi api = spy(new PatheApi(new ObjectMapper(), "SOMEKEY", patheCacheRepository, notificationService));
+
+        Watcher watcher = new Watcher("SOMEID", "SOMEUSER", "SOMENAME", 23469, 1564380000000L, 1564432200000L, new WatcherFilters(
+                6,
+                1564840800000L, 1564866000000L, NOPREFERENCE, NOPREFERENCE, NOPREFERENCE, NOPREFERENCE, NOPREFERENCE, NOPREFERENCE, YES,
+                NOPREFERENCE, NOPREFERENCE, NOPREFERENCE, NOPREFERENCE
+        ));
+
+        PatheShowing patheShowingResponse = new PatheShowing(6, 23469, 3098306, UnixTimestampDeserializer.PATHEFORMAT.parse("2019-08-03T18:15:00+02:00").getTime(),
+                UnixTimestampDeserializer.PATHEFORMAT.parse("2019-08-03T20:46:00+02:00").getTime(), 1, 0, 1, 1, 0, 0, 0, 0, false, false);
+
+        assertTrue(api.accepts(watcher, patheShowingResponse));
     }
 
     @Test
@@ -205,6 +237,36 @@ public class PatheApiTest {
         assertTrue(api.eqBool(NOPREFERENCE, true));
         assertTrue(api.eqBool(NOPREFERENCE, false));
         assertTrue(api.eqBool(NOPREFERENCE, null));
+
+        assertTrue(api.eqAtmos(YES, 1, true));
+        assertTrue(api.eqAtmos(YES, 1, false));
+        assertTrue(api.eqAtmos(YES, 1, null));
+        assertTrue(api.eqAtmos(YES, 0, true));
+        assertFalse(api.eqAtmos(YES, 0, false));
+        assertTrue(api.eqAtmos(YES, 0, null));
+        assertTrue(api.eqAtmos(YES, null, true));
+        assertTrue(api.eqAtmos(YES, null, false));
+        assertTrue(api.eqAtmos(YES, null, null));
+
+        assertFalse(api.eqAtmos(NO, 1, true));
+        assertFalse(api.eqAtmos(NO, 1, false));
+        assertTrue(api.eqAtmos(NO, 1, null));
+        assertFalse(api.eqAtmos(NO, 0, true));
+        assertTrue(api.eqAtmos(NO, 0, false));
+        assertTrue(api.eqAtmos(NO, 0, null));
+        assertTrue(api.eqAtmos(NO, null, true));
+        assertTrue(api.eqAtmos(NO, null, false));
+        assertTrue(api.eqAtmos(NO, null, null));
+
+        assertTrue(api.eqAtmos(NOPREFERENCE, 1, true));
+        assertTrue(api.eqAtmos(NOPREFERENCE, 1, false));
+        assertTrue(api.eqAtmos(NOPREFERENCE, 1, null));
+        assertTrue(api.eqAtmos(NOPREFERENCE, 0, true));
+        assertTrue(api.eqAtmos(NOPREFERENCE, 0, false));
+        assertTrue(api.eqAtmos(NOPREFERENCE, 0, null));
+        assertTrue(api.eqAtmos(NOPREFERENCE, null, true));
+        assertTrue(api.eqAtmos(NOPREFERENCE, null, false));
+        assertTrue(api.eqAtmos(NOPREFERENCE, null, null));
     }
 
 }
