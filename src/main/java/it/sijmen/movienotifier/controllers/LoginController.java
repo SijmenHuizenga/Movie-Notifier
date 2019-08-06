@@ -15,34 +15,33 @@ import org.springframework.web.bind.annotation.*;
 @Controller
 public class LoginController {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(LoginController.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(LoginController.class);
 
-    private final UserRepository userRepository;
+  private final UserRepository userRepository;
 
-    @Autowired
-    public LoginController(UserRepository userRepository) {
-        this.userRepository = userRepository;
+  @Autowired
+  public LoginController(UserRepository userRepository) {
+    this.userRepository = userRepository;
+  }
+
+  @RequestMapping(value = "/login", method = RequestMethod.POST)
+  @ResponseStatus(HttpStatus.OK)
+  @ResponseBody
+  public User login(@RequestBody LoginDetails loginDetails) {
+
+    loginDetails.validate();
+
+    User user = userRepository.findFirstByName(loginDetails.getName());
+    if (user == null) {
+      LOGGER.trace("User Login failed: unknown name {}", loginDetails);
+      throw new UnauthorizedException();
     }
 
-    @RequestMapping(value = "/login", method = RequestMethod.POST)
-    @ResponseStatus(HttpStatus.OK)
-    @ResponseBody
-    public User login(@RequestBody LoginDetails loginDetails) {
-
-        loginDetails.validate();
-
-        User user = userRepository.findFirstByName(loginDetails.getName());
-        if(user == null) {
-            LOGGER.trace("User Login failed: unknown name {}", loginDetails);
-            throw new UnauthorizedException();
-        }
-
-        if(!PasswordAuthentication.authenticate(loginDetails.getPassword(), user.getPassword())) {
-            LOGGER.trace("User Login failed: incorrect password {}", loginDetails);
-            throw new UnauthorizedException();
-        }
-        LOGGER.trace("User Login successfull {}", loginDetails);
-        return user;
+    if (!PasswordAuthentication.authenticate(loginDetails.getPassword(), user.getPassword())) {
+      LOGGER.trace("User Login failed: incorrect password {}", loginDetails);
+      throw new UnauthorizedException();
     }
-
+    LOGGER.trace("User Login successfull {}", loginDetails);
+    return user;
+  }
 }

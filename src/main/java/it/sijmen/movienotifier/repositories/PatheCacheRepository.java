@@ -7,6 +7,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface PatheCacheRepository extends MongoRepository<PatheMovieCache, String> {
 
-    public PatheMovieCache getFirstByMovieid(int movieId);
-
+  public PatheMovieCache getFirstByMovieid(int movieId);
 }
