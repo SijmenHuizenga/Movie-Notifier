@@ -17,35 +17,35 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 @EnableScheduling
 public class App implements CommandLineRunner {
 
-    @Override
-    public void run(String... arg0) throws Exception {
-        //nothing to do here
-    }
+  @Override
+  public void run(String... arg0) throws Exception {
+    // nothing to do here
+  }
 
-    public static void main(String[] args) {
-        new SpringApplication(App.class).run(args);
-    }
+  public static void main(String[] args) {
+    new SpringApplication(App.class).run(args);
+  }
 
-    @Bean
-    public WebMvcConfigurer corsConfigurer() {
-        return new WebMvcConfigurerAdapter() {
-            @Override
-            public void addCorsMappings(CorsRegistry registry) {
-                registry.addMapping("/**")
-                        .allowedMethods("GET", "PUT", "POST", "DELETE")
-                        .allowedHeaders("APIKEY")
-                        .allowCredentials(false);
-            }
-        };
-    }
+  @Bean
+  public WebMvcConfigurer corsConfigurer() {
+    return new WebMvcConfigurerAdapter() {
+      @Override
+      public void addCorsMappings(CorsRegistry registry) {
+        registry
+            .addMapping("/**")
+            .allowedMethods("GET", "PUT", "POST", "DELETE")
+            .allowedHeaders("APIKEY")
+            .allowCredentials(false);
+      }
+    };
+  }
 
-    @Bean
-    public static PropertySourcesPlaceholderConfigurer placeholderConfigurer() {
-        PropertySourcesPlaceholderConfigurer propsConfig
-                = new PropertySourcesPlaceholderConfigurer();
-        propsConfig.setLocation(new ClassPathResource("git.properties"));
-        propsConfig.setIgnoreResourceNotFound(true);
-        propsConfig.setIgnoreUnresolvablePlaceholders(true);
-        return propsConfig;
-    }
+  @Bean
+  public static PropertySourcesPlaceholderConfigurer placeholderConfigurer() {
+    PropertySourcesPlaceholderConfigurer propsConfig = new PropertySourcesPlaceholderConfigurer();
+    propsConfig.setLocation(new ClassPathResource("git.properties"));
+    propsConfig.setIgnoreResourceNotFound(true);
+    propsConfig.setIgnoreUnresolvablePlaceholders(true);
+    return propsConfig;
+  }
 }

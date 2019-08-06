@@ -8,13 +8,14 @@ import org.springframework.web.servlet.ModelAndView;
 @RestController
 public class IndexController {
 
-    @Value("${git.commit.id}")
-    private String commitId;
+  @Value("${git.commit.id}")
+  private String commitId;
 
-    @RequestMapping("/")
-    public ModelAndView redirectSwaggerDocs() {
-        return new ModelAndView("redirect:http://petstore.swagger.io/?url=https://raw.githubusercontent.com/SijmenHuizenga/Movie-Notifier/"+commitId+"/docs/Api%20Specifications.yaml");
-    }
-
-
+  @RequestMapping("/")
+  public ModelAndView redirectSwaggerDocs() {
+    return new ModelAndView(
+        "redirect:http://petstore.swagger.io/?url=https://raw.githubusercontent.com/SijmenHuizenga/Movie-Notifier/"
+            + commitId
+            + "/docs/Api%20Specifications.yaml");
+  }
 }
