@@ -19,7 +19,7 @@ public class Cinema {
     /**
      * Indicates that this Cinema has an IMAX room with Laser projects
      */
-    private boolean hasLaserIamx;
+    private boolean hasLaserImax;
 
     private static final String DEFAULT_TIMEZONE = "Europe/Amsterdam";
 
@@ -27,17 +27,17 @@ public class Cinema {
         this(id, name, lat, lon, DEFAULT_TIMEZONE, false);
     }
 
-    public Cinema(int id, String name, float lat, float lon, String timezone, boolean hasLaserIamx) {
+    public Cinema(int id, String name, float lat, float lon, String timezone, boolean hasLaserImax) {
         this.id = id;
         this.name = name;
         this.lat = lat;
         this.lon = lon;
         this.timezone = timezone;
-        this.hasLaserIamx = hasLaserIamx;
+        this.hasLaserImax = hasLaserImax;
     }
 
-    public Cinema(int id, String name, float lat, float lon, boolean hasLaserIamx) {
-        this(id, name, lat, lon, DEFAULT_TIMEZONE, hasLaserIamx);
+    public Cinema(int id, String name, float lat, float lon, boolean hasLaserImax) {
+        this(id, name, lat, lon, DEFAULT_TIMEZONE, hasLaserImax);
     }
 
     public int getId() {
@@ -80,8 +80,8 @@ public class Cinema {
         this.timezone = timezone;
     }
 
-    public boolean hasLaserIamx() {
-        return this.hasLaserIamx;
+    public boolean hasLaserImax() {
+        return this.hasLaserImax;
     }
 
     @Override

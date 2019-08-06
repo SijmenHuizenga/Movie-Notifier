@@ -54,7 +54,7 @@ public class CinemaService {
     public static boolean hasLaserImax(int id) {
         return allCinemas.stream()
         .filter(cinema -> cinema.getId() == id)
-        .map(Cinema::hasLaserIamx)
+        .map(Cinema::hasLaserImax)
         .findFirst()
         .orElse(false);
     }
