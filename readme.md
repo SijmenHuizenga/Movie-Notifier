@@ -29,3 +29,8 @@ cinema.pathe.apikey=
 fcm.serviceaccountkeyfile=
 ```
 Copy the above example and fill in the required properties. Movie-notifier uses Spring Boot which means that that there are many more options that can be configured in this file. These properties are described [here](https://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html)
+
+## Formatting
+The [Cosium/maven-git-code-format](https://github.com/Cosium/maven-git-code-format) plugin is configured to automatically run the [google-java-format](https://github.com/google/google-java-format) formatter as a pre-commit git hook.
+On commit, the hook will automatically format staged java files.
+To manually format all java code run `mvn git-code-format:format-code`
