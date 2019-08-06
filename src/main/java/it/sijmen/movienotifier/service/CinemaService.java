@@ -12,13 +12,13 @@ public class CinemaService {
     static {
         allCinemas = new ArrayList<>();
 
-        allCinemas.add(new Cinema(9, "Pathé Arena", 52.31233f, 4.94577f));
+        allCinemas.add(new Cinema(9, "Pathé Arena", 52.31233f, 4.94577f, true));
         allCinemas.add(new Cinema(2, "Pathé Tuschinski", 52.36655f, 4.89469f));
         allCinemas.add(new Cinema(1, "Pathé City", 52.36345f, 4.88383f));
         allCinemas.add(new Cinema(10, "Pathé De Munt", 52.36648f, 4.89342f));
         allCinemas.add(new Cinema(12, "Pathé De Kuip", 51.8968f, 4.5231f));
-        allCinemas.add(new Cinema(6, "Pathé Schouwburgplein", 51.92078f, 4.47341f));
-        allCinemas.add(new Cinema(13, "Pathé Spuimarkt", 52.07727f, 4.31522f));
+        allCinemas.add(new Cinema(6, "Pathé Schouwburgplein", 51.92078f, 4.47341f, true));
+        allCinemas.add(new Cinema(13, "Pathé Spuimarkt", 52.07727f, 4.31522f, true));
         allCinemas.add(new Cinema(5, "Pathé Buitenhof", 52.07858f, 4.31089f));
         allCinemas.add(new Cinema(7, "Pathé Scheveningen", 52.11241f, 4.2839f));
         allCinemas.add(new Cinema(3, "Pathé Rembrandt Utrecht", 52.09388f, 5.11629f));
@@ -49,6 +49,14 @@ public class CinemaService {
                 .filter(cinema -> cinema.getId() == id)
                 .findFirst()
                 .orElse(null);
+    }
+
+    public static boolean hasLaserImax(int id) {
+        return allCinemas.stream()
+        .filter(cinema -> cinema.getId() == id)
+        .map(Cinema::hasLaserImax)
+        .findFirst()
+        .orElse(false);
     }
 }
 

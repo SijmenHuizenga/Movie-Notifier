@@ -9,6 +9,7 @@ import it.sijmen.movienotifier.model.PatheMovieCache;
 import it.sijmen.movienotifier.model.Watcher;
 import it.sijmen.movienotifier.model.WatcherFilters;
 import it.sijmen.movienotifier.repositories.PatheCacheRepository;
+import it.sijmen.movienotifier.service.CinemaService;
 import it.sijmen.movienotifier.service.NotificationService;
 import it.sijmen.movienotifier.service.pathe.api.PatheShowing;
 import it.sijmen.movienotifier.service.pathe.api.PatheShowings;
@@ -22,7 +23,6 @@ import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static it.sijmen.movienotifier.model.FilterOption.NO;
 import static it.sijmen.movienotifier.model.FilterOption.NOPREFERENCE;
 import static it.sijmen.movienotifier.model.FilterOption.YES;
 
@@ -143,34 +143,64 @@ public class PatheApi {
             return false;
         }
 
-        if (!eq(d.isD3(), showing.getIs3d()) ||
-                !eq(d.isImax(), showing.getImax()) ||
-                !eq(d.isOv(), showing.getOv()) ||
-                !eq(d.isNl(), showing.getNl()) ||
-                !eq(d.isHfr(), showing.getHfr()) ||
-                !eq(d.isDolbyatmos(), showing.getIsAtmos()) ||
-                !eq(d.isK4(), showing.getIs4k()) ||
-                !eq(d.isLaser(), showing.getIsLaser()) ||
-                !eqBool(d.isDx4(), showing.getIs4dx()) ||
-                !eqBool(d.isDolbycinema(), showing.getIsVision())
-                ) {
-            LOGGER.debug("The boolean filters failed");
-            return false;
+        return accepts(d.isD3(), toBool(showing.getIs3d())) &&
+               accepts(d.isImax(), toBool(showing.getImax())) &&
+               accepts(d.isOv(), toBool(showing.getOv())) &&
+               accepts(d.isNl(), toBool(showing.getNl())) &&
+               accepts(d.isHfr(), toBool(showing.getHfr())) &&
+               accepts(d.isK4(), toBool(showing.getIs4k())) &&
+               accepts(d.isDx4(), showing.getIs4dx()) &&
+               accepts(d.isDolbycinema(), showing.getIsVision()) &&
+
+               /*
+                * A movie is shown using the Dolby Atmos sound system when one of the following conditions are true:
+                *  - the `isAtmos` property is set on the PatheShowing
+                *  - the showing takes place in a Dolby Cinema room
+                */
+               accepts(d.isDolbyatmos(), toBool(showing.getIsAtmos()), showing.getIsVision()) &&
+
+               /*
+                * A movie is projected using a laser-projector if one of the following conditions are true:
+                *   - the `isLaser` property is set on the PatheShowing
+                *   - the showing takes places in a DolbyCinema cinema room
+                *   - the showing takes place in a IMAX room that has an Laser projector
+                */
+               accepts(d.isLaser(), toBool(showing.getIsLaser()), showing.getIsVision(), (showing.getImax() == 1 && CinemaService.hasLaserImax(showing.getCinemaId())));
+    }
+
+    private Boolean toBool(Integer i) {
+        if(i == null) {
+            return null;
         }
-        return true;
+        return i == 1;
     }
 
-    public boolean eq(FilterOption expected, Integer actual) {
-        return expected == NOPREFERENCE
-                || actual == null
-                || (expected == YES && (actual == 1))
-                || (expected == NO && (actual == 0));
-    }
+    /**
+     * If option is NOPREFERENCE, always return true
+     * If one of the value is null, return true
+     * If option is YES, all value's are or'ed: (A || B || C ...)
+     * If option is NO, all values are inverse or'ed: !(A || B || C ...)
+     */
+    private boolean accepts(FilterOption option, Boolean... value) {
+        if (option == NOPREFERENCE) {
+            return true;
+        }
+        boolean result = false;
 
-    public boolean eqBool(FilterOption expected, Boolean actual) {
-        return expected == NOPREFERENCE
-                || actual == null
-                || (expected == YES && actual)
-                || (expected == NO && !actual);
+        for (Boolean b : value) {
+            //if there is missing data, always return true
+            if(b == null) {
+                return true;
+            }
+            if (b) {
+                result = true;
+            }
+        }
+
+        if(option == YES) {
+            return result;
+        }
+
+        return !result;
     }
 }

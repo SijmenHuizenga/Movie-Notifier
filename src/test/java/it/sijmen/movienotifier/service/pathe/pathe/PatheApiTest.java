@@ -174,37 +174,41 @@ public class PatheApiTest {
         ));
 
         PatheShowing patheShowingResponse = new PatheShowing(12, 21432, 2382115, UnixTimestampDeserializer.PATHEFORMAT.parse("2017-12-15T21:00:00+01:00").getTime(),
-                UnixTimestampDeserializer.PATHEFORMAT.parse("2017-12-15T23:50:00+01:00").getTime(), 1, 0, 0, 0, 0, 0, 0, 1, false, true);
+                UnixTimestampDeserializer.PATHEFORMAT.parse("2017-12-15T23:50:00+01:00").getTime(), 0, 0, 0, 0, 0, 0, 0, 0, false, true);
 
         assertFalse(api.accepts(watcher, patheShowingResponse));
     }
 
     @Test
-    public void testEq(){
+    public void testISAtmosDolbyCinema() throws ParseException {
         PatheApi api = spy(new PatheApi(new ObjectMapper(), "SOMEKEY", patheCacheRepository, notificationService));
-        assertTrue(api.eq(YES, 1));
-        assertFalse(api.eq(YES, 0));
-        assertTrue(api.eq(YES, null));
 
-        assertFalse(api.eq(NO, 1));
-        assertTrue(api.eq(NO, 0));
-        assertTrue(api.eq(NO, null));
+        Watcher watcher = new Watcher("SOMEID", "SOMEUSER", "SOMENAME", 23469, 1564380000000L, 1564432200000L, new WatcherFilters(
+                12,
+                1564840800000L, 1564866000000L, NOPREFERENCE, NOPREFERENCE, NOPREFERENCE, NOPREFERENCE, NOPREFERENCE, NOPREFERENCE, NOPREFERENCE,
+                NOPREFERENCE, NOPREFERENCE, NOPREFERENCE, YES
+        ));
 
-        assertTrue(api.eq(NOPREFERENCE, 1));
-        assertTrue(api.eq(NOPREFERENCE, 0));
-        assertTrue(api.eq(NOPREFERENCE, null));
+        PatheShowing patheShowingResponse = new PatheShowing(12, 23469, 3098804, UnixTimestampDeserializer.PATHEFORMAT.parse("2019-08-03T19:50:00+02:00").getTime(),
+                UnixTimestampDeserializer.PATHEFORMAT.parse("2019-08-03T22:26:00+02:00").getTime(), 0, 0, 0, 1, 0, 0, 0, 0, false, true);
 
-        assertTrue(api.eqBool(YES, true));
-        assertFalse(api.eqBool(YES, false));
-        assertTrue(api.eqBool(YES, null));
+        assertTrue(api.accepts(watcher, patheShowingResponse));
+    }
 
-        assertFalse(api.eqBool(NO, true));
-        assertTrue(api.eqBool(NO, false));
-        assertTrue(api.eqBool(NO, null));
+    @Test
+    public void testISLaserIMAX() throws ParseException {
+        PatheApi api = spy(new PatheApi(new ObjectMapper(), "SOMEKEY", patheCacheRepository, notificationService));
 
-        assertTrue(api.eqBool(NOPREFERENCE, true));
-        assertTrue(api.eqBool(NOPREFERENCE, false));
-        assertTrue(api.eqBool(NOPREFERENCE, null));
+        Watcher watcher = new Watcher("SOMEID", "SOMEUSER", "SOMENAME", 23469, 1564380000000L, 1564432200000L, new WatcherFilters(
+                6,
+                1564840800000L, 1564866000000L, NOPREFERENCE, NOPREFERENCE, NOPREFERENCE, NOPREFERENCE, NOPREFERENCE, NOPREFERENCE, YES,
+                NOPREFERENCE, NOPREFERENCE, NOPREFERENCE, NOPREFERENCE
+        ));
+
+        PatheShowing patheShowingResponse = new PatheShowing(6, 23469, 3098306, UnixTimestampDeserializer.PATHEFORMAT.parse("2019-08-03T18:15:00+02:00").getTime(),
+                UnixTimestampDeserializer.PATHEFORMAT.parse("2019-08-03T20:46:00+02:00").getTime(), 1, 0, 1, 1, 0, 0, 0, 0, false, false);
+
+        assertTrue(api.accepts(watcher, patheShowingResponse));
     }
 
 }
