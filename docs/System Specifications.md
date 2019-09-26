@@ -2,19 +2,19 @@
 This document describes the idea, the functionalities and business rules that are part of Movie Notifier. Use this document to understand the system and get a better idea of the usage of the REST Api. Exact api call specifications are described in the `swagger.yaml` file.
 
 ## Abstract
-Thea idea behind movie notifier is that cinema enthousiasts (users) can be notified when their favorite movie is available in their local cinema to get the best spots on premiere evening.
+Thea idea behind movie notifier is that cinema enthusiasts (users) can be notified when their favorite movie is available in their local cinema to get the best spots on premiere evening.
 
 After a user registers they can configure in what way they want to be notified when a new movie showing is available. Current options are the notification types Facebook Messenger and Email.
 
 Next, a user can set up a watcher. A watcher will keep it's eye on new showings for a specific movie. When a new showing is available the user will immediately be notified of the new showing through the notification type's they have configured earlyer. 
 
-Since users are mostly after specific showings the user can configure filters. These filters make sure the user gets only usefull notifications about showings they actually want to go and see. 
+Since users are mostly after specific showings the user can configure filters. These filters make sure the user gets only useful notifications about showings they actually want to go and see. 
 
 ## Domains
-The whole system can be devided in two primary domains: users and notifications
+The whole system can be divided in two primary domains: users and notifications
 
 ### User
-A user represents a cinema enthousiast that uses the system. A user looks like this:
+A user represents a cinema enthusiast that uses the system. A user looks like this:
 ```json
 {
     "id": "5995f25708813b0001f99393",
@@ -29,7 +29,7 @@ The fields `name`, `email`, and `password` are provided by the user at registrat
 
 There are some extra rules for userdata that apply to all users:
 - [x] `name`, `email`, `phonenumber`, `password` and `notifications` are required and thus cannot be null.
-- [x] `name` must be between 4 and 16 charcters and only contains letters (a-z) and numbers (0-9), but no capital letters (A-Z). The first 4 characters must always be letters.
+- [x] `name` must be between 4 and 16 characters and only contains letters (a-z) and numbers (0-9), but no capital letters (A-Z). The first 4 characters must always be letters.
 - [x] `email` must contain a valid email address. This field is optional. When the field is set to an empty string the user will receive no notifications over email.
 - [x] `password` must at least be 8 characters long and may only contain the letters (`a-z`), capital letters (`A-Z`), numbers (`0-9`) and the following special characters: `!@#$%^&*()_-+={}[]:;?><.,`
 - [x] `fcm-registration-tokens` is a list of firebase-cloud-messaging device registration tokens. Notifications are sent to all tokens in this list.
@@ -45,7 +45,7 @@ Users can register watchers. A watcher looks like this:
     "begin": 1504800000000,
     "end": 1507392000000,
     "filters": {
-        "cinemaid": "PATHE12",
+        "cinemaid": 12,
         "startafter": 1504800000000,
         "startbefore": 1507392000000,
         "ov": "yes",
@@ -68,9 +68,9 @@ The movie that is watched by this watcher is specified as a numerical id in the 
 
 `begin` and `end` specify in what period this watcher is enabled. These fields are necessary to stop watchers from watching forever. There are some rules that apply to these fields that are specified below.
 
-All fields witin the `filters` property are used to filter out new movie showings from getting notifications to the user. `cinemaid` specifies the cinema the showing is shown at. For all filters a preference must be specified.
+All fields within the `filters` property are used to filter out new movie showings from getting notifications to the user. `cinemaid` specifies the cinema the showing is shown at. For all filters a preference must be specified.
 
-This `cinemaid` filter selects a cinema. This id references a cinema from the `GET /cinemas/` list. At this moment there is no check weather or not the cinema is valid! This filter is required as you can only watch showings for a specific movie in a specific cinema. In previous versions this string was a concatination of the cinema chain id and the cinema number. For example `PATHE12`. 
+This `cinemaid` filter selects a cinema. This id references a cinema from the `GET /cinemas/` list. At this moment there is no check weather or not the cinema is valid! This filter is required as you can only watch showings for a specific movie in a specific cinema. In previous versions this string was a concatenation of the cinema chain id and the cinema number. For example `PATHE12`. 
 
 The following other parameters are supported:
 * `startafter` Showings that start later than this timestamp 
@@ -78,13 +78,13 @@ The following other parameters are supported:
 * `ov` Showing with original spoken audio
 * `nl` Showing with dutch spoken audio
 * `imax` Showing on a IMAX display. Weather or not the movie has imax aspect ratio is not supported by this filter.
-* `hfr` Showing wiht High Frame Rate (48 fps)
+* `hfr` Showing with High Frame Rate
 * `laser` Showing with Laser projector
 * `dbox` Showing with D-Box Experience
 * `4dx` Showing with 4DX Experience
 * `dolbycinema` Showing with Dolby Cinema audio and display 
 * `dolbyatmos` Showing with Dolby Atmos audio
-* `3d` Showign in 3D
+* `3d` Showing in 3D
 * `4k` Showing in 4K resolution
 
 All boolean true/false filters can have three options:
@@ -92,7 +92,7 @@ All boolean true/false filters can have three options:
 * `no` filter out all showings with this feature
 * `no-preference` do not filter showings on this feature.
 
-To support watcher sharing it is possible to retreve watchers details by id without being the owner. 
+To support watcher sharing it is possible to retrieve watchers details by id without being the owner. 
 
 Some extra rules about the watcher data that apply to all watchers from all users:
 - [x] Watchers can only be created by authenticated users.
@@ -100,8 +100,8 @@ Some extra rules about the watcher data that apply to all watchers from all user
 - [x] The `name` of the watcher must be between 3 and 50 characters.
 - [x] Users can only create watchers with their own `userid`.
 - [x] All fields can be updated by the owner (user with the same `userid`) except the watcher `id`. But since the `userid` can only be the one of the user that is executing the request this field cannot be changed.
-- [x] All users can retreve a watcher with any valid apikey and the id. 
-- [x] The field `userid` will be ommitted when a user retreves a watcher by its id with an apikey that does not match the userid of the watcher because of privacy.
+- [x] All users can retrieve a watcher with any valid apikey and the id. 
+- [x] The field `userid` will be omitted when a user retrieves a watcher by its id with an apikey that does not match the userid of the watcher because of privacy.
 - [x] The `end` timestamp must be later than the `begin` timestamp
 - [x] The `filters.startafter` timestamp must be before than the `filters.startbefore` timestamp
 - [ ] A user can have no more than 10 watchers that have overlapping `begin` to `end` periods to make sure there are never too many watchers watching at the same time.  
@@ -113,4 +113,4 @@ Some extra rules about the watcher data that apply to all watchers from all user
 Some technical details about the usage of the api:
 * All timestamps used in this system use Unix Time: milliseconds since January 1, 1970.
 * When updating a model fields that do not need to be updated can be omitted.
-* Fields that are optional can be ommitted to not specifie them. With a `string` or `object` they can also be set to `null` to not specify them. A number or timestamp field can be set to value `0` to not specify them.
+* Fields that are optional can be omitted to not specify them. With a `string` or `object` they can also be set to `null` to not specify them. A number or timestamp field can be set to value `0` to not specify them.
