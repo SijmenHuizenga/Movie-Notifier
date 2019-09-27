@@ -253,8 +253,10 @@ public class PatheShowing implements Comparable<PatheShowing> {
 
     if (getIs4dx()) builder.append("4DX ");
     if (getIs4k() == 1) builder.append("4K ");
-    if (getIs3d() == 1) builder.append("3D, ");
-    else builder.append("2D, ");
+    if (getIs3d() == 1) builder.append("3D");
+    else builder.append("2D");
+    if (getHfr() == 1) builder.append(" HFR");
+    builder.append(", ");
 
     builder.append(getUrl());
 
