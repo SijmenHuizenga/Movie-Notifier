@@ -120,7 +120,7 @@ class WatcherIT {
     out.put("startbefore", r.nextInt(500) + 1001L);
     String[] opts =
         new String[] {
-          "ov", "nl", "imax", "hfr", "laser", "dbox", "dolbycinema", "dolbyatmos", "3d", "4k", "4dx"
+          "ov", "nl", "imax", "hfr", "laser", "dolbycinema", "dolbyatmos", "3d", "4k", "4dx"
         };
     for (String o : opts) {
       if (includeNulls && r.nextBoolean()) continue;

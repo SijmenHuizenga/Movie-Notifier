@@ -40,7 +40,6 @@ abstract class WatcherTestBase extends UserTestBase {
                 NO,
                 NOPREFERENCE,
                 NO,
-                NO,
                 NOPREFERENCE,
                 YES));
   }
@@ -74,7 +73,6 @@ abstract class WatcherTestBase extends UserTestBase {
         d.isHfr(),
         d.isK4(),
         d.isLaser(),
-        d.isDbox(),
         d.isDx4(),
         d.isDolbycinema(),
         d.isDolbyatmos(),
@@ -91,7 +89,6 @@ abstract class WatcherTestBase extends UserTestBase {
       FilterOption hfr,
       FilterOption k4,
       FilterOption laser,
-      FilterOption dbox,
       FilterOption dx4,
       FilterOption dolbycinema,
       FilterOption dolbyatmos,
@@ -107,7 +104,6 @@ abstract class WatcherTestBase extends UserTestBase {
     if (hfr != null) items.add("\"hfr\": \"" + hfr + "\"");
     if (k4 != null) items.add("\"4k\": \"" + k4 + "\"");
     if (laser != null) items.add("\"laser\": \"" + laser + "\"");
-    if (dbox != null) items.add("\"dbox\": \"" + dbox + "\"");
     if (dx4 != null) items.add("\"4dx\": \"" + dx4 + "\"");
     if (dolbycinema != null) items.add("\"dolbycinema\": \"" + dolbycinema + "\"");
     if (dolbyatmos != null) items.add("\"dolbyatmos\": \"" + dolbyatmos + "\"");

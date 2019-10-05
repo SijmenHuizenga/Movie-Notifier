@@ -53,7 +53,6 @@ Users can register watchers. A watcher looks like this:
         "imax": "no-preference",
         "hfr": "no",
         "laser": "yes",
-        "dbox": "no",
         "4dx": "no",
         "dolbycinema": "no",
         "dolbyatmos": "no-preference",
@@ -80,7 +79,6 @@ The following other parameters are supported:
 * `imax` Showing on a IMAX display. Weather or not the movie has imax aspect ratio is not supported by this filter.
 * `hfr` Showing with High Frame Rate
 * `laser` Showing with Laser projector
-* `dbox` Showing with D-Box Experience
 * `4dx` Showing with 4DX Experience
 * `dolbycinema` Showing with Dolby Cinema audio and display 
 * `dolbyatmos` Showing with Dolby Atmos audio

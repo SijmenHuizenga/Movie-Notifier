@@ -39,8 +39,6 @@ public class WatcherFilters implements Model {
 
   @NotNull @JsonProperty private FilterOption laser;
 
-  @NotNull @JsonProperty private FilterOption dbox;
-
   @NotNull
   @JsonProperty("4dx")
   private FilterOption dx4;
@@ -60,7 +58,6 @@ public class WatcherFilters implements Model {
       FilterOption hfr,
       FilterOption k4,
       FilterOption laser,
-      FilterOption dbox,
       FilterOption dx4,
       FilterOption dolbycinema,
       FilterOption dolbyatmos) {
@@ -74,7 +71,6 @@ public class WatcherFilters implements Model {
     this.hfr = hfr;
     this.k4 = k4;
     this.laser = laser;
-    this.dbox = dbox;
     this.dx4 = dx4;
     this.dolbycinema = dolbycinema;
     this.dolbyatmos = dolbyatmos;
@@ -93,7 +89,6 @@ public class WatcherFilters implements Model {
     this.hfr = filters.hfr;
     this.k4 = filters.k4;
     this.laser = filters.laser;
-    this.dbox = filters.dbox;
     this.dx4 = filters.dx4;
     this.dolbycinema = filters.dolbycinema;
     this.dolbyatmos = filters.dolbyatmos;
@@ -170,14 +165,6 @@ public class WatcherFilters implements Model {
     this.laser = laser;
   }
 
-  public FilterOption isDbox() {
-    return dbox;
-  }
-
-  public void setDbox(FilterOption dbox) {
-    this.dbox = dbox;
-  }
-
   public FilterOption isDx4() {
     return dx4;
   }
@@ -250,8 +237,6 @@ public class WatcherFilters implements Model {
         + k4
         + ", laser="
         + laser
-        + ", dbox="
-        + dbox
         + ", dx4="
         + dx4
         + ", dolbycinema="

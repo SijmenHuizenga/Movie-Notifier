@@ -450,7 +450,6 @@ definitions:
           - hfr
           - 4k
           - laser
-          - dbox
           - 4dx
           - dolbycinema
           - dolbyatmos
@@ -501,10 +500,6 @@ definitions:
             type: string
             enum: [yes, no, no-preference]
             description: whether or not the showing is projected with a laser projector
-          dbox:
-            type: string
-            enum: [yes, no, no-preference]
-            description: whether or not the showing is in D-Box seats
           4dx:
             type: string
             enum: [yes, no, no-preference]
