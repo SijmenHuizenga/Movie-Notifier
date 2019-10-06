@@ -166,7 +166,6 @@ public class PatheApiTest {
                     NO,
                     NOPREFERENCE,
                     NOPREFERENCE,
-                    NOPREFERENCE,
                     YES))));
 
     verify(notificationService, times(fired ? 1 : 0)).sendUpdates(any(), any());
@@ -189,7 +188,6 @@ public class PatheApiTest {
                 12,
                 1513353540786L,
                 1513540800699L,
-                NOPREFERENCE,
                 NOPREFERENCE,
                 NOPREFERENCE,
                 NOPREFERENCE,
@@ -239,7 +237,6 @@ public class PatheApiTest {
                 12,
                 1513353540786L,
                 1513540800699L,
-                NOPREFERENCE,
                 NOPREFERENCE,
                 NOPREFERENCE,
                 NOPREFERENCE,
@@ -298,7 +295,6 @@ public class PatheApiTest {
                 NOPREFERENCE,
                 NOPREFERENCE,
                 NOPREFERENCE,
-                NOPREFERENCE,
                 YES));
 
     PatheShowing patheShowingResponse =
@@ -346,7 +342,6 @@ public class PatheApiTest {
                 NOPREFERENCE,
                 NOPREFERENCE,
                 YES,
-                NOPREFERENCE,
                 NOPREFERENCE,
                 NOPREFERENCE,
                 NOPREFERENCE));
