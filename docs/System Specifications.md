@@ -57,6 +57,7 @@ Users can register watchers. A watcher looks like this:
         "screenx": "no",
         "dolbycinema": "no",
         "dolbyatmos": "no-preference",
+        "regularshowing": "no-preference",
         "3d": "no-preference",
         "4k": "no-preference"
     }
@@ -84,6 +85,7 @@ The following other parameters are supported:
 * `screenx` Showing with ScreenX Experience
 * `dolbycinema` Showing with Dolby Cinema audio and display 
 * `dolbyatmos` Showing with Dolby Atmos audio
+* `regularshowing` Showing not in any of the premium experiences (IMAX, Dolby Cinema, 4DX or ScreenX)
 * `3d` Showing in 3D
 * `4k` Showing in 4K resolution
 
