@@ -1,8 +1,6 @@
 package it.sijmen.movienotifier.service.pathe.pathe;
 
-import static it.sijmen.movienotifier.model.FilterOption.NO;
-import static it.sijmen.movienotifier.model.FilterOption.NOPREFERENCE;
-import static it.sijmen.movienotifier.model.FilterOption.YES;
+import static it.sijmen.movienotifier.model.FilterOption.*;
 import static it.sijmen.movienotifier.model.serialization.UnixTimestampDeserializer.PATHEFORMAT;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -135,6 +133,7 @@ public class PatheApiTest {
                 + "            \"is4k\": 0,"
                 + "            \"isLaser\": 0,"
                 + "            \"is4dx\": false,"
+                + "            \"isScreenx\": false,"
                 + "            \"isVision\": false"
                 + "        }"
                 + "    ]"
@@ -164,6 +163,7 @@ public class PatheApiTest {
                     NO,
                     NO,
                     NO,
+                    NOPREFERENCE,
                     NOPREFERENCE,
                     NOPREFERENCE,
                     YES))));
@@ -197,6 +197,7 @@ public class PatheApiTest {
                 NOPREFERENCE,
                 NO,
                 NOPREFERENCE,
+                NOPREFERENCE,
                 NOPREFERENCE));
 
     PatheShowing patheShowingResponse =
@@ -215,6 +216,7 @@ public class PatheApiTest {
             0,
             0,
             true,
+            false,
             false);
 
     assertFalse(api.accepts(watcher, patheShowingResponse));
@@ -245,6 +247,7 @@ public class PatheApiTest {
                 NOPREFERENCE,
                 NOPREFERENCE,
                 NOPREFERENCE,
+                NOPREFERENCE,
                 NO,
                 NOPREFERENCE));
 
@@ -263,6 +266,7 @@ public class PatheApiTest {
             0,
             0,
             0,
+            false,
             false,
             true);
 
@@ -295,6 +299,7 @@ public class PatheApiTest {
                 NOPREFERENCE,
                 NOPREFERENCE,
                 NOPREFERENCE,
+                NOPREFERENCE,
                 YES));
 
     PatheShowing patheShowingResponse =
@@ -312,6 +317,7 @@ public class PatheApiTest {
             0,
             0,
             0,
+            false,
             false,
             true);
 
@@ -344,6 +350,7 @@ public class PatheApiTest {
                 YES,
                 NOPREFERENCE,
                 NOPREFERENCE,
+                NOPREFERENCE,
                 NOPREFERENCE));
 
     PatheShowing patheShowingResponse =
@@ -362,6 +369,58 @@ public class PatheApiTest {
             0,
             0,
             false,
+            false,
+            false);
+
+    assertTrue(api.accepts(watcher, patheShowingResponse));
+  }
+
+  @Test
+  public void testISScreenX() throws ParseException {
+    PatheApi api =
+        spy(new PatheApi(new ObjectMapper(), "SOMEKEY", patheCacheRepository, notificationService));
+
+    Watcher watcher =
+        new Watcher(
+            "SOMEID",
+            "SOMEUSER",
+            "Star Wars 8 X",
+            21432,
+            1510992000185L,
+            1513186080310L,
+            new WatcherFilters(
+                12,
+                1513353540786L,
+                1513540800699L,
+                NOPREFERENCE,
+                NOPREFERENCE,
+                NOPREFERENCE,
+                NOPREFERENCE,
+                NOPREFERENCE,
+                NOPREFERENCE,
+                NOPREFERENCE,
+                NOPREFERENCE,
+                YES,
+                NOPREFERENCE,
+                NOPREFERENCE));
+
+    PatheShowing patheShowingResponse =
+        new PatheShowing(
+            12,
+            21432,
+            2382115,
+            UnixTimestampDeserializer.PATHEFORMAT.parse("2017-12-15T21:00:00+01:00").getTime(),
+            UnixTimestampDeserializer.PATHEFORMAT.parse("2017-12-15T23:50:00+01:00").getTime(),
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            false,
+            true,
             false);
 
     assertTrue(api.accepts(watcher, patheShowingResponse));

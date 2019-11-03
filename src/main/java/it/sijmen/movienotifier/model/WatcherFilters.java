@@ -43,6 +43,8 @@ public class WatcherFilters implements Model {
   @JsonProperty("4dx")
   private FilterOption dx4;
 
+  @NotNull @JsonProperty private FilterOption screenx;
+
   @NotNull @JsonProperty private FilterOption dolbycinema;
 
   @NotNull @JsonProperty private FilterOption dolbyatmos;
@@ -59,6 +61,7 @@ public class WatcherFilters implements Model {
       FilterOption k4,
       FilterOption laser,
       FilterOption dx4,
+      FilterOption screenx,
       FilterOption dolbycinema,
       FilterOption dolbyatmos) {
     this.cinemaid = cinemaid;
@@ -72,6 +75,7 @@ public class WatcherFilters implements Model {
     this.k4 = k4;
     this.laser = laser;
     this.dx4 = dx4;
+    this.screenx = screenx;
     this.dolbycinema = dolbycinema;
     this.dolbyatmos = dolbyatmos;
   }
@@ -90,6 +94,7 @@ public class WatcherFilters implements Model {
     this.k4 = filters.k4;
     this.laser = filters.laser;
     this.dx4 = filters.dx4;
+    this.screenx = filters.screenx;
     this.dolbycinema = filters.dolbycinema;
     this.dolbyatmos = filters.dolbyatmos;
   }
@@ -173,6 +178,14 @@ public class WatcherFilters implements Model {
     this.dx4 = dx4;
   }
 
+  public FilterOption isScreenx() {
+    return screenx;
+  }
+
+  public void setScreenx(FilterOption screenx) {
+    this.screenx = screenx;
+  }
+
   public FilterOption isDolbycinema() {
     return dolbycinema;
   }
@@ -239,6 +252,8 @@ public class WatcherFilters implements Model {
         + laser
         + ", dx4="
         + dx4
+        + ", screenx="
+        + screenx
         + ", dolbycinema="
         + dolbycinema
         + ", dolbyatmos="

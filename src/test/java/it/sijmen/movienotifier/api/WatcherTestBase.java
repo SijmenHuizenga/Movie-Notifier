@@ -1,8 +1,6 @@
 package it.sijmen.movienotifier.api;
 
-import static it.sijmen.movienotifier.model.FilterOption.NO;
-import static it.sijmen.movienotifier.model.FilterOption.NOPREFERENCE;
-import static it.sijmen.movienotifier.model.FilterOption.YES;
+import static it.sijmen.movienotifier.model.FilterOption.*;
 import static org.mockito.Mockito.when;
 
 import it.sijmen.movienotifier.model.FilterOption;
@@ -40,6 +38,7 @@ abstract class WatcherTestBase extends UserTestBase {
                 NO,
                 NOPREFERENCE,
                 NO,
+                NO,
                 NOPREFERENCE,
                 YES));
   }
@@ -74,6 +73,7 @@ abstract class WatcherTestBase extends UserTestBase {
         d.isK4(),
         d.isLaser(),
         d.isDx4(),
+        d.isScreenx(),
         d.isDolbycinema(),
         d.isDolbyatmos(),
         d.getCinemaid(),
@@ -90,6 +90,7 @@ abstract class WatcherTestBase extends UserTestBase {
       FilterOption k4,
       FilterOption laser,
       FilterOption dx4,
+      FilterOption screenx,
       FilterOption dolbycinema,
       FilterOption dolbyatmos,
       int cinemaid,
@@ -105,6 +106,7 @@ abstract class WatcherTestBase extends UserTestBase {
     if (k4 != null) items.add("\"4k\": \"" + k4 + "\"");
     if (laser != null) items.add("\"laser\": \"" + laser + "\"");
     if (dx4 != null) items.add("\"4dx\": \"" + dx4 + "\"");
+    if (screenx != null) items.add("\"screenx\": \"" + screenx + "\"");
     if (dolbycinema != null) items.add("\"dolbycinema\": \"" + dolbycinema + "\"");
     if (dolbyatmos != null) items.add("\"dolbyatmos\": \"" + dolbyatmos + "\"");
     if (startafter != -1) items.add("\"startafter\": \"" + startafter + "\"");

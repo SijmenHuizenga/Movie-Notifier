@@ -159,6 +159,7 @@ public class PatheApi {
         && accepts(d.isHfr(), toBool(showing.getHfr()))
         && accepts(d.isK4(), toBool(showing.getIs4k()))
         && accepts(d.isDx4(), showing.getIs4dx())
+        && accepts(d.isScreenx(), showing.getIsScreenx())
         && accepts(d.isDolbycinema(), showing.getIsVision())
         &&
 

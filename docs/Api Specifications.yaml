@@ -451,6 +451,7 @@ definitions:
           - 4k
           - laser
           - 4dx
+          - screenx
           - dolbycinema
           - dolbyatmos
         properties:
@@ -504,6 +505,10 @@ definitions:
             type: string
             enum: [yes, no, no-preference]
             description: whether or not the showing is in 4DX seats
+          screenx:
+            type: string
+            enum: [yes, no, no-preference]
+            description: whether or not the showing uses ScreenX
           dolbycinema:
             type: string
             enum: [yes, no, no-preference]
@@ -511,7 +516,7 @@ definitions:
           dolbyatmos:
             type: string
             enum: [yes, no, no-preference]
-            description: whether or not the showing is in dolbey atmos
+            description: whether or not the showing is in dolby atmos
   Cinema:
     type: object
     properties:

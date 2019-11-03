@@ -46,6 +46,8 @@ public class PatheShowing implements Comparable<PatheShowing> {
 
   @JsonProperty private Boolean is4dx;
 
+  @JsonProperty private Boolean isScreenx;
+
   @JsonProperty private Boolean isVision;
 
   public PatheShowing(
@@ -63,6 +65,7 @@ public class PatheShowing implements Comparable<PatheShowing> {
       Integer is4k,
       Integer isLaser,
       Boolean is4dx,
+      Boolean isScreenx,
       Boolean isVision) {
     this.cinemaId = cinemaId;
     this.movieId = movieId;
@@ -78,6 +81,7 @@ public class PatheShowing implements Comparable<PatheShowing> {
     this.is4k = is4k;
     this.isLaser = isLaser;
     this.is4dx = is4dx;
+    this.isScreenx = isScreenx;
     this.isVision = isVision;
   }
 
@@ -176,6 +180,14 @@ public class PatheShowing implements Comparable<PatheShowing> {
     this.is4dx = is4dx;
   }
 
+  public Boolean getIsScreenx() {
+    return isScreenx;
+  }
+
+  public void setIsScreenx(Boolean isScreenx) {
+    this.isScreenx = isScreenx;
+  }
+
   public Boolean getIsVision() {
     return isVision;
   }
@@ -252,6 +264,7 @@ public class PatheShowing implements Comparable<PatheShowing> {
     }
 
     if (getIs4dx()) builder.append("4DX ");
+    if (getIsScreenx()) builder.append("ScreenX ");
     if (getIs4k() == 1) builder.append("4K ");
     if (getIs3d() == 1) builder.append("3D");
     else builder.append("2D");
