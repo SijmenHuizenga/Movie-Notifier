@@ -181,7 +181,18 @@ public class PatheApi {
             d.isLaser(),
             toBool(showing.getIsLaser()),
             showing.getIsVision(),
-            (showing.getImax() == 1 && CinemaService.hasLaserImax(showing.getCinemaId())));
+            (showing.getImax() == 1 && CinemaService.hasLaserImax(showing.getCinemaId())))
+        &&
+
+        /*
+         * A showing is considered 'regular' when it is not any premium experience
+         */
+        acceptsAll(
+            d.isRegularshowing(),
+            !toBool(showing.getImax()),
+            !showing.getIsVision(),
+            !showing.getIs4dx(),
+            !showing.getIsScreenx());
   }
 
   private Boolean toBool(Integer i) {
@@ -209,6 +220,34 @@ public class PatheApi {
       }
       if (b) {
         result = true;
+      }
+    }
+
+    if (option == YES) {
+      return result;
+    }
+
+    return !result;
+  }
+
+  /**
+   * If option is NOPREFERENCE, always return true If one of the value is null, return true If
+   * option is YES, all value's are and'ed: (A && B && C ...) If option is NO, all values are
+   * inverse and'ed: !(A && B && C ...)
+   */
+  private boolean acceptsAll(FilterOption option, Boolean... value) {
+    if (option == NOPREFERENCE) {
+      return true;
+    }
+    boolean result = true;
+
+    for (Boolean b : value) {
+      // if there is missing data, always return true
+      if (b == null) {
+        return true;
+      }
+      if (!b) {
+        result = false;
       }
     }
 

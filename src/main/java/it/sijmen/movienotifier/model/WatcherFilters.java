@@ -49,6 +49,8 @@ public class WatcherFilters implements Model {
 
   @NotNull @JsonProperty private FilterOption dolbyatmos;
 
+  @NotNull @JsonProperty private FilterOption regularshowing;
+
   public WatcherFilters(
       int cinemaid,
       long startafter,
@@ -63,7 +65,8 @@ public class WatcherFilters implements Model {
       FilterOption dx4,
       FilterOption screenx,
       FilterOption dolbycinema,
-      FilterOption dolbyatmos) {
+      FilterOption dolbyatmos,
+      FilterOption regularshowing) {
     this.cinemaid = cinemaid;
     this.startafter = startafter;
     this.startbefore = startbefore;
@@ -78,6 +81,7 @@ public class WatcherFilters implements Model {
     this.screenx = screenx;
     this.dolbycinema = dolbycinema;
     this.dolbyatmos = dolbyatmos;
+    this.regularshowing = regularshowing;
   }
 
   public WatcherFilters() {}
@@ -97,6 +101,7 @@ public class WatcherFilters implements Model {
     this.screenx = filters.screenx;
     this.dolbycinema = filters.dolbycinema;
     this.dolbyatmos = filters.dolbyatmos;
+    this.regularshowing = filters.regularshowing;
   }
 
   @AssertTrue(message = "must be before than the startbefore")
@@ -202,6 +207,14 @@ public class WatcherFilters implements Model {
     this.dolbyatmos = dolbyatmos;
   }
 
+  public FilterOption isRegularshowing() {
+    return regularshowing;
+  }
+
+  public void setRegularshowing(FilterOption regularshowing) {
+    this.regularshowing = regularshowing;
+  }
+
   public void setStartbefore(long startbefore) {
     this.startbefore = startbefore;
   }
@@ -258,6 +271,8 @@ public class WatcherFilters implements Model {
         + dolbycinema
         + ", dolbyatmos="
         + dolbyatmos
+        + ", regularshowing="
+        + regularshowing
         + '}';
   }
 }

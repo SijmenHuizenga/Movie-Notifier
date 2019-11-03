@@ -40,7 +40,8 @@ abstract class WatcherTestBase extends UserTestBase {
                 NO,
                 NO,
                 NOPREFERENCE,
-                YES));
+                YES,
+                NOPREFERENCE));
   }
 
   @After
@@ -76,6 +77,7 @@ abstract class WatcherTestBase extends UserTestBase {
         d.isScreenx(),
         d.isDolbycinema(),
         d.isDolbyatmos(),
+        d.isRegularshowing(),
         d.getCinemaid(),
         d.getStartafter(),
         d.getStartbefore());
@@ -93,6 +95,7 @@ abstract class WatcherTestBase extends UserTestBase {
       FilterOption screenx,
       FilterOption dolbycinema,
       FilterOption dolbyatmos,
+      FilterOption regularshowing,
       int cinemaid,
       long startafter,
       long startbefore) {
@@ -109,6 +112,7 @@ abstract class WatcherTestBase extends UserTestBase {
     if (screenx != null) items.add("\"screenx\": \"" + screenx + "\"");
     if (dolbycinema != null) items.add("\"dolbycinema\": \"" + dolbycinema + "\"");
     if (dolbyatmos != null) items.add("\"dolbyatmos\": \"" + dolbyatmos + "\"");
+    if (regularshowing != null) items.add("\"regularshowing\": \"" + regularshowing + "\"");
     if (startafter != -1) items.add("\"startafter\": \"" + startafter + "\"");
     if (startbefore != -1) items.add("\"startbefore\": \"" + startbefore + "\"");
 

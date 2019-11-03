@@ -131,7 +131,8 @@ class WatcherIT {
           "3d",
           "4k",
           "4dx",
-          "screenx"
+          "screenx",
+          "regularshowing"
         };
     for (String o : opts) {
       if (includeNulls && r.nextBoolean()) continue;
