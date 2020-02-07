@@ -1,11 +1,12 @@
 package it.sijmen.movienotifier.integrationtests;
 
 import static io.restassured.RestAssured.given;
-import static org.hamcrest.Matchers.*;
 
 import io.restassured.response.Response;
 import io.restassured.response.ValidatableResponse;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Random;
 import org.hamcrest.BaseMatcher;
 import org.hamcrest.Description;
 import org.slf4j.Logger;
@@ -120,7 +121,18 @@ class WatcherIT {
     out.put("startbefore", r.nextInt(500) + 1001L);
     String[] opts =
         new String[] {
-          "ov", "nl", "imax", "hfr", "laser", "dolbycinema", "dolbyatmos", "3d", "4k", "4dx"
+          "ov",
+          "nl",
+          "imax",
+          "hfr",
+          "laser",
+          "dolbycinema",
+          "dolbyatmos",
+          "3d",
+          "4k",
+          "4dx",
+          "screenx",
+          "regularshowing"
         };
     for (String o : opts) {
       if (includeNulls && r.nextBoolean()) continue;

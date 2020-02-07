@@ -1,8 +1,6 @@
 package it.sijmen.movienotifier.service.pathe.pathe;
 
-import static it.sijmen.movienotifier.model.FilterOption.NO;
-import static it.sijmen.movienotifier.model.FilterOption.NOPREFERENCE;
-import static it.sijmen.movienotifier.model.FilterOption.YES;
+import static it.sijmen.movienotifier.model.FilterOption.*;
 import static it.sijmen.movienotifier.model.serialization.UnixTimestampDeserializer.PATHEFORMAT;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -135,6 +133,7 @@ public class PatheApiTest {
                 + "            \"is4k\": 0,"
                 + "            \"isLaser\": 0,"
                 + "            \"is4dx\": false,"
+                + "            \"isScreenx\": false,"
                 + "            \"isVision\": false"
                 + "        }"
                 + "    ]"
@@ -166,7 +165,9 @@ public class PatheApiTest {
                     NO,
                     NOPREFERENCE,
                     NOPREFERENCE,
-                    YES))));
+                    NOPREFERENCE,
+                    YES,
+                    NOPREFERENCE))));
 
     verify(notificationService, times(fired ? 1 : 0)).sendUpdates(any(), any());
   }
@@ -197,6 +198,8 @@ public class PatheApiTest {
                 NOPREFERENCE,
                 NO,
                 NOPREFERENCE,
+                NOPREFERENCE,
+                NOPREFERENCE,
                 NOPREFERENCE));
 
     PatheShowing patheShowingResponse =
@@ -215,6 +218,7 @@ public class PatheApiTest {
             0,
             0,
             true,
+            false,
             false);
 
     assertFalse(api.accepts(watcher, patheShowingResponse));
@@ -245,7 +249,9 @@ public class PatheApiTest {
                 NOPREFERENCE,
                 NOPREFERENCE,
                 NOPREFERENCE,
+                NOPREFERENCE,
                 NO,
+                NOPREFERENCE,
                 NOPREFERENCE));
 
     PatheShowing patheShowingResponse =
@@ -263,6 +269,7 @@ public class PatheApiTest {
             0,
             0,
             0,
+            false,
             false,
             true);
 
@@ -295,7 +302,9 @@ public class PatheApiTest {
                 NOPREFERENCE,
                 NOPREFERENCE,
                 NOPREFERENCE,
-                YES));
+                NOPREFERENCE,
+                YES,
+                NOPREFERENCE));
 
     PatheShowing patheShowingResponse =
         new PatheShowing(
@@ -312,6 +321,7 @@ public class PatheApiTest {
             0,
             0,
             0,
+            false,
             false,
             true);
 
@@ -344,6 +354,8 @@ public class PatheApiTest {
                 YES,
                 NOPREFERENCE,
                 NOPREFERENCE,
+                NOPREFERENCE,
+                NOPREFERENCE,
                 NOPREFERENCE));
 
     PatheShowing patheShowingResponse =
@@ -362,7 +374,164 @@ public class PatheApiTest {
             0,
             0,
             false,
+            false,
             false);
+
+    assertTrue(api.accepts(watcher, patheShowingResponse));
+  }
+
+  @Test
+  public void testISScreenX() throws ParseException {
+    PatheApi api =
+        spy(new PatheApi(new ObjectMapper(), "SOMEKEY", patheCacheRepository, notificationService));
+
+    Watcher watcher =
+        new Watcher(
+            "SOMEID",
+            "SOMEUSER",
+            "Star Wars 8 X",
+            21432,
+            1510992000185L,
+            1513186080310L,
+            new WatcherFilters(
+                12,
+                1513353540786L,
+                1513540800699L,
+                NOPREFERENCE,
+                NOPREFERENCE,
+                NOPREFERENCE,
+                NOPREFERENCE,
+                NOPREFERENCE,
+                NOPREFERENCE,
+                NOPREFERENCE,
+                NOPREFERENCE,
+                YES,
+                NOPREFERENCE,
+                NOPREFERENCE,
+                NOPREFERENCE));
+
+    PatheShowing patheShowingResponse =
+        new PatheShowing(
+            12,
+            21432,
+            2382115,
+            UnixTimestampDeserializer.PATHEFORMAT.parse("2017-12-15T21:00:00+01:00").getTime(),
+            UnixTimestampDeserializer.PATHEFORMAT.parse("2017-12-15T23:50:00+01:00").getTime(),
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            false,
+            true,
+            false);
+
+    assertTrue(api.accepts(watcher, patheShowingResponse));
+  }
+
+  @Test
+  public void testISRegularShowing() throws ParseException {
+    PatheApi api =
+        spy(new PatheApi(new ObjectMapper(), "SOMEKEY", patheCacheRepository, notificationService));
+
+    Watcher watcher =
+        new Watcher(
+            "SOMEID",
+            "SOMEUSER",
+            "SOMENAME",
+            23469,
+            1564380000000L,
+            1564432200000L,
+            new WatcherFilters(
+                6,
+                1564840800000L,
+                1564866000000L,
+                NOPREFERENCE,
+                NOPREFERENCE,
+                NOPREFERENCE,
+                NOPREFERENCE,
+                NOPREFERENCE,
+                NOPREFERENCE,
+                NOPREFERENCE,
+                NOPREFERENCE,
+                NOPREFERENCE,
+                NOPREFERENCE,
+                NOPREFERENCE,
+                YES));
+
+    PatheShowing patheShowingResponse =
+        new PatheShowing(
+            6,
+            23469,
+            3098306,
+            UnixTimestampDeserializer.PATHEFORMAT.parse("2019-08-03T18:15:00+02:00").getTime(),
+            UnixTimestampDeserializer.PATHEFORMAT.parse("2019-08-03T20:46:00+02:00").getTime(),
+            0,
+            0,
+            1,
+            1,
+            0,
+            0,
+            0,
+            0,
+            false,
+            false,
+            false);
+
+    assertFalse(api.accepts(watcher, patheShowingResponse));
+  }
+
+  @Test
+  public void testISNoRegularShowing() throws ParseException {
+    PatheApi api =
+        spy(new PatheApi(new ObjectMapper(), "SOMEKEY", patheCacheRepository, notificationService));
+
+    Watcher watcher =
+        new Watcher(
+            "SOMEID",
+            "SOMEUSER",
+            "SOMENAME",
+            23469,
+            1564380000000L,
+            1564432200000L,
+            new WatcherFilters(
+                6,
+                1564840800000L,
+                1564866000000L,
+                NOPREFERENCE,
+                NOPREFERENCE,
+                NOPREFERENCE,
+                NOPREFERENCE,
+                NOPREFERENCE,
+                NOPREFERENCE,
+                NOPREFERENCE,
+                NOPREFERENCE,
+                NOPREFERENCE,
+                NOPREFERENCE,
+                NOPREFERENCE,
+                NO));
+
+    PatheShowing patheShowingResponse =
+        new PatheShowing(
+            6,
+            23469,
+            3098306,
+            UnixTimestampDeserializer.PATHEFORMAT.parse("2019-08-03T18:15:00+02:00").getTime(),
+            UnixTimestampDeserializer.PATHEFORMAT.parse("2019-08-03T20:46:00+02:00").getTime(),
+            1,
+            0,
+            0,
+            1,
+            0,
+            1,
+            0,
+            0,
+            false,
+            false,
+            true);
 
     assertTrue(api.accepts(watcher, patheShowingResponse));
   }
