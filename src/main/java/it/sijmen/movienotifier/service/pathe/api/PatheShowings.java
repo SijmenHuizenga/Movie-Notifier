@@ -12,9 +12,13 @@ public class PatheShowings {
   @JsonProperty("schedules")
   private List<PatheShowing> showings;
 
-  public PatheShowings(int movieid) {
+  public PatheShowings(int movieid, List<PatheShowing> showings) {
     this.movieid = movieid;
-    this.showings = new ArrayList<>();
+    this.showings = showings;
+  }
+
+  public PatheShowings(int movieid) {
+    this(movieid, new ArrayList<>());
   }
 
   public PatheShowings() {}
@@ -59,5 +63,10 @@ public class PatheShowings {
     ArrayList<Long> out = new ArrayList<>();
     for (PatheShowing s : showings) out.add(s.getId());
     return out;
+  }
+
+  @Override
+  public String toString() {
+    return "PatheShowings{" + "movieid=" + movieid + ", showings=" + showings + '}';
   }
 }

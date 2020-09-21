@@ -5,9 +5,10 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import it.sijmen.movienotifier.model.Cinema;
 import it.sijmen.movienotifier.model.serialization.UnixTimestampDeserializer;
-import it.sijmen.movienotifier.service.CinemaService;
+import it.sijmen.movienotifier.service.pathe.CinemaService;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Objects;
 import java.util.TimeZone;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -235,6 +236,27 @@ public class PatheShowing implements Comparable<PatheShowing> {
     return (int) (getId() ^ (getId() >>> 32));
   }
 
+  public boolean equalsContent(PatheShowing that) {
+    if (this == that) return true;
+    if (that == null) return false;
+    return cinemaId == that.cinemaId
+        && movieId == that.movieId
+        && id == that.id
+        && start == that.start
+        && end == that.end
+        && Objects.equals(is3d, that.is3d)
+        && Objects.equals(nl, that.nl)
+        && Objects.equals(imax, that.imax)
+        && Objects.equals(ov, that.ov)
+        && Objects.equals(hfr, that.hfr)
+        && Objects.equals(isAtmos, that.isAtmos)
+        && Objects.equals(is4k, that.is4k)
+        && Objects.equals(isLaser, that.isLaser)
+        && Objects.equals(is4dx, that.is4dx)
+        && Objects.equals(isScreenx, that.isScreenx)
+        && Objects.equals(isVision, that.isVision);
+  }
+
   private static final SimpleDateFormat format1 = new SimpleDateFormat("EEE d MMMM HH:mm");
   private static final SimpleDateFormat format2 = new SimpleDateFormat("HH:mm");
 
@@ -285,5 +307,10 @@ public class PatheShowing implements Comparable<PatheShowing> {
     if (this.getStart() == -1) return 1;
     if (o.getStart() == -1) return -1;
     return Long.compare(this.getStart(), o.getStart());
+  }
+
+  @Override
+  public String toString() {
+    return "PatheShowing{" + "id=" + id + '}';
   }
 }

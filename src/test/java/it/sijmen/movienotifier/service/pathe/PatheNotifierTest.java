@@ -1,15 +1,11 @@
-package it.sijmen.movienotifier.service.pathe.pathe;
+package it.sijmen.movienotifier.service.pathe;
 
 import static it.sijmen.movienotifier.model.FilterOption.*;
-import static it.sijmen.movienotifier.model.serialization.UnixTimestampDeserializer.PATHEFORMAT;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.*;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.mashape.unirest.http.HttpResponse;
-import it.sijmen.movienotifier.controllers.WatcherController;
 import it.sijmen.movienotifier.model.PatheMovieCache;
 import it.sijmen.movienotifier.model.Watcher;
 import it.sijmen.movienotifier.model.WatcherFilters;
@@ -18,21 +14,19 @@ import it.sijmen.movienotifier.repositories.PatheCacheRepository;
 import it.sijmen.movienotifier.repositories.UserRepository;
 import it.sijmen.movienotifier.repositories.WatcherRepository;
 import it.sijmen.movienotifier.service.NotificationService;
-import it.sijmen.movienotifier.service.pathe.PatheApi;
+import it.sijmen.movienotifier.service.pathe.api.PatheApiClient;
 import it.sijmen.movienotifier.service.pathe.api.PatheShowing;
+import it.sijmen.movienotifier.service.pathe.api.PatheShowings;
 import java.text.ParseException;
+import java.util.Arrays;
 import java.util.Collections;
-import java.util.Date;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mockito;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
-@WebMvcTest(WatcherController.class)
-public class PatheApiTest {
+public class PatheNotifierTest {
 
   private static final long DAY = 86_400_000;
   private static final long HOUR = 3_600_000;
@@ -101,45 +95,31 @@ public class PatheApiTest {
       long filterafter,
       long filterbefore)
       throws Exception {
-    PatheApi api =
-        spy(new PatheApi(new ObjectMapper(), "SOMEKEY", patheCacheRepository, notificationService));
-    HttpResponse<String> mockResponse = mock(HttpResponse.class);
-    when(mockResponse.getStatus()).thenReturn(200);
-    when(mockResponse.getBody())
-        .thenReturn(
-            "{"
-                + "    \"schedules\": ["
-                + "        {"
-                + "            \"id\": 123456,"
-                + "            \"cinemaId\": "
-                + CINEMAID
-                + ","
-                + "            \"movieId\": "
-                + MOVIEID
-                + ","
-                + "            \"start\": \""
-                + PATHEFORMAT.format(new Date(showingstart))
-                + "\","
-                + "            \"end\": \""
-                + PATHEFORMAT.format(new Date(showingend))
-                + "\","
-                + "            \"imax\": 0,"
-                + "            \"3d\": 0,"
-                + "            \"ov\": 1,"
-                + "            \"nl\": 0,"
-                + "            \"vip\": 1,"
-                + "            \"hfr\": 0,"
-                + "            \"isAtmos\": 1,"
-                + "            \"is4k\": 0,"
-                + "            \"isLaser\": 0,"
-                + "            \"is4dx\": false,"
-                + "            \"isScreenx\": false,"
-                + "            \"isVision\": false"
-                + "        }"
-                + "    ]"
-                + "}");
+    PatheApiClient apiClient = mock(PatheApiClient.class);
+    PatheShowings patheShowings = new PatheShowings(123456);
+    patheShowings.setShowings(
+        Arrays.asList(
+            new PatheShowing(
+                CINEMAID,
+                MOVIEID,
+                123456,
+                showingstart,
+                showingend,
+                0,
+                0,
+                0,
+                1,
+                0,
+                1,
+                0,
+                0,
+                false,
+                false,
+                false)));
+    when(apiClient.getShowingsForMovie(anyInt())).thenReturn(patheShowings);
 
-    Mockito.doReturn(mockResponse).when(api).makeGetRequest(anyString());
+    PatheNotifier api =
+        spy(new PatheNotifier(patheCacheRepository, notificationService, apiClient));
 
     when(patheCacheRepository.getFirstByMovieid(MOVIEID)).thenReturn(new PatheMovieCache(MOVIEID));
 
@@ -174,8 +154,7 @@ public class PatheApiTest {
 
   @Test
   public void testIS4DX() throws ParseException {
-    PatheApi api =
-        spy(new PatheApi(new ObjectMapper(), "SOMEKEY", patheCacheRepository, notificationService));
+    PatheNotifier api = spy(new PatheNotifier(patheCacheRepository, notificationService, null));
 
     Watcher watcher =
         new Watcher(
@@ -226,8 +205,7 @@ public class PatheApiTest {
 
   @Test
   public void testISDolbyCinema() throws ParseException {
-    PatheApi api =
-        spy(new PatheApi(new ObjectMapper(), "SOMEKEY", patheCacheRepository, notificationService));
+    PatheNotifier api = spy(new PatheNotifier(patheCacheRepository, notificationService, null));
 
     Watcher watcher =
         new Watcher(
@@ -278,8 +256,7 @@ public class PatheApiTest {
 
   @Test
   public void testISAtmosDolbyCinema() throws ParseException {
-    PatheApi api =
-        spy(new PatheApi(new ObjectMapper(), "SOMEKEY", patheCacheRepository, notificationService));
+    PatheNotifier api = spy(new PatheNotifier(patheCacheRepository, notificationService, null));
 
     Watcher watcher =
         new Watcher(
@@ -330,8 +307,7 @@ public class PatheApiTest {
 
   @Test
   public void testISLaserIMAX() throws ParseException {
-    PatheApi api =
-        spy(new PatheApi(new ObjectMapper(), "SOMEKEY", patheCacheRepository, notificationService));
+    PatheNotifier api = spy(new PatheNotifier(patheCacheRepository, notificationService, null));
 
     Watcher watcher =
         new Watcher(
@@ -382,8 +358,7 @@ public class PatheApiTest {
 
   @Test
   public void testISScreenX() throws ParseException {
-    PatheApi api =
-        spy(new PatheApi(new ObjectMapper(), "SOMEKEY", patheCacheRepository, notificationService));
+    PatheNotifier api = spy(new PatheNotifier(patheCacheRepository, notificationService, null));
 
     Watcher watcher =
         new Watcher(
@@ -434,8 +409,7 @@ public class PatheApiTest {
 
   @Test
   public void testISRegularShowing() throws ParseException {
-    PatheApi api =
-        spy(new PatheApi(new ObjectMapper(), "SOMEKEY", patheCacheRepository, notificationService));
+    PatheNotifier api = spy(new PatheNotifier(patheCacheRepository, notificationService, null));
 
     Watcher watcher =
         new Watcher(
@@ -486,8 +460,7 @@ public class PatheApiTest {
 
   @Test
   public void testISNoRegularShowing() throws ParseException {
-    PatheApi api =
-        spy(new PatheApi(new ObjectMapper(), "SOMEKEY", patheCacheRepository, notificationService));
+    PatheNotifier api = spy(new PatheNotifier(patheCacheRepository, notificationService, null));
 
     Watcher watcher =
         new Watcher(

@@ -54,7 +54,8 @@ public class NotificationService {
   public void sendUpdates(Watcher watcher, List<PatheShowing> matches) {
     User user = userRepository.getFirstByUuid(watcher.getUserid());
     if (user == null) {
-      LOGGER.error("Could not send notification to user {} because it does not exit.");
+      LOGGER.error(
+          "Could not send notification to user {} because it does not exit.", watcher.getUserid());
       return;
     }
 
@@ -81,7 +82,7 @@ public class NotificationService {
           watcher.getMovieid());
     } catch (IOException e) {
       LOGGER.error(
-          "Could not send notification to {}. title: {}. Caused By:\n",
+          "Could not send notification to {}. title: {}. Caused By: {}\n",
           user.getName(),
           header,
           e.getMessage());

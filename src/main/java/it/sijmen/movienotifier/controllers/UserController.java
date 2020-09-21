@@ -41,7 +41,7 @@ public class UserController {
   }
 
   @PutMapping("/user")
-  public HttpEntity putUser(@RequestBody User newUser) {
+  public HttpEntity<User> putUser(@RequestBody User newUser) {
     newUser.setApikey(apiKeyHelper.randomAPIKey());
     newUser.setCreated(new Date());
 
@@ -58,7 +58,7 @@ public class UserController {
   }
 
   @GetMapping("/user/{userid:.*}")
-  public HttpEntity getUser(
+  public HttpEntity<User> getUser(
       @PathVariable String userid, @RequestHeader Map<String, String> requestHeaders) {
     User user = getUserObject(userid, requestHeaders);
 
@@ -69,7 +69,7 @@ public class UserController {
   }
 
   @PostMapping("/user/{userid:.*}")
-  public HttpEntity updateUser(
+  public HttpEntity<User> updateUser(
       @PathVariable(required = false) String userid,
       @RequestHeader(required = false) Map<String, String> requestHeaders,
       @RequestBody User newUserData) {
@@ -91,7 +91,7 @@ public class UserController {
   }
 
   @DeleteMapping("/user/{userid:.*}")
-  public HttpEntity deleteUser(
+  public HttpEntity<User> deleteUser(
       @PathVariable String userid, @RequestHeader Map<String, String> requestHeaders) {
     User user = getUserObject(userid, requestHeaders);
 

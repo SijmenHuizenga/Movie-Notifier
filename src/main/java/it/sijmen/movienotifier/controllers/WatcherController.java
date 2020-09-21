@@ -42,7 +42,7 @@ public class WatcherController {
   }
 
   @PutMapping("/watchers")
-  public HttpEntity newWatcher(
+  public HttpEntity<Watcher> newWatcher(
       @RequestBody Watcher newWatcher, @RequestHeader Map<String, String> requestHeaders) {
     User user = ensureLoggedIn(requestHeaders);
     ensureUserOwnsWatcher(newWatcher, user);
@@ -58,7 +58,7 @@ public class WatcherController {
   }
 
   @GetMapping("/watchers/{watcherid}")
-  public HttpEntity getWatcher(
+  public HttpEntity<Watcher> getWatcher(
       @PathVariable(required = false) String watcherid,
       @RequestHeader Map<String, String> requestHeaders) {
     User user = ensureLoggedIn(requestHeaders);
@@ -74,14 +74,14 @@ public class WatcherController {
   }
 
   @GetMapping("/watchers")
-  public HttpEntity getWatcher(@RequestHeader Map<String, String> requestHeaders) {
+  public HttpEntity<List<Watcher>> getWatcher(@RequestHeader Map<String, String> requestHeaders) {
     User user = ensureLoggedIn(requestHeaders);
     List<Watcher> watchers = watcherRepo.getAllByUserid(user.getId());
     return ResponseEntity.ok(watchers);
   }
 
   @PostMapping("/watchers/{watcherid}")
-  public HttpEntity updateWatcher(
+  public HttpEntity<Watcher> updateWatcher(
       @PathVariable(required = false) String watcherid,
       @RequestBody Watcher newWatcherData,
       @RequestHeader Map<String, String> requestHeaders) {
@@ -108,7 +108,7 @@ public class WatcherController {
   }
 
   @DeleteMapping("/watchers/{watcherid}")
-  public HttpEntity deleteWatcher(
+  public HttpEntity<Watcher> deleteWatcher(
       @PathVariable(required = false) String watcherid,
       @RequestHeader Map<String, String> requestHeaders) {
     User user = ensureLoggedIn(requestHeaders);

@@ -14,7 +14,7 @@ public class IndexController {
   @RequestMapping("/")
   public ModelAndView redirectSwaggerDocs() {
     return new ModelAndView(
-        "redirect:http://petstore.swagger.io/?url=https://raw.githubusercontent.com/SijmenHuizenga/Movie-Notifier/"
+        "redirect:https://editor.swagger.io/?url=https://raw.githubusercontent.com/SijmenHuizenga/Movie-Notifier/"
             + commitId
             + "/docs/Api%20Specifications.yaml");
   }

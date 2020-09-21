@@ -1,4 +1,4 @@
-package it.sijmen.movienotifier.service;
+package it.sijmen.movienotifier.service.pathe;
 
 import it.sijmen.movienotifier.model.Cinema;
 import java.util.ArrayList;

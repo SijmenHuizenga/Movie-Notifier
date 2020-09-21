@@ -2,7 +2,7 @@ package it.sijmen.movienotifier.service;
 
 import it.sijmen.movienotifier.model.Watcher;
 import it.sijmen.movienotifier.repositories.WatcherRepository;
-import it.sijmen.movienotifier.service.pathe.PatheApi;
+import it.sijmen.movienotifier.service.pathe.PatheNotifier;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 import org.slf4j.Logger;
@@ -18,35 +18,25 @@ public class WatchJob {
 
   private final boolean disabled;
   private final WatcherRepository watcherRepo;
-  private final PatheApi api;
+  private final PatheNotifier api;
 
   public WatchJob(
-      @Value("${disable.checker}") boolean disabled, WatcherRepository repository, PatheApi api) {
+      @Value("${disable.checker}") boolean disabled,
+      WatcherRepository repository,
+      PatheNotifier api) {
     this.disabled = disabled;
     this.watcherRepo = repository;
     this.api = api;
     if (disabled) LOGGER.info("Checking is disabled. No notifications will be sent.");
   }
 
-  @Scheduled(cron = "0 */12  22-23 * * *")
   @Scheduled(cron = "0 */12  0-6 * * *")
+  @Scheduled(cron = "0 */5   6-21 * * *")
+  @Scheduled(cron = "0 */12  22-23 * * *")
   public void executeByNight() {
     if (disabled) return;
     delaySome();
-    LOGGER.info("Executing night job");
-    checkCinemasForChangesAndNotifyWatchers();
-  }
-
-  @Scheduled(cron = "0 */5 6-21 * * *")
-  public void executeByDay() {
-    if (disabled) return;
-    delaySome();
-    LOGGER.info("Executing day job");
-    try {
-      Thread.sleep(1000);
-    } catch (InterruptedException e) {
-      e.printStackTrace();
-    }
+    LOGGER.info("Executing job");
     checkCinemasForChangesAndNotifyWatchers();
   }
 

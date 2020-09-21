@@ -3,70 +3,39 @@ package it.sijmen.movienotifier.service.pathe;
 import static it.sijmen.movienotifier.model.FilterOption.NOPREFERENCE;
 import static it.sijmen.movienotifier.model.FilterOption.YES;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.mashape.unirest.http.HttpResponse;
-import com.mashape.unirest.http.Unirest;
-import com.mashape.unirest.http.exceptions.UnirestException;
 import it.sijmen.movienotifier.model.FilterOption;
 import it.sijmen.movienotifier.model.PatheMovieCache;
 import it.sijmen.movienotifier.model.Watcher;
 import it.sijmen.movienotifier.model.WatcherFilters;
 import it.sijmen.movienotifier.repositories.PatheCacheRepository;
-import it.sijmen.movienotifier.service.CinemaService;
 import it.sijmen.movienotifier.service.NotificationService;
+import it.sijmen.movienotifier.service.pathe.api.PatheApiClient;
 import it.sijmen.movienotifier.service.pathe.api.PatheShowing;
 import it.sijmen.movienotifier.service.pathe.api.PatheShowings;
-import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 @Service
-public class PatheApi {
+public class PatheNotifier {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(PatheApi.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(PatheNotifier.class);
 
-  private ObjectMapper mapper;
-  private String patheApiKey;
   private PatheCacheRepository repository;
   private NotificationService notificationService;
+  private PatheApiClient apiClient;
 
   @Autowired
-  public PatheApi(
-      ObjectMapper mapper,
-      @Value("${cinema.pathe.apikey}") String patheApiKey,
+  public PatheNotifier(
       PatheCacheRepository repository,
-      NotificationService notificationService) {
-    this.mapper = mapper;
-    this.patheApiKey = patheApiKey;
+      NotificationService notificationService,
+      PatheApiClient apiClient) {
     this.repository = repository;
     this.notificationService = notificationService;
-  }
-
-  private PatheShowings getShowingsPerCinema(int movieId) throws IOException {
-    String uri = "https://connect.pathe.nl/v1/movies/" + movieId + "/schedules";
-    HttpResponse<String> stringHttpResponse = makeGetRequest(uri);
-
-    if (stringHttpResponse.getStatus() != 200)
-      throw new IOException(
-          "Status returned " + stringHttpResponse.getStatus() + " after request " + uri);
-    PatheShowings patheShowings =
-        mapper.readValue(stringHttpResponse.getBody(), PatheShowings.class);
-    if (patheShowings == null) throw new IOException("Unexpected api result");
-    patheShowings.setMovieid(movieId);
-    return patheShowings;
-  }
-
-  public HttpResponse<String> makeGetRequest(String uri) throws IOException {
-    try {
-      return Unirest.get(uri).header("X-Client-Token", patheApiKey).asString();
-    } catch (UnirestException e) {
-      throw new IOException("Could not load request.", e);
-    }
+    this.apiClient = apiClient;
   }
 
   public void checkWatcher(List<Watcher> watcher) {
@@ -82,7 +51,7 @@ public class PatheApi {
     PatheShowings newData;
     try {
       oldData = repository.getFirstByMovieid(movieId);
-      newData = this.getShowingsPerCinema(movieId);
+      newData = apiClient.getShowingsForMovie(movieId);
     } catch (Exception e) {
       LOGGER.error("Could not load old or new data for movieId {}", movieId, e);
       return;

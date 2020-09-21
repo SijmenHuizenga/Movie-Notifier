@@ -1,7 +1,7 @@
 package it.sijmen.movienotifier.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import it.sijmen.movienotifier.service.CinemaService;
+import it.sijmen.movienotifier.service.pathe.CinemaService;
 import javax.validation.constraints.AssertTrue;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;

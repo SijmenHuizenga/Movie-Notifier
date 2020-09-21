@@ -1,7 +1,7 @@
 package it.sijmen.movienotifier.controllers;
 
 import it.sijmen.movienotifier.model.Cinema;
-import it.sijmen.movienotifier.service.CinemaService;
+import it.sijmen.movienotifier.service.pathe.CinemaService;
 import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,7 +22,7 @@ public class CinemasController {
   @ResponseStatus(HttpStatus.OK)
   @ResponseBody
   public List<Cinema> getAll() {
-    LOGGER.trace("Get all pathe");
+    LOGGER.trace("Get all pathe cinemas");
     return CinemaService.getAllCinemaLocations();
   }
 }

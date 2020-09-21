@@ -10,7 +10,7 @@ import javax.validation.ValidatorFactory;
 
 public interface Model {
 
-  /** Validates the user. When something is wrong a error message is returned. Else null. */
+  /** Validates the model. When something is wrong a error message is returned. Else null. */
   default void validate() {
     ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
     Validator validator = factory.getValidator();
