@@ -26,7 +26,7 @@ public class CinemaService {
     allCinemas.add(new Cinema(27, "Pathé Arnhem", 51.98422f, 5.90339f));
     allCinemas.add(new Cinema(20, "Pathé Breda", 51.58972f, 4.78503f));
     allCinemas.add(new Cinema(18, "Pathé Delft", 52.00861f, 4.36329f));
-    allCinemas.add(new Cinema(8, "Pathé Eindhoven", 51.44082f, 5.48053f));
+    allCinemas.add(new Cinema(8, "Pathé Eindhoven", 51.44082f, 5.48053f, true));
     allCinemas.add(new Cinema(4, "Pathé Groningen", 53.21434f, 6.56636f));
     allCinemas.add(new Cinema(22, "Pathé Haarlem", 52.38176f, 4.6294f));
     allCinemas.add(new Cinema(11, "Pathé Helmond", 51.47793f, 5.65092f));
@@ -37,6 +37,9 @@ public class CinemaService {
     allCinemas.add(new Cinema(29, "Pathé Ede", 52.01575f, 5.64801f));
     allCinemas.add(new Cinema(31, "Pathé Nijmegen", 51.87994f, 5.862f));
     allCinemas.add(new Cinema(32, "Tivoli en Cinema Leeuwarden", 53.20119f, 5.79235f));
+    allCinemas.add(new Cinema(36, "Pathé Amsterdam Noord", 52.40113f, 4.93474f));
+    allCinemas.add(new Cinema(38, "Pathé Euroscoop Schiedam", 51.92439f, 4.40648f));
+    allCinemas.add(new Cinema(37, "Pathé Euroscoop Tilburg", 51.53925f, 5.07611f));
   }
 
   public static List<Cinema> getAllCinemaLocations() {
